@@ -22,12 +22,13 @@
 		<dependency>
 			<groupId>de.ngloader</groupId>
 			<artifactId>wuffy-common</artifactId>
-			<version>0.0.1</version>
+			<version>${wuffy.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>LATEST</version>
+			<version>${jda.version}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

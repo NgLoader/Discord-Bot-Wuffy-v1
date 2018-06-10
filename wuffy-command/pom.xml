@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>LATEST</version>
+			<version>${jda.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
