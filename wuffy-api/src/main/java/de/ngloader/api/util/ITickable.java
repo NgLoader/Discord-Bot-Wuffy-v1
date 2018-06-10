@@ -1,0 +1,9 @@
+package de.ngloader.api.util;
+
+/**
+ * @author Ingrim4
+ */
+public interface ITickable {
+
+	public void update();
+}

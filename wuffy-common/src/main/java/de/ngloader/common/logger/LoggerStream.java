@@ -8,7 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.ngloader.common.logger.ILogger.Level;
+import de.ngloader.api.logger.ILogger.Level;
 
 /**
  * @author Ingrim4

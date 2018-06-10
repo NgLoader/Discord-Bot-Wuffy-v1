@@ -1,12 +1,12 @@
 package de.ngloader.master.command;
 
-import de.ngloader.command.Command;
-import de.ngloader.command.CommandResult;
-import de.ngloader.command.ICommandExecutor;
-import de.ngloader.language.TranslationKeys;
+import de.ngloader.api.command.Command;
+import de.ngloader.api.command.CommandResult;
+import de.ngloader.api.command.ICommandExecutor;
+import de.ngloader.api.lang.TranslationKey;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-@Command(trigger = TranslationKeys.UNKNOWN)
+@Command(trigger = TranslationKey.UNKNOWN)
 public class CommandTest implements ICommandExecutor {
 
 	@Override

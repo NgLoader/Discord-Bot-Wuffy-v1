@@ -1,9 +1,10 @@
 package de.ngloader.database.impl.user;
 
-import de.ngloader.database.api.StorageProvider;
-import de.ngloader.database.sql.SQLStorage;
+import de.ngloader.api.database.IStorageProvider;
+import de.ngloader.api.database.impl.user.IExtensionUser;
+import de.ngloader.api.database.sql.SQLStorage;
 
-public class SQLExtensionUser implements StorageProvider<SQLStorage>, ExtensionUser {
+public class SQLExtensionUser implements IStorageProvider<SQLStorage>, IExtensionUser {
 
 	@Override
 	public void registered(SQLStorage storage) {

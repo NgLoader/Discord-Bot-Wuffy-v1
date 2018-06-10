@@ -22,6 +22,7 @@
 		<module>wuffy-command</module>
 		<module>wuffy-language</module>
 		<module>wuffy-database</module>
+		<module>wuffy-api</module>
 	</modules>
 
 	<developers>

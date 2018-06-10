@@ -8,9 +8,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.crypto.SecretKey;
 
-import de.ngloader.common.logger.Logger;
-import de.ngloader.common.logger.LoggerManager;
-import de.ngloader.common.util.ITickable;
+import de.ngloader.api.WuffyServer;
+import de.ngloader.api.logger.ILogger;
+import de.ngloader.api.util.ITickable;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,7 +27,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 
 	public static final AttributeKey<EnumProtocolState> PROTOCOL = AttributeKey.valueOf("protocol");
 
-	private static final Logger LOGGER = LoggerManager.getLogger();
+	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private final Queue<QueuedPacket> packetsQueue = new ConcurrentLinkedQueue<QueuedPacket>();
 	private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -187,7 +187,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 
 	public void setNetHandler(INetHandler handler) {
 		Objects.nonNull(handler);
-		if(LoggerManager.isDebug())
+		if(WuffyServer.getLoggerManager().isDebug())
 			LOGGER.debug("NetworkManager", String.format("Set handler of %s to %s", this, handler));
 		this.handler = handler;
 	}

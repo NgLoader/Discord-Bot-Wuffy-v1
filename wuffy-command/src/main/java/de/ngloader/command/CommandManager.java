@@ -6,14 +6,18 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import de.ngloader.common.logger.Logger;
-import de.ngloader.common.logger.LoggerManager;
-import de.ngloader.common.util.ITickable;
+import de.ngloader.api.WuffyServer;
+import de.ngloader.api.command.Command;
+import de.ngloader.api.command.Commands;
+import de.ngloader.api.command.ICommandExecutor;
+import de.ngloader.api.command.ICommandManager;
+import de.ngloader.api.logger.ILogger;
+import de.ngloader.api.util.ITickable;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-public class CommandManager implements ITickable {
+public class CommandManager implements ICommandManager, ITickable {
 
-	private static final Logger LOGGER = LoggerManager.getLogger();
+	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private final Map<String, Map<String, CommandInfo>> commands = new HashMap<String, Map<String, CommandInfo>>();
 	private final Queue<GuildMessageReceivedEvent> commandQueue = new ConcurrentLinkedQueue<>();

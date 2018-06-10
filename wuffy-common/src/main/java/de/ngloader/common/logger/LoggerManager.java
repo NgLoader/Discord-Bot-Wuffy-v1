@@ -11,63 +11,71 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.ngloader.common.logger.ILogger.Level;
+import de.ngloader.api.logger.ILoggerManager;
+import de.ngloader.api.logger.Logger;
+import de.ngloader.api.logger.ILogger.Level;
 import de.ngloader.common.util.FileUtil;
 
 /**
  * @author Ingrim4
  */
-public class LoggerManager {
+public class LoggerManager implements ILoggerManager {
 
 	protected static final Path LOG_DIR = Paths.get("./logs/");
 	protected static final Path LATEST = LOG_DIR.resolve("latest.log");
 
-	private static final DateFormat SAVE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 	private static final Logger LOGGER = new Logger();
 
-	private static boolean debug = false;
-	private static LoggerStream logStream, errStream;
-	private static PrintWriter printWriter;
+	private static final DateFormat SAVE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
-	static {
+	private boolean debug = false;
+	private LoggerStream logStream, errStream;
+	private PrintWriter printWriter;
+
+	public LoggerManager() {
 		try {
 			FileUtil.delete(LATEST);
 			FileUtil.create(LATEST);
 
-			LoggerManager.printWriter = new PrintWriter(Files.newBufferedWriter(LATEST), true);
+			this.printWriter = new PrintWriter(Files.newBufferedWriter(LATEST), true);
 
-			System.setOut(LoggerManager.logStream = new LoggerStream(new FileOutputStream(FileDescriptor.out), Level.INFO, printWriter));
-			System.setErr(LoggerManager.errStream = new LoggerStream(new FileOutputStream(FileDescriptor.err), Level.ERROR, printWriter));
+			System.setOut(this.logStream = new LoggerStream(new FileOutputStream(FileDescriptor.out), Level.INFO, this.printWriter));
+			System.setErr(this.errStream = new LoggerStream(new FileOutputStream(FileDescriptor.err), Level.ERROR, this.printWriter));
 		} catch (IOException e) {
 			throw new Error("Failed to init logger", e);
 		}
 	}
 
-	protected static void log0(Level level, String message) {
-		if(level == Level.DEBUG && !LoggerManager.debug)
+	@Override
+	public void log0(Level level, String message) {
+		if(level == Level.DEBUG && !this.debug)
 			return;
-		(level.isError() ? LoggerManager.errStream : LoggerManager.logStream).log(level, message);
+		(level.isError() ? this.errStream : this.logStream).log(level, message);
 	}
 
-	public static void setDebug(boolean debug) {
-		LoggerManager.debug = true;
+	@Override
+	public void setDebug(boolean debug) {
+		this.debug = true;
 	}
 
-	public static boolean isDebug() {
-		return LoggerManager.debug;
+	@Override
+	public boolean isDebug() {
+		return this.debug;
 	}
 
-	public static Logger getLogger() {
-		return LOGGER;
+	@Override
+	public Logger getLogger() {
+		return LoggerManager.LOGGER;
 	}
 
-	public static void close() {
+	@Override
+	public void close() {
 		try {
-			LoggerManager.logStream.close();
-			LoggerManager.errStream.close();
-			LoggerManager.printWriter.close();
+			this.logStream.close();
+			this.errStream.close();
+			this.printWriter.close();
 
-			Path log = LOG_DIR.resolve(String.format("%s.log", SAVE_FORMAT.format(new Date())));
+			var log = LOG_DIR.resolve(String.format("%s.log", SAVE_FORMAT.format(new Date())));
 			FileUtil.copy(LATEST, log);
 		} catch (Exception e) {
 			throw new Error("Failed to close all logger", e);

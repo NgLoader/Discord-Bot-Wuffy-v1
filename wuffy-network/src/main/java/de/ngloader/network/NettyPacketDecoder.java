@@ -2,8 +2,8 @@ package de.ngloader.network;
 
 import java.util.List;
 
-import de.ngloader.common.logger.Logger;
-import de.ngloader.common.logger.LoggerManager;
+import de.ngloader.api.WuffyServer;
+import de.ngloader.api.logger.ILogger;
 import de.ngloader.network.PacketRegistry.EnumProtocolDirection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,7 +15,7 @@ import io.netty.handler.codec.DecoderException;
  */
 public class NettyPacketDecoder extends ByteToMessageDecoder {
 
-	private static final Logger LOGGER = LoggerManager.getLogger();
+	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private EnumProtocolDirection protocolDirection;
 
@@ -39,7 +39,7 @@ public class NettyPacketDecoder extends ByteToMessageDecoder {
 				throw new DecoderException(String.format("Packet %s/%d (%s) was larger than expected, found %d bytes extra whilst reading packet", protocolState, packetId, packet.getClass().getSimpleName(), packetBuffer.readableBytes()));
 
 			out.add(packet);
-			if(LoggerManager.isDebug())
+			if(WuffyServer.getLoggerManager().isDebug())
 				LOGGER.debug(String.format("Decoder/%s/%s", protocolState, packetId), String.format("IN: %s", packet.getClass().getName()));
 		}
 	}

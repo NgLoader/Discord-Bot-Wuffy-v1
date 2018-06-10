@@ -15,6 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.ngloader</groupId>
+			<artifactId>wuffy-api</artifactId>
+			<version>${wuffy.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.ngloader</groupId>
 			<artifactId>wuffy-language</artifactId>
 			<version>${wuffy.version}</version>
 			<scope>provided</scope>

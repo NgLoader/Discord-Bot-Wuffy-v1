@@ -12,25 +12,25 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import de.ngloader.common.logger.Logger;
-import de.ngloader.common.logger.LoggerManager;
-import de.ngloader.database.api.Storage;
-import de.ngloader.database.api.StorageExtension;
-import de.ngloader.database.api.StorageService;
-import de.ngloader.database.mongo.MongoStorage;
-import de.ngloader.database.sql.SQLStorage;
+import de.ngloader.api.WuffyServer;
+import de.ngloader.api.database.IStorageExtension;
+import de.ngloader.api.database.IStorageService;
+import de.ngloader.api.database.Storage;
+import de.ngloader.api.database.mongo.MongoStorage;
+import de.ngloader.api.database.sql.SQLStorage;
+import de.ngloader.api.logger.ILogger;
 
-public final class ModuleStorageService implements StorageService {
+public final class ModuleStorageService implements IStorageService {
 
-	private static final Logger LOGGER = LoggerManager.getLogger();
+	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private final Config config;
 
 	private final Map<Class<? extends Storage<?>>, Storage<?>> storages = new HashMap<Class<? extends Storage<?>>, Storage<?>>();
 	private final Map<String, Storage<?>> storageNames = new HashMap<String, Storage<?>>();
 
-	private final Map<String, Class<? extends StorageExtension>> storageExtensions = new HashMap<String, Class<? extends StorageExtension>>();
-	private final Map<Class<? extends StorageExtension>, StorageExtension> defaultProvider = new HashMap<Class<? extends StorageExtension>, StorageExtension>();
+	private final Map<String, Class<? extends IStorageExtension>> storageExtensions = new HashMap<String, Class<? extends IStorageExtension>>();
+	private final Map<Class<? extends IStorageExtension>, IStorageExtension> defaultProvider = new HashMap<Class<? extends IStorageExtension>, IStorageExtension>();
 
 	private boolean init;
 
@@ -65,21 +65,21 @@ public final class ModuleStorageService implements StorageService {
 		LOGGER.debug("database", "Loading database modules");
 
 		for(Entry<String, String> extension : this.config.extensions.entrySet()) {
-			Class<? extends StorageExtension> extensionClass = this.storageExtensions.get(extension.getKey());
+			Class<? extends IStorageExtension> extensionClass = this.storageExtensions.get(extension.getKey());
 			if(extensionClass == null) {
-				LOGGER.warn(String.format("Unknown extension: %s", extension.getKey()));
+				LOGGER.warn("database", String.format("Unknown extension: %s", extension.getKey()));
 				continue;
 			}
 
 			Storage<?> storage = storageNames.get(extension.getValue());
 			if(storage == null) {
-				LOGGER.warn(String.format("Unknown storage: %s", extension.getValue()));
+				LOGGER.warn("database", String.format("Unknown storage: %s", extension.getValue()));
 				continue;
 			}
 
-			StorageExtension provider = storage.getProvider(extensionClass);
+			IStorageExtension provider = storage.getProvider(extensionClass);
 			if(provider == null) {
-				LOGGER.warn(String.format("Unknown provider: %s/%s", extension.getValue(), extension.getKey()));
+				LOGGER.warn("database", String.format("Unknown provider: %s/%s", extension.getValue(), extension.getKey()));
 				continue;
 			}
 
@@ -135,7 +135,7 @@ public final class ModuleStorageService implements StorageService {
 	}
 
 	@Override
-	public <T extends StorageExtension> boolean registerExtension(String name, Class<T> extenionClass) {
+	public <T extends IStorageExtension> boolean registerExtension(String name, Class<T> extenionClass) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(extenionClass);
 
@@ -143,11 +143,12 @@ public final class ModuleStorageService implements StorageService {
 			return false;
 
 		this.storageExtensions.put(name, extenionClass);
+		LOGGER.debug("database storage", "registerExtension '" + extenionClass.getSimpleName() + "'");
 		return true;
 	}
 
 	@Override
-	public <T extends StorageExtension> boolean unregisterExtension(String name) {
+	public <T extends IStorageExtension> boolean unregisterExtension(String name) {
 		Objects.requireNonNull(name);
 
 		if(this.storageExtensions.containsKey(name)) {
@@ -159,7 +160,7 @@ public final class ModuleStorageService implements StorageService {
 	}
 
 	@Override
-	public <T extends StorageExtension> T getExtension(Class<T> extenionClass) {
+	public <T extends IStorageExtension> T getExtension(Class<T> extenionClass) {
 		Objects.requireNonNull(extenionClass);
 
 		return extenionClass.cast(this.defaultProvider.get(extenionClass));

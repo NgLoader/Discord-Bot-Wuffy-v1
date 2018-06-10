@@ -23,6 +23,8 @@
     "prefix": "wuffy_"
   },
   "extensions": {
-    "uuid": "mongo"
+    "guild": "mongo",
+    "user": "mongo",
+    "lang": "mongo"
   }
 }
