@@ -40,13 +40,35 @@ public class WuffyGuild implements IWuffyGuild {
 	private final Guild guild;
 
 	private GuildSettings guildSettings;
-//	private List<GuildMusicPlaylist> musicPlaylist;
 
 	public WuffyGuild(Guild guild) {
 		if(guild == null)
 			throw new NullPointerException("Guild is null");
 
 		this.guild = guild;
+	}
+
+	@Override
+	public boolean isBlocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setBlocked(Boolean blocked, String reason, Long expire) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getLocale() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLocale(String locale) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -63,10 +85,12 @@ public class WuffyGuild implements IWuffyGuild {
 
 	@Override
 	public List<GuildMusicPlaylist> getPlaylists() {
-//		if(this.musicPlaylist == null)
-//			this.musicPlaylist = this.guildExtesnion.getPlaylists(this.guild.getIdLong());
-//		return this.musicPlaylist;
 		return this.guildExtension.getPlaylists(this.guild.getIdLong());
+	}
+
+	@Override
+	public GuildMusicPlaylist getPlaylist(String name) {
+		return this.guildExtension.getPlaylist(this.guild.getIdLong(), name);
 	}
 
 	@Override

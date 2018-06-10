@@ -1,8 +1,6 @@
 package de.ngloader.database.impl.user;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.ngloader.api.database.impl.user.IWuffyUser;
 import net.dv8tion.jda.core.JDA;
@@ -13,18 +11,6 @@ import net.dv8tion.jda.core.requests.RestAction;
 
 public class WuffyUser implements IWuffyUser {
 
-	private static final Map<Long, WuffyUser> CACHE = new HashMap<Long, WuffyUser>();
-
-	public static WuffyUser getUser(User user) {
-		var longId = user.getIdLong();
-
-		if(!CACHE.containsKey(longId)) {
-			CACHE.put(longId, new WuffyUser(user));
-		}
-
-		return CACHE.get(longId);
-	}
-
 	private final User user;
 
 	public WuffyUser(User user) {
@@ -32,6 +18,30 @@ public class WuffyUser implements IWuffyUser {
 			throw new NullPointerException("User is null");
 
 		this.user = user;
+	}
+
+	@Override
+	public boolean isBlocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setBlocked(boolean blocked, String reason, Long expire) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLocale() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLocale(String locale) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

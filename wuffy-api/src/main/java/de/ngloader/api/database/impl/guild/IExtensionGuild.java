@@ -15,6 +15,8 @@ public interface IExtensionGuild extends IStorageExtension {
 
 	List<GuildMusicPlaylist> getPlaylists(long longId);
 
+	GuildMusicPlaylist getPlaylist(long longId, String name);
+
 	void updatePlaylist(long longId, GuildMusicPlaylist playlist);
 
 	void deletePlaylist(long longId, GuildMusicPlaylist playlist);

@@ -83,6 +83,12 @@ public class MongoExtensionGuild implements IStorageProvider<MongoStorage>, IExt
 	}
 
 	@Override
+	public GuildMusicPlaylist getPlaylist(long longId, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void deletePlaylist(long longId, GuildMusicPlaylist playlist) {
 		// TODO Auto-generated method stub
 		

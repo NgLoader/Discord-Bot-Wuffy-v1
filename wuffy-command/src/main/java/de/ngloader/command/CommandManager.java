@@ -13,6 +13,7 @@ import de.ngloader.api.command.ICommandExecutor;
 import de.ngloader.api.command.ICommandManager;
 import de.ngloader.api.logger.ILogger;
 import de.ngloader.api.util.ITickable;
+import de.ngloader.api.util.Reactions;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandManager implements ICommandManager, ITickable {
@@ -30,7 +31,7 @@ public class CommandManager implements ICommandManager, ITickable {
 			this.processCommand(commandQueue.poll());
 	}
 
-	public void issueCommand(GuildMessageReceivedEvent event) {
+	public void issueCommand(GuildMessageReceivedEvent event) { //TODO create auto blacklist system and check it here before adding to queue
 		if(this.commandQueue.size() < 100)
 			this.commandQueue.add(event);
 		else if(nextWarnMessage < System.currentTimeMillis()) {
@@ -40,31 +41,54 @@ public class CommandManager implements ICommandManager, ITickable {
 	}
 
 	private void processCommand(GuildMessageReceivedEvent event) {
-		//TODO fill out
-		var message = event.getMessage().getContentRaw();
+		try {
+			var guild = WuffyServer.getGuild(event.getGuild().getIdLong());
+			var user = WuffyServer.getUser(event.getAuthor().getIdLong());
 
-		var split = message.split("\\s+");
-		var args = Arrays.copyOfRange(split, 1, split.length);
-		var command = split[0].toLowerCase();
+			if(guild.isBlocked()) {
+				guild.leave();
+				return;
+			}
 
-//		var commandInfo = null;
-//
-//		if(commandInfo == null) {
-//			LOGGER.debug("CommandExecutor", "Command '" + command + "' not found.");
-//			return;
-//		}
-//
-//		CommandResult commandResult = commandInfo.executor.onCommand(event, args);
-//		switch (commandResult.getCommandResult()) {
-//		case SYNTAX:
-//			break;
-//
-//		case ERROR:
-//			break;
-//
-//		default:
-//			break;
-//		}
+			if(user.isBlocked())
+				return; //TODO add blocked message with reason and expire date
+
+			var message = event.getMessage().getContentRaw();
+			var locale = user.getLocale() != null ? user.getLocale() : guild.getLocale();
+
+			if(commands.containsKey(locale)) {
+				var split = message.split("\\s+");
+
+				//TODO check is trigger and remove
+
+				var commandString = split[0].toLowerCase();
+				var command = commands.get(locale).get(commandString);
+
+				if(command != null)
+					switch (command.getExecutor().onCommand(event, guild, user, Arrays.copyOfRange(split, 1, split.length)).getCommandResult()) {
+					case SUCCESS:
+						LOGGER.debug("Command executor", String.format("Successful executed command '%s'", message));
+						break;
+
+					case SYNTAX:
+						LOGGER.debug("Command executor", String.format("Syntax error by executed command '%s'", message));
+						command.getExecutor().onHelp(event, guild, user);
+						break;
+
+					case ERROR:
+						LOGGER.debug("Command executor", String.format("Error by executed command '%s'", message));
+						event.getMessage().addReaction(Reactions.WARNING.getAsUnicode()).queue();
+						break;
+					}
+				else {
+					LOGGER.debug("Command executor", String.format("Command '%s' not found", message));
+					event.getMessage().addReaction(Reactions.GREY_QUESTION.getAsUnicode()).queue();
+				}
+			} else
+				LOGGER.info(String.format("Locale '%s' not exist. Used by user '%s' in guild '%s'.", locale, event.getGuild().getId(), event.getAuthor().getId()));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void close() {

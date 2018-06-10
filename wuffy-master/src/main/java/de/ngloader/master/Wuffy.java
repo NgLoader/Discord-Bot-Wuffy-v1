@@ -88,10 +88,6 @@ public class Wuffy extends WuffyServer {
 		this.moduleStorageService.enable();
 		/* DATABASE END */
 
-		//TEST START
-		System.out.println(mongoStorage.getProvider(IExtensionGuild.class).getGuildSettings(01321331l).name);
-		//TEST END
-
 		/* COMMAND START */
 		this.commandManager = new CommandManager();
 		/* COMMAND END */
