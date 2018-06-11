@@ -11,4 +11,4 @@ pipelines:
         caches:
           - maven
         script: # Modify the commands below to build your repository.
-          - mvn -B verify # -B batch mode makes Maven less verbose
+          - mvn clean compile package verify --projects wuffy-master --also-make # -B batch mode makes Maven less verbose
