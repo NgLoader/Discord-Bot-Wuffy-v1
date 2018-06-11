@@ -1,4 +1,4 @@
-package de.ngloader.database.impl.lang;
+package de.ngloader.database.impl.guild;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -15,6 +15,12 @@ import net.dv8tion.jda.core.Region;
 import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Guild.Ban;
+import net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel;
+import net.dv8tion.jda.core.entities.Guild.MFALevel;
+import net.dv8tion.jda.core.entities.Guild.NotificationLevel;
+import net.dv8tion.jda.core.entities.Guild.Timeout;
+import net.dv8tion.jda.core.entities.Guild.VerificationLevel;
 import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Invite;
 import net.dv8tion.jda.core.entities.Member;
@@ -332,5 +338,35 @@ public class WuffyGuild implements IWuffyGuild {
 	@Override
 	public boolean isAvailable() {
 		return this.guild.isAvailable();
+	}
+
+	@Override
+	public List<String> getPrefixes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addPrefix(String prefix) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removePrefix(String prefix) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isMention() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setMention() {
+		// TODO Auto-generated method stub
+		
 	}
 }
