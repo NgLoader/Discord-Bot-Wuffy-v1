@@ -12,6 +12,16 @@ public interface IWuffyGuild extends Guild {
 
 	public boolean setBlocked(Boolean blocked, String reason, Long expire);
 
+	public List<String> getPrefixes();
+
+	public void addPrefix(String prefix);
+
+	public void removePrefix(String prefix);
+
+	public boolean isMention();
+
+	public void setMention();
+
 	public String getLocale();
 
 	public void setLocale(String locale);

@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.mongodb.internal.connection.ScramShaAuthenticator.RandomStringGenerator;
+
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.Command;
 import de.ngloader.api.command.Commands;
@@ -19,6 +21,8 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 public class CommandManager implements ICommandManager, ITickable {
 
 	private static final ILogger LOGGER = WuffyServer.getLogger();
+
+	private static final String BOT_MENTION = String.format("<@%s>", Long.toString(WuffyServer.getShardProvider().getJDA().getSelfUser().getIdLong()));
 
 	private final Map<String, Map<String, CommandInfo>> commands = new HashMap<String, Map<String, CommandInfo>>();
 	private final Queue<GuildMessageReceivedEvent> commandQueue = new ConcurrentLinkedQueue<>();
@@ -42,24 +46,27 @@ public class CommandManager implements ICommandManager, ITickable {
 
 	private void processCommand(GuildMessageReceivedEvent event) {
 		try {
+			if(event.getAuthor().isBot() || !event.getChannel().canTalk())
+				return;
+
 			var guild = WuffyServer.getGuild(event.getGuild().getIdLong());
 			var user = WuffyServer.getUser(event.getAuthor().getIdLong());
 
 			if(guild.isBlocked()) {
-				guild.leave();
+				guild.leave().queue();
 				return;
 			}
-
 			if(user.isBlocked())
 				return; //TODO add blocked message with reason and expire date
 
 			var message = event.getMessage().getContentRaw();
+
+			var mention = message.startsWith(BOT_MENTION);
+
 			var locale = user.getLocale() != null ? user.getLocale() : guild.getLocale();
 
 			if(commands.containsKey(locale)) {
 				var split = message.split("\\s+");
-
-				//TODO check is trigger and remove
 
 				var commandString = split[0].toLowerCase();
 				var command = commands.get(locale).get(commandString);
