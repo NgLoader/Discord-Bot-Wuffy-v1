@@ -9,7 +9,6 @@ pipelines:
   default:
     - step:
         name: "build"
-        image: openjdk:10
         caches:
           - maven
         script: # Modify the commands below to build your repository.
