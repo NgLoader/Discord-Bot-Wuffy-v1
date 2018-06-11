@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.mongodb.internal.connection.ScramShaAuthenticator.RandomStringGenerator;
-
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.Command;
 import de.ngloader.api.command.Commands;
@@ -41,7 +39,7 @@ public class CommandManager implements ICommandManager, ITickable {
 		else if(nextWarnMessage < System.currentTimeMillis()) {
 			LOGGER.warn("Command queue is full.");
 			nextWarnMessage = System.currentTimeMillis() + 15000;
-		}
+		}	
 	}
 
 	private void processCommand(GuildMessageReceivedEvent event) {
