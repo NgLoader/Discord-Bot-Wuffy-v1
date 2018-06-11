@@ -6,7 +6,6 @@
 	<properties>
 		<maven.compiler.source>10</maven.compiler.source>
 		<maven.compiler.target>10</maven.compiler.target>
-		<wuffy.version>0.0.1</wuffy.version>
 		<netty.version>4.1.25.Final</netty.version>
 		<json.version>20160810</json.version>
 		<commons-collections4.version>4.1</commons-collections4.version>

@@ -12,5 +12,6 @@ pipelines:
         caches:
           - maven
         script: # Modify the commands below to build your repository.
-          - mvn clean compile package verify --projects wuffy-master --also-make
-          - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"wuffy-master/target/wuffy-master-${BOT_VERSION}-dependencies.jar" #Find a way to select the currently version
+          - mvn -Dwuffy.version=${BOT_VERSION} clean compile package verify --projects wuffy-master --also-make
+          - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"wuffy-master/target/wuffy-master-${BOT_VERSION}-dependencies.jar"
+          - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"wuffy-master/target/wuffy-master-${BOT_VERSION}.jar"
