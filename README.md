@@ -7,4 +7,5 @@ Here: https://jenkins.zockercraft.net/job/Wuffy%20Discord%20Bot/
 Jenkins: https://jenkins.zockercraft.net/job/Wuffy%20Discord%20Bot/
 Bitbucket: https://bitbucket.org/wuffy-official/bot
 #
+#
 More details coming soon
