@@ -7,6 +7,7 @@ import java.util.Map;
 import de.ngloader.api.IShardProvider;
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.ICommandManager;
+import de.ngloader.api.config.IConfigService;
 import de.ngloader.api.database.IStorageService;
 import de.ngloader.api.database.impl.guild.IExtensionGuild;
 import de.ngloader.api.database.impl.guild.IWuffyGuild;
@@ -56,12 +57,17 @@ public class Wuffy extends WuffyServer {
 	private final ShardProvider shardProvider;
 	private final CommandManager commandManager;
 	private final ModuleStorageService moduleStorageService;
+	private final IConfigService configService;
 
 	private final Map<Long, IWuffyGuild> guilds = new HashMap<Long, IWuffyGuild>();
 	private final Map<Long, IWuffyUser> users = new HashMap<Long, IWuffyUser>();
 
 	public Wuffy(boolean debug) {
 		this.loggerManager = new LoggerManager();
+
+		/* SETTINGS START */
+		
+		/* SETTINGS END */
 
 		/* DATABASE START */
 		this.moduleStorageService = new ModuleStorageService(new File("./").toPath().resolve("database.yml"));
@@ -113,32 +119,37 @@ public class Wuffy extends WuffyServer {
 	}
 
 	@Override
-	public ILogger getLogger0() {
+	protected ILogger getLogger0() {
 		return this.loggerManager.getLogger();
 	}
 
 	@Override
-	public ILoggerManager getLoggerManager0() {
+	protected ILoggerManager getLoggerManager0() {
 		return this.loggerManager;
 	}
 
 	@Override
-	public IStorageService getStorageService0() {
+	protected IStorageService getStorageService0() {
 		return this.moduleStorageService;
 	}
 
 	@Override
-	public IShardProvider getShardProvider0() {
+	protected IShardProvider getShardProvider0() {
 		return this.shardProvider;
 	}
 
 	@Override
-	public ICommandManager getCommandManager0() {
+	protected ICommandManager getCommandManager0() {
 		return this.commandManager;
 	}
 
 	@Override
-	public IWuffyUser getUser0(Long longId) {
+	protected IConfigService getConfigService0() {
+		return this.configService;
+	}
+
+	@Override
+	protected IWuffyUser getUser0(Long longId) {
 		if(!this.users.containsKey(longId))
 			this.users.put(longId, new WuffyUser(this.shardProvider.getJDA().getUserById(longId)));
 
@@ -146,7 +157,7 @@ public class Wuffy extends WuffyServer {
 	}
 
 	@Override
-	public IWuffyGuild getGuild0(Long longId) {
+	protected IWuffyGuild getGuild0(Long longId) {
 		if(!this.guilds.containsKey(longId))
 			this.guilds.put(longId, new WuffyGuild(this.shardProvider.getJDA().getGuildById(longId)));
 

@@ -1,6 +1,7 @@
 package de.ngloader.api;
 
 import de.ngloader.api.command.ICommandManager;
+import de.ngloader.api.config.IConfigService;
 import de.ngloader.api.database.IStorageService;
 import de.ngloader.api.database.impl.guild.IWuffyGuild;
 import de.ngloader.api.database.impl.user.IWuffyUser;
@@ -42,6 +43,10 @@ public abstract class WuffyServer extends TickingTask {
 		return WuffyServer.instance.getCommandManager0();
 	}
 
+	public static IConfigService getConfigLoader() {
+		return WuffyServer.instance.getConfigService0();
+	}
+
 	public static IWuffyUser getUser(Long longId) {
 		return WuffyServer.instance.getUser0(longId);
 	}
@@ -50,17 +55,19 @@ public abstract class WuffyServer extends TickingTask {
 		return WuffyServer.instance.getGuild0(longId);
 	}
 
-	public abstract ILogger getLogger0();
+	protected abstract ILogger getLogger0();
 
-	public abstract ILoggerManager getLoggerManager0();
+	protected abstract ILoggerManager getLoggerManager0();
 
-	public abstract IStorageService getStorageService0();
+	protected abstract IStorageService getStorageService0();
 
-	public abstract IShardProvider getShardProvider0();
+	protected abstract IShardProvider getShardProvider0();
 
-	public abstract ICommandManager getCommandManager0();
+	protected abstract ICommandManager getCommandManager0();
 
-	public abstract IWuffyUser getUser0(Long longId);
+	protected abstract IConfigService getConfigService0();
 
-	public abstract IWuffyGuild getGuild0(Long longId);
+	protected abstract IWuffyUser getUser0(Long longId);
+
+	protected abstract IWuffyGuild getGuild0(Long longId);
 }

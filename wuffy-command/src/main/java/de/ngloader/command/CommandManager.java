@@ -54,6 +54,7 @@ public class CommandManager implements ICommandManager, ITickable {
 				guild.leave().queue();
 				return;
 			}
+
 			if(user.isBlocked())
 				return; //TODO add blocked message with reason and expire date
 
@@ -62,6 +63,8 @@ public class CommandManager implements ICommandManager, ITickable {
 			var mention = message.startsWith(BOT_MENTION);
 
 			var locale = user.getLocale() != null ? user.getLocale() : guild.getLocale();
+
+			if(())
 
 			if(commands.containsKey(locale)) {
 				var split = message.split("\\s+");

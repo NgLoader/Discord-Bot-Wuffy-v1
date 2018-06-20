@@ -24,7 +24,7 @@ public final class ModuleStorageService implements IStorageService {
 
 	private static final ILogger LOGGER = WuffyServer.getLogger();
 
-	private final Config config;
+	private final DatabaseConfig config;
 
 	private final Map<Class<? extends Storage<?>>, Storage<?>> storages = new HashMap<Class<? extends Storage<?>>, Storage<?>>();
 	private final Map<String, Storage<?>> storageNames = new HashMap<String, Storage<?>>();
@@ -47,7 +47,7 @@ public final class ModuleStorageService implements IStorageService {
 		}
 
 		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			this.config = gson.fromJson(reader, Config.class);
+			this.config = gson.fromJson(reader, DatabaseConfig.class);
 		} catch (IOException e) {
 			throw new Error(e);
 		}
