@@ -14,6 +14,8 @@ public class WuffyConfig implements IConfig {
 
 	public String token;
 
+	public String mentionId;
+
 	public List<String> admins;
 
 	public OnlineStatus status;

@@ -25,10 +25,6 @@ public abstract class WuffyServer extends TickingTask {
 		return WuffyServer.instance;
 	}
 
-	public static JDA getJDA() {
-		return WuffyServer.instance.getShardProvider0().getJDA();
-	}
-
 	public static ILogger getLogger() {
 		return WuffyServer.instance.getLogger0();
 	}
@@ -37,8 +33,8 @@ public abstract class WuffyServer extends TickingTask {
 		return WuffyServer.instance.getStorageService0();
 	}
 
-	public static IShardProvider getShardProvider() {
-		return WuffyServer.instance.getShardProvider0();
+	public static IJDAProvider getJDAProvider() {
+		return WuffyServer.instance.getJDAProvider0();
 	}
 
 	public static ICommandManager getCommandManager() {
@@ -49,25 +45,25 @@ public abstract class WuffyServer extends TickingTask {
 		return WuffyServer.instance.getConfigService0();
 	}
 
-	public static IWuffyUser getUser(Long longId) {
-		return WuffyServer.instance.getUser0(longId);
+	public static IWuffyUser getUser(JDA jda, Long longId) {
+		return WuffyServer.instance.getUser0(jda, longId);
 	}
 
-	public static IWuffyGuild getGuild(Long longId) {
-		return WuffyServer.instance.getGuild0(longId);
+	public static IWuffyGuild getGuild(JDA jda, Long longId) {
+		return WuffyServer.instance.getGuild0(jda, longId);
 	}
 
 	protected abstract ILogger getLogger0();
 
 	protected abstract IStorageService getStorageService0();
 
-	protected abstract IShardProvider getShardProvider0();
+	protected abstract IJDAProvider getJDAProvider0();
 
 	protected abstract ICommandManager getCommandManager0();
 
 	protected abstract IConfigService getConfigService0();
 
-	protected abstract IWuffyUser getUser0(Long longId);
+	protected abstract IWuffyUser getUser0(JDA jda, Long longId);
 
-	protected abstract IWuffyGuild getGuild0(Long longId);
+	protected abstract IWuffyGuild getGuild0(JDA jda, Long longId);
 }

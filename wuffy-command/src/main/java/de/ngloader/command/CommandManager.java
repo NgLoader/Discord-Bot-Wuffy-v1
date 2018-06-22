@@ -23,7 +23,7 @@ public class CommandManager implements ICommandManager, ITickable {
 
 	private static final ILogger LOGGER = WuffyServer.getLogger();
 
-	private static final String BOT_MENTION = String.format("<@%s>", Long.toString(WuffyServer.getJDA().getSelfUser().getIdLong()));
+	private static final String BOT_MENTION = String.format("<@%s>", WuffyServer.getConfigService().getConfig(WuffyConfig.class).mentionId);
 
 	private final Map<String, CommandInfo> commands = new HashMap<String, CommandInfo>();
 	private final Queue<MessageReceivedEvent> commandQueue = new ConcurrentLinkedQueue<>();
@@ -54,8 +54,8 @@ public class CommandManager implements ICommandManager, ITickable {
 					config.accountType == AccountType.CLIENT && !config.admins.contains(Long.toString(event.getAuthor().getIdLong())))
 				return;
 
-			var guild = WuffyServer.getGuild(event.getGuild().getIdLong());
-			var user = WuffyServer.getUser(event.getAuthor().getIdLong());
+			var guild = WuffyServer.getGuild(event.getJDA(), event.getGuild().getIdLong());
+			var user = WuffyServer.getUser(event.getJDA(), event.getAuthor().getIdLong());
 
 			if(guild.isBlocked()) {
 				guild.leave().queue();

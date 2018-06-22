@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.ngloader.api.IShardProvider;
+import de.ngloader.api.IJDAProvider;
 import de.ngloader.api.WuffyConfig;
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.ICommandManager;
@@ -32,8 +32,8 @@ import de.ngloader.database.impl.user.SQLExtensionUser;
 import de.ngloader.database.impl.user.WuffyUser;
 import de.ngloader.master.command.CommandRegistry;
 import de.ngloader.master.config.ConfigService;
-import de.ngloader.master.listener.MessageListener;
-import de.ngloader.master.provider.ShardProvider;
+import de.ngloader.master.provider.JDAProvider;
+import net.dv8tion.jda.core.JDA;
 
 public class Wuffy extends WuffyServer {
 
@@ -57,7 +57,7 @@ public class Wuffy extends WuffyServer {
 
 	private final Thread masterThread;
 
-	private ShardProvider shardProvider;
+	private JDAProvider jdaProvider;
 	private CommandManager commandManager;
 	private ModuleStorageService moduleStorageService;
 	private IConfigService configService;
@@ -67,8 +67,6 @@ public class Wuffy extends WuffyServer {
 
 	public Wuffy(boolean debug) {
 		WuffyServer.setInstance(this);
-
-		this.masterThread = new Thread(this, "Wuffy master thread");
 
 		/* SETTINGS START */
 		WuffyServer.getLogger().info("Startup config", "Loading");
@@ -106,27 +104,22 @@ public class Wuffy extends WuffyServer {
 		WuffyServer.getLogger().info("Startup database", "Loaded");
 		/* DATABASE END */
 
-		
-	
-		/* BOT START */
-		this.shardProvider = new ShardProvider(new ReadyListenerAdapter() {
+		/* COMMAND START */
+		WuffyServer.getLogger().info("Startup command", "Loading");
+		commandManager = new CommandManager();
+		WuffyServer.getLogger().info("Startup command", "Adding commands");
+		CommandRegistry.register();
+		WuffyServer.getLogger().info("Startup command", "Loaded");
+		/* COMMAND END */
 
-			public void onReady(net.dv8tion.jda.core.events.ReadyEvent event) {
-				/* COMMAND START */
-				WuffyServer.getLogger().info("Startup command", "Loading");
-				commandManager = new CommandManager();
-				WuffyServer.getLogger().info("Startup command", "Adding commands");
-				CommandRegistry.register();
-				WuffyServer.getLogger().info("Startup command", "Loaded");
-				/* COMMAND END */
+		/* TICKINGTASK START */
+		this.masterThread = new Thread(this, "Wuffy master thread");
+		masterThread.start();
+		/* TICKINGTASK STOP */
 
-				event.getJDA().removeEventListener(this);
-				event.getJDA().addEventListener(new MessageListener());
-
-				masterThread.start();
-			};
-		});
-		/* BOT END */
+		/* JDA START */
+		this.jdaProvider = new JDAProvider();
+		/* JDA STOP */
 	}
 
 	@Override
@@ -152,8 +145,8 @@ public class Wuffy extends WuffyServer {
 	}
 
 	@Override
-	protected IShardProvider getShardProvider0() {
-		return this.shardProvider;
+	protected IJDAProvider getJDAProvider0() {
+		return this.jdaProvider;
 	}
 
 	@Override
@@ -167,17 +160,17 @@ public class Wuffy extends WuffyServer {
 	}
 
 	@Override
-	protected IWuffyUser getUser0(Long longId) {
+	protected IWuffyUser getUser0(JDA jda, Long longId) {
 		if(!this.users.containsKey(longId))
-			this.users.put(longId, new WuffyUser(this.shardProvider.getJDA().getUserById(longId)));
+			this.users.put(longId, new WuffyUser(jda.getUserById(longId)));
 
 		return this.users.get(longId);
 	}
 
 	@Override
-	protected IWuffyGuild getGuild0(Long longId) {
+	protected IWuffyGuild getGuild0(JDA jda, Long longId) {
 		if(!this.guilds.containsKey(longId))
-			this.guilds.put(longId, new WuffyGuild(this.shardProvider.getJDA().getGuildById(longId)));
+			this.guilds.put(longId, new WuffyGuild(jda.getGuildById(longId)));
 
 		return this.guilds.get(longId);
 	}

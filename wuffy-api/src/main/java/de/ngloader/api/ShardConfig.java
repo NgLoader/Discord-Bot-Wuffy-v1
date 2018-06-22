@@ -1,8 +1,10 @@
 package de.ngloader.api;
 
+import java.util.List;
+
 public class ShardConfig {
 
-	public boolean enabled;
-	public int id;
-	public int total;
+	public Boolean enabled;
+	public List<Integer> shardIds;
+	public Integer total;
 }
