@@ -45,6 +45,11 @@ public class WuffyUser implements IWuffyUser {
 	}
 
 	@Override
+	public boolean isAdmin() {
+		return false;
+	}
+
+	@Override
 	public long getIdLong() {
 		return this.user.getIdLong();
 	}

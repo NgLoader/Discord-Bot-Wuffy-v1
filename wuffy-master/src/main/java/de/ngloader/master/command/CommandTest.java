@@ -5,14 +5,14 @@ import de.ngloader.api.command.CommandResult;
 import de.ngloader.api.command.ICommandExecutor;
 import de.ngloader.api.database.impl.guild.IWuffyGuild;
 import de.ngloader.api.database.impl.user.IWuffyUser;
-import de.ngloader.api.lang.TranslationKey;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-@Command(trigger = TranslationKey.UNKNOWN)
+@Command(accountType = AccountType.BOT, aliases = { "test" })
 public class CommandTest implements ICommandExecutor {
 
 	@Override
-	public CommandResult onCommand(GuildMessageReceivedEvent event, IWuffyGuild guild, IWuffyUser user, String[] args) {
+	public CommandResult onCommand(MessageReceivedEvent event, IWuffyGuild guild, IWuffyUser user, String[] args) {
 		event.getChannel().sendMessage("Test").queue();
 		return CommandResult.SUCCESS;
 	}

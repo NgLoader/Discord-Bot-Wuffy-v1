@@ -30,7 +30,7 @@ public final class ModuleStorageService implements IStorageService {
 	private boolean init;
 
 	public ModuleStorageService(Path path) {
-		this.config = WuffyServer.getConfigLoader().getConfig(DatabaseConfig.class);
+		this.config = WuffyServer.getConfigService().getConfig(DatabaseConfig.class);
 
 		if(this.config.mongo.enabled)
 			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.config.mongo));

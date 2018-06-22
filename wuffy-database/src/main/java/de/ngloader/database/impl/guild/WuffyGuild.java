@@ -1,5 +1,6 @@
 package de.ngloader.database.impl.guild;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -15,12 +16,6 @@ import net.dv8tion.jda.core.Region;
 import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Guild.Ban;
-import net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel;
-import net.dv8tion.jda.core.entities.Guild.MFALevel;
-import net.dv8tion.jda.core.entities.Guild.NotificationLevel;
-import net.dv8tion.jda.core.entities.Guild.Timeout;
-import net.dv8tion.jda.core.entities.Guild.VerificationLevel;
 import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Invite;
 import net.dv8tion.jda.core.entities.Member;
@@ -32,7 +27,6 @@ import net.dv8tion.jda.core.entities.Webhook;
 import net.dv8tion.jda.core.managers.AudioManager;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.GuildManager;
-import net.dv8tion.jda.core.managers.GuildManagerUpdatable;
 import net.dv8tion.jda.core.requests.RestAction;
 import net.dv8tion.jda.core.requests.restaction.MemberAction;
 import net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction;
@@ -102,6 +96,36 @@ public class WuffyGuild implements IWuffyGuild {
 	@Override
 	public void deletePlaylist(GuildMusicPlaylist playlist) {
 		this.guildExtension.deletePlaylist(this.guild.getIdLong(), playlist);
+	}
+
+	@Override
+	public List<String> getPrefixes() {
+		// TODO Auto-generated method stub
+		return Arrays.asList("~", "test");
+	}
+
+	@Override
+	public void addPrefix(String prefix) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removePrefix(String prefix) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isMention() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setMention() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -251,7 +275,7 @@ public class WuffyGuild implements IWuffyGuild {
 
 	@Deprecated
 	@Override
-	public GuildManagerUpdatable getManagerUpdatable() {
+	public net.dv8tion.jda.core.managers.GuildManagerUpdatable getManagerUpdatable() {
 		return this.guild.getManagerUpdatable();
 	}
 
@@ -338,35 +362,5 @@ public class WuffyGuild implements IWuffyGuild {
 	@Override
 	public boolean isAvailable() {
 		return this.guild.isAvailable();
-	}
-
-	@Override
-	public List<String> getPrefixes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addPrefix(String prefix) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removePrefix(String prefix) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isMention() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setMention() {
-		// TODO Auto-generated method stub
-		
 	}
 }

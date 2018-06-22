@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.ngloader.api.IShardProvider;
+import de.ngloader.api.IJDAProvider;
+import de.ngloader.api.WuffyConfig;
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.ICommandManager;
 import de.ngloader.api.config.IConfigService;
+import de.ngloader.api.database.DatabaseConfig;
 import de.ngloader.api.database.IStorageService;
 import de.ngloader.api.database.impl.guild.IExtensionGuild;
 import de.ngloader.api.database.impl.guild.IWuffyGuild;
@@ -28,8 +30,10 @@ import de.ngloader.database.impl.lang.SQLExtensionLanguage;
 import de.ngloader.database.impl.user.MongoExtensionUser;
 import de.ngloader.database.impl.user.SQLExtensionUser;
 import de.ngloader.database.impl.user.WuffyUser;
+import de.ngloader.master.command.CommandRegistry;
 import de.ngloader.master.config.ConfigService;
-import de.ngloader.master.provider.ShardProvider;
+import de.ngloader.master.listener.MessageListener;
+import de.ngloader.master.provider.JDAProvider;
 
 public class Wuffy extends WuffyServer {
 
@@ -53,10 +57,10 @@ public class Wuffy extends WuffyServer {
 
 	private final Thread masterThread;
 
-	private final ShardProvider shardProvider;
-	private final CommandManager commandManager;
-	private final ModuleStorageService moduleStorageService;
-	private final IConfigService configService;
+	private JDAProvider jdaProvider;
+	private CommandManager commandManager;
+	private ModuleStorageService moduleStorageService;
+	private IConfigService configService;
 
 	private final Map<Long, IWuffyGuild> guilds = new HashMap<Long, IWuffyGuild>();
 	private final Map<Long, IWuffyUser> users = new HashMap<Long, IWuffyUser>();
@@ -64,11 +68,19 @@ public class Wuffy extends WuffyServer {
 	public Wuffy(boolean debug) {
 		WuffyServer.setInstance(this);
 
+		this.masterThread = new Thread(this, "Wuffy master thread");
+
 		/* SETTINGS START */
+		WuffyServer.getLogger().info("Startup config", "Loading");
 		this.configService = new ConfigService();
+		this.configService.loadConfig(WuffyConfig.class);
+		this.configService.loadConfig(DatabaseConfig.class);
+		System.out.println(this.configService.getConfig(WuffyConfig.class).accountType);
+		WuffyServer.getLogger().info("Startup conifg", "Loaded");
 		/* SETTINGS END */
 
 		/* DATABASE START */
+		WuffyServer.getLogger().info("Startup database", "Starting");
 		this.moduleStorageService = new ModuleStorageService(new File("./").toPath().resolve("database.yml"));
 
 		this.moduleStorageService.registerExtension("guild", IExtensionGuild.class);
@@ -90,19 +102,32 @@ public class Wuffy extends WuffyServer {
 			sqlStorage.registerProvider(IExtensionLanguage.class, new SQLExtensionLanguage());
 		}
 
+		WuffyServer.getLogger().info("Startup database", "Enabling");
 		this.moduleStorageService.enable();
+		WuffyServer.getLogger().info("Startup database", "Loaded");
 		/* DATABASE END */
 
-		/* COMMAND START */
-		this.commandManager = new CommandManager();
-		/* COMMAND END */
-
+		
+	
 		/* BOT START */
-		this.shardProvider = new ShardProvider();
-		/* BOT END */
+		this.jdaProvider = new JDAProvider(new ReadyListenerAdapter() {
 
-		this.masterThread = new Thread(this, "Wuffy master thread");
-		this.masterThread.start();
+			public void onReady(net.dv8tion.jda.core.events.ReadyEvent event) {
+				/* COMMAND START */
+				WuffyServer.getLogger().info("Startup command", "Loading");
+				commandManager = new CommandManager();
+				WuffyServer.getLogger().info("Startup command", "Adding commands");
+				CommandRegistry.register();
+				WuffyServer.getLogger().info("Startup command", "Loaded");
+				/* COMMAND END */
+
+				event.getJDA().removeEventListener(this);
+				event.getJDA().addEventListener(new MessageListener());
+
+				masterThread.start();
+			};
+		});
+		/* BOT END */
 	}
 
 	@Override
@@ -112,7 +137,7 @@ public class Wuffy extends WuffyServer {
 
 	@Override
 	protected void stop() {
-		getLogger().info("Stopping wuffy");
+		getLogger().info("Stopping wuffy. Goodbye my friend :)");
 
 		LoggerManager.close();
 	}
@@ -128,8 +153,8 @@ public class Wuffy extends WuffyServer {
 	}
 
 	@Override
-	protected IShardProvider getShardProvider0() {
-		return this.shardProvider;
+	protected IJDAProvider getJDAProvider0() {
+		return this.jdaProvider;
 	}
 
 	@Override
@@ -145,7 +170,7 @@ public class Wuffy extends WuffyServer {
 	@Override
 	protected IWuffyUser getUser0(Long longId) {
 		if(!this.users.containsKey(longId))
-			this.users.put(longId, new WuffyUser(this.shardProvider.getJDA().getUserById(longId)));
+			this.users.put(longId, new WuffyUser(this.jdaProvider.getJDA().getUserById(longId)));
 
 		return this.users.get(longId);
 	}
@@ -153,7 +178,7 @@ public class Wuffy extends WuffyServer {
 	@Override
 	protected IWuffyGuild getGuild0(Long longId) {
 		if(!this.guilds.containsKey(longId))
-			this.guilds.put(longId, new WuffyGuild(this.shardProvider.getJDA().getGuildById(longId)));
+			this.guilds.put(longId, new WuffyGuild(this.jdaProvider.getJDA().getGuildById(longId)));
 
 		return this.guilds.get(longId);
 	}

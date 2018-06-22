@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
+import de.ngloader.api.WuffyConfig;
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.Command;
 import de.ngloader.api.command.Commands;
@@ -14,16 +16,18 @@ import de.ngloader.api.command.ICommandManager;
 import de.ngloader.api.logger.ILogger;
 import de.ngloader.api.util.ITickable;
 import de.ngloader.api.util.Reactions;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import de.ngloader.common.logger.LoggerManager;
+import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class CommandManager implements ICommandManager, ITickable {
 
 	private static final ILogger LOGGER = WuffyServer.getLogger();
 
-	private static final String BOT_MENTION = String.format("<@%s>", Long.toString(WuffyServer.getShardProvider().getJDA().getSelfUser().getIdLong()));
+	private static final String BOT_MENTION = String.format("<@%s>", Long.toString(WuffyServer.getJDA().getSelfUser().getIdLong()));
 
-	private final Map<String, Map<String, CommandInfo>> commands = new HashMap<String, Map<String, CommandInfo>>();
-	private final Queue<GuildMessageReceivedEvent> commandQueue = new ConcurrentLinkedQueue<>();
+	private final Map<String, CommandInfo> commands = new HashMap<String, CommandInfo>();
+	private final Queue<MessageReceivedEvent> commandQueue = new ConcurrentLinkedQueue<>();
 
 	private long nextWarnMessage = 0;
 
@@ -33,18 +37,22 @@ public class CommandManager implements ICommandManager, ITickable {
 			this.processCommand(commandQueue.poll());
 	}
 
-	public void issueCommand(GuildMessageReceivedEvent event) { //TODO create auto blacklist system and check it here before adding to queue
+	public void issueCommand(MessageReceivedEvent event) { //TODO create auto blacklist system and check it here before adding to queue
 		if(this.commandQueue.size() < 100)
 			this.commandQueue.add(event);
 		else if(nextWarnMessage < System.currentTimeMillis()) {
 			LOGGER.warn("Command queue is full.");
 			nextWarnMessage = System.currentTimeMillis() + 15000;
-		}	
+		}
 	}
 
-	private void processCommand(GuildMessageReceivedEvent event) {
+	private void processCommand(MessageReceivedEvent event) {
 		try {
-			if(event.getAuthor().isBot() || !event.getChannel().canTalk())
+			WuffyConfig config = WuffyServer.getConfigService().getConfig(WuffyConfig.class);
+
+			if(event.getAuthor().isBot() ||
+					(event.getGuild() != null && !event.getGuild().getTextChannelById(event.getChannel().getIdLong()).canTalk()) ||
+					config.accountType == AccountType.CLIENT && !config.admins.contains(Long.toString(event.getAuthor().getIdLong())))
 				return;
 
 			var guild = WuffyServer.getGuild(event.getGuild().getIdLong());
@@ -55,44 +63,53 @@ public class CommandManager implements ICommandManager, ITickable {
 				return;
 			}
 
+			System.out.println(guild.getPrefixes().stream().collect(Collectors.joining(", ")));
+
 			if(user.isBlocked())
 				return; //TODO add blocked message with reason and expire date
 
 			var message = event.getMessage().getContentRaw();
 
-			var mention = message.startsWith(BOT_MENTION);
+			var mention = (user.isAdmin() || guild.isMention()) && message.startsWith(BOT_MENTION);
 
-			var locale = user.getLocale() != null ? user.getLocale() : guild.getLocale();
+			if(mention)
+				message = message.substring(0, BOT_MENTION.length()).trim();
 
-			if(commands.containsKey(locale)) {
-				var split = message.split("\\s+");
+			System.out.println(message);
 
-				var commandString = split[0].toLowerCase();
-				var command = commands.get(locale).get(commandString);
+			for(String prefix : guild.getPrefixes()) {
+				if(message.startsWith(prefix)) {
+					message = message.substring(0, prefix.length());
 
-				if(command != null)
-					switch (command.getExecutor().onCommand(event, guild, user, Arrays.copyOfRange(split, 1, split.length)).getCommandResult()) {
-					case SUCCESS:
-						LOGGER.debug("Command executor", String.format("Successful executed command '%s'", message));
-						event.getMessage().addReaction(Reactions.WHITE_CHECK_MARK.getAsUnicode()).queue();
-						break;
+					var split = message.split("\\s+");
 
-					case SYNTAX:
-						LOGGER.debug("Command executor", String.format("Syntax error by executed command '%s'", message));
-						command.getExecutor().onHelp(event, guild, user);
-						break;
+					var commandString = split[0].toLowerCase();
+					var command = commands.get(commandString);
 
-					case ERROR:
-						LOGGER.debug("Command executor", String.format("Error by executed command '%s'", message));
-						event.getMessage().addReaction(Reactions.WARNING.getAsUnicode()).queue();
-						break;
+					if(command != null)
+						switch (command.getExecutor().onCommand(event, guild, user, Arrays.copyOfRange(split, 1, split.length)).getCommandResult()) {
+						case SUCCESS:
+							LOGGER.debug("Command executor", String.format("Successful executed command '%s'", event.getMessage().getContentRaw()));
+							event.getMessage().addReaction(Reactions.WHITE_CHECK_MARK.getAsUnicode()).queue();
+							break;
+
+						case SYNTAX:
+							LOGGER.debug("Command executor", String.format("Syntax error by executed command '%s'", event.getMessage().getContentRaw()));
+							command.getExecutor().onHelp(event, guild, user);
+							break;
+
+						case ERROR:
+							LOGGER.debug("Command executor", String.format("Error by executed command '%s'", event.getMessage().getContentRaw()));
+							event.getMessage().addReaction(Reactions.WARNING.getAsUnicode()).queue();
+							break;
+						}
+					else {
+						LOGGER.debug("Command executor", String.format("Command '%s' not found", event.getMessage().getContentRaw()));
+						event.getMessage().addReaction(Reactions.GREY_QUESTION.getAsUnicode()).queue();
 					}
-				else {
-					LOGGER.debug("Command executor", String.format("Command '%s' not found", message));
-					event.getMessage().addReaction(Reactions.GREY_QUESTION.getAsUnicode()).queue();
+					break;
 				}
-			} else
-				LOGGER.info(String.format("Locale '%s' not exist. Used by user '%s' in guild '%s'.", locale, event.getGuild().getId(), event.getAuthor().getId()));
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -114,7 +131,11 @@ public class CommandManager implements ICommandManager, ITickable {
 	public void registerExecutor(Command command, ICommandExecutor executor) {
 		CommandInfo commandInfo = new CommandInfo(command, executor);
 
-		//TODO register commands with langauge
+		for(String alias : Arrays.asList(commandInfo.command.aliases())) {
+			this.commands.put(alias, commandInfo);
+
+			LoggerManager.getLogger().debug("CommandManager", "Registered command '" + alias + "'");
+		}
 	}
 
 	class CommandInfo {

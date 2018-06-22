@@ -11,4 +11,6 @@ public interface IWuffyUser extends User {
 	public String getLocale();
 
 	public void setLocale(String locale);
+
+	public boolean isAdmin();
 }

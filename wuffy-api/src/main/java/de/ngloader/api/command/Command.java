@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import de.ngloader.api.lang.TranslationKey;
 import net.dv8tion.jda.core.AccountType;
 
@@ -17,7 +18,7 @@ public @interface Command {
 
 	TranslationKey description() default TranslationKey.UNKNOWN;
 
-	TranslationKey trigger();
+	String[] aliases();
 
 	EnumCommandCategory category() default EnumCommandCategory.UNKNOWN;
 }
