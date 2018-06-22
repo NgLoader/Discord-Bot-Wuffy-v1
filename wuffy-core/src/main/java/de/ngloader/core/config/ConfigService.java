@@ -1,4 +1,4 @@
-package de.ngloader.master.config;
+package de.ngloader.core.config;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

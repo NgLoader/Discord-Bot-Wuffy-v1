@@ -1,4 +1,4 @@
-package de.ngloader.master;
+package de.ngloader.core;
 
 public class Defaults {
 
