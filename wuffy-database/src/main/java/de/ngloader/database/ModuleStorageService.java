@@ -13,7 +13,7 @@ import de.ngloader.api.database.IStorageService;
 import de.ngloader.api.database.Storage;
 import de.ngloader.api.database.mongo.MongoStorage;
 import de.ngloader.api.database.sql.SQLStorage;
-import de.ngloader.api.logger.ILogger;
+import de.ngloader.core.logger.ILogger;
 
 public final class ModuleStorageService implements IStorageService {
 
