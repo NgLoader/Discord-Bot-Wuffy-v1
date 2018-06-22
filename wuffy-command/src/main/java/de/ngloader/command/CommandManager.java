@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 import de.ngloader.api.WuffyConfig;
 import de.ngloader.api.WuffyServer;
@@ -63,23 +62,22 @@ public class CommandManager implements ICommandManager, ITickable {
 				return;
 			}
 
-			System.out.println(guild.getPrefixes().stream().collect(Collectors.joining(", ")));
-
 			if(user.isBlocked())
 				return; //TODO add blocked message with reason and expire date
 
 			var message = event.getMessage().getContentRaw();
 
-			var mention = (user.isAdmin() || guild.isMention()) && message.startsWith(BOT_MENTION);
+			var mention = message.startsWith(BOT_MENTION);
+
+			if(mention && (!guild.isMention() && !user.isAdmin()))
+				return;
 
 			if(mention)
-				message = message.substring(0, BOT_MENTION.length()).trim();
-
-			System.out.println(message);
+				message = message.substring(BOT_MENTION.length()).trim();
 
 			for(String prefix : guild.getPrefixes()) {
 				if(message.startsWith(prefix)) {
-					message = message.substring(0, prefix.length());
+					message = message.substring(prefix.length());
 
 					var split = message.split("\\s+");
 

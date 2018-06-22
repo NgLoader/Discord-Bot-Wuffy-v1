@@ -13,7 +13,7 @@ public class CommandTest implements ICommandExecutor {
 
 	@Override
 	public CommandResult onCommand(MessageReceivedEvent event, IWuffyGuild guild, IWuffyUser user, String[] args) {
-		event.getChannel().sendMessage("Test").queue();
+		event.getChannel().sendMessage(String.format("test '%s'", String.join(", ", args))).queue();
 		return CommandResult.SUCCESS;
 	}
 }

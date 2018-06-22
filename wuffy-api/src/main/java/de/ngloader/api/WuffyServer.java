@@ -26,7 +26,7 @@ public abstract class WuffyServer extends TickingTask {
 	}
 
 	public static JDA getJDA() {
-		return WuffyServer.instance.getJDAProvider0().getJDA();
+		return WuffyServer.instance.getShardProvider0().getJDA();
 	}
 
 	public static ILogger getLogger() {
@@ -37,8 +37,8 @@ public abstract class WuffyServer extends TickingTask {
 		return WuffyServer.instance.getStorageService0();
 	}
 
-	public static IJDAProvider getJDAProvider() {
-		return WuffyServer.instance.getJDAProvider0();
+	public static IShardProvider getShardProvider() {
+		return WuffyServer.instance.getShardProvider0();
 	}
 
 	public static ICommandManager getCommandManager() {
@@ -61,7 +61,7 @@ public abstract class WuffyServer extends TickingTask {
 
 	protected abstract IStorageService getStorageService0();
 
-	protected abstract IJDAProvider getJDAProvider0();
+	protected abstract IShardProvider getShardProvider0();
 
 	protected abstract ICommandManager getCommandManager0();
 

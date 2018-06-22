@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.ngloader.api.IJDAProvider;
+import de.ngloader.api.IShardProvider;
 import de.ngloader.api.WuffyConfig;
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.command.ICommandManager;
@@ -33,7 +33,7 @@ import de.ngloader.database.impl.user.WuffyUser;
 import de.ngloader.master.command.CommandRegistry;
 import de.ngloader.master.config.ConfigService;
 import de.ngloader.master.listener.MessageListener;
-import de.ngloader.master.provider.JDAProvider;
+import de.ngloader.master.provider.ShardProvider;
 
 public class Wuffy extends WuffyServer {
 
@@ -57,7 +57,7 @@ public class Wuffy extends WuffyServer {
 
 	private final Thread masterThread;
 
-	private JDAProvider jdaProvider;
+	private ShardProvider shardProvider;
 	private CommandManager commandManager;
 	private ModuleStorageService moduleStorageService;
 	private IConfigService configService;
@@ -75,7 +75,6 @@ public class Wuffy extends WuffyServer {
 		this.configService = new ConfigService();
 		this.configService.loadConfig(WuffyConfig.class);
 		this.configService.loadConfig(DatabaseConfig.class);
-		System.out.println(this.configService.getConfig(WuffyConfig.class).accountType);
 		WuffyServer.getLogger().info("Startup conifg", "Loaded");
 		/* SETTINGS END */
 
@@ -110,7 +109,7 @@ public class Wuffy extends WuffyServer {
 		
 	
 		/* BOT START */
-		this.jdaProvider = new JDAProvider(new ReadyListenerAdapter() {
+		this.shardProvider = new ShardProvider(new ReadyListenerAdapter() {
 
 			public void onReady(net.dv8tion.jda.core.events.ReadyEvent event) {
 				/* COMMAND START */
@@ -153,8 +152,8 @@ public class Wuffy extends WuffyServer {
 	}
 
 	@Override
-	protected IJDAProvider getJDAProvider0() {
-		return this.jdaProvider;
+	protected IShardProvider getShardProvider0() {
+		return this.shardProvider;
 	}
 
 	@Override
@@ -170,7 +169,7 @@ public class Wuffy extends WuffyServer {
 	@Override
 	protected IWuffyUser getUser0(Long longId) {
 		if(!this.users.containsKey(longId))
-			this.users.put(longId, new WuffyUser(this.jdaProvider.getJDA().getUserById(longId)));
+			this.users.put(longId, new WuffyUser(this.shardProvider.getJDA().getUserById(longId)));
 
 		return this.users.get(longId);
 	}
@@ -178,7 +177,7 @@ public class Wuffy extends WuffyServer {
 	@Override
 	protected IWuffyGuild getGuild0(Long longId) {
 		if(!this.guilds.containsKey(longId))
-			this.guilds.put(longId, new WuffyGuild(this.jdaProvider.getJDA().getGuildById(longId)));
+			this.guilds.put(longId, new WuffyGuild(this.shardProvider.getJDA().getGuildById(longId)));
 
 		return this.guilds.get(longId);
 	}
