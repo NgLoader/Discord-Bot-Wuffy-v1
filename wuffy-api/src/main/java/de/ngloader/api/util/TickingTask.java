@@ -1,14 +1,12 @@
 package de.ngloader.api.util;
 
 import de.ngloader.api.WuffyServer;
-import de.ngloader.api.logger.ILogger;
 
 /**
  * @author Ingrim4
  */
 public abstract class TickingTask implements Runnable {
 
-	protected static final ILogger LOGGER = WuffyServer.getLogger();
 	private static final long MS_PER_TICK = 1000L /50L;
 
 	protected boolean running = true;
@@ -30,13 +28,13 @@ public abstract class TickingTask implements Runnable {
 				var delta = time - this.lastTickTime;
 
 				if(delta > 2000L && this.lastTickTime - this.lastLaggWarning >= 15000L) {
-					LOGGER.warn(String.format("Can\'t keep up! Did the system time change, or is the server overloaded? Running %dms behind, skipping %d tick(s)", delta, (delta / MS_PER_TICK)));
+					WuffyServer.getLogger().warn(String.format("Can\'t keep up! Did the system time change, or is the server overloaded? Running %dms behind, skipping %d tick(s)", delta, (delta / MS_PER_TICK)));
 					delta = 2000;
 					this.lastLaggWarning = this.lastTickTime;
 				}
 
 				if(delta < 0L) {
-					LOGGER.warn("Time ran backwards! Didi the system time change?");
+					WuffyServer.getLogger().warn("Time ran backwards! Didi the system time change?");
 					delta = 0L;
 				}
 

@@ -1,12 +1,12 @@
 {
   "mongo": {
-    "enabled": true,
-    "address": "173.249.11.205",
-    "port": 27027,
-    "username": "wuffy",
-    "password": " k3nh3RnhnNFH<.3jn5ja",
-    "database": "wuffy",
-    "collectionPrefix": "wuffy_",
+    "enabled": false,
+    "address": "localhost",
+    "port": 27017,
+    "username": "username",
+    "password": "password",
+    "database": "database",
+    "collectionPrefix": "imprex_",
     "ssl": {
       "enabled": false,
       "invalidHostNames": false,
@@ -20,11 +20,10 @@
     "enabled": false,
     "driver": "com.mysql.jdbc.Driver",
     "uri": "jdbc:mysql://localhost/database?user=username&password=password",
-    "prefix": "wuffy_"
+    "prefix": "imprex_"
   },
   "extensions": {
     "guild": "mongo",
-    "user": "mongo",
-    "lang": "mongo"
+    "user": "mongo"
   }
 }

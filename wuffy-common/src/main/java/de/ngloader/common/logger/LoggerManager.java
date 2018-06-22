@@ -11,69 +11,63 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.ngloader.api.logger.ILoggerManager;
-import de.ngloader.api.logger.Logger;
+import de.ngloader.api.logger.ILogger;
 import de.ngloader.api.logger.ILogger.Level;
 import de.ngloader.common.util.FileUtil;
 
 /**
  * @author Ingrim4
  */
-public class LoggerManager implements ILoggerManager {
+public class LoggerManager {
 
 	protected static final Path LOG_DIR = Paths.get("./logs/");
 	protected static final Path LATEST = LOG_DIR.resolve("latest.log");
 
-	private static final Logger LOGGER = new Logger();
+	private static final ILogger LOGGER = new Logger();
 
 	private static final DateFormat SAVE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
-	private boolean debug = false;
-	private LoggerStream logStream, errStream;
-	private PrintWriter printWriter;
+	private static boolean debug = false;
+	private static LoggerStream logStream, errStream;
+	private static PrintWriter printWriter;
 
-	public LoggerManager() {
+	static {
 		try {
 			FileUtil.delete(LATEST);
 			FileUtil.create(LATEST);
 
-			this.printWriter = new PrintWriter(Files.newBufferedWriter(LATEST), true);
+			LoggerManager.printWriter = new PrintWriter(Files.newBufferedWriter(LATEST), true);
 
-			System.setOut(this.logStream = new LoggerStream(new FileOutputStream(FileDescriptor.out), Level.INFO, this.printWriter));
-			System.setErr(this.errStream = new LoggerStream(new FileOutputStream(FileDescriptor.err), Level.ERROR, this.printWriter));
+			System.setOut(LoggerManager.logStream = new LoggerStream(new FileOutputStream(FileDescriptor.out), Level.INFO, LoggerManager.printWriter));
+			System.setErr(LoggerManager.errStream = new LoggerStream(new FileOutputStream(FileDescriptor.err), Level.ERROR, LoggerManager.printWriter));
 		} catch (IOException e) {
 			throw new Error("Failed to init logger", e);
 		}
 	}
 
-	@Override
-	public void log0(Level level, String message) {
-		if(level == Level.DEBUG && !this.debug)
+	public static void log0(Level level, String message) {
+		if(level == Level.DEBUG && !LoggerManager.debug)
 			return;
-		(level.isError() ? this.errStream : this.logStream).log(level, message);
+		(level.isError() ? LoggerManager.errStream : LoggerManager.logStream).log(level, message);
 	}
 
-	@Override
-	public void setDebug(boolean debug) {
-		this.debug = true;
+	public static void setDebug(boolean debug) {
+		LoggerManager.debug = true;
 	}
 
-	@Override
-	public boolean isDebug() {
-		return this.debug;
+	public static boolean isDebug() {
+		return LoggerManager.debug;
 	}
 
-	@Override
-	public Logger getLogger() {
+	public static ILogger getLogger() {
 		return LoggerManager.LOGGER;
 	}
 
-	@Override
-	public void close() {
+	public static void close() {
 		try {
-			this.logStream.close();
-			this.errStream.close();
-			this.printWriter.close();
+			LoggerManager.logStream.close();
+			LoggerManager.errStream.close();
+			LoggerManager.printWriter.close();
 
 			var log = LOG_DIR.resolve(String.format("%s.log", SAVE_FORMAT.format(new Date())));
 			FileUtil.copy(LATEST, log);

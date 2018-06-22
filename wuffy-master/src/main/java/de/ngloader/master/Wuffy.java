@@ -17,7 +17,6 @@ import de.ngloader.api.database.impl.user.IWuffyUser;
 import de.ngloader.api.database.mongo.MongoStorage;
 import de.ngloader.api.database.sql.SQLStorage;
 import de.ngloader.api.logger.ILogger;
-import de.ngloader.api.logger.ILoggerManager;
 import de.ngloader.command.CommandManager;
 import de.ngloader.common.logger.LoggerManager;
 import de.ngloader.database.ModuleStorageService;
@@ -29,6 +28,7 @@ import de.ngloader.database.impl.lang.SQLExtensionLanguage;
 import de.ngloader.database.impl.user.MongoExtensionUser;
 import de.ngloader.database.impl.user.SQLExtensionUser;
 import de.ngloader.database.impl.user.WuffyUser;
+import de.ngloader.master.config.ConfigService;
 import de.ngloader.master.provider.ShardProvider;
 
 public class Wuffy extends WuffyServer {
@@ -48,12 +48,11 @@ public class Wuffy extends WuffyServer {
 
 		System.setProperty("io.netty.eventLoopThreads", Integer.toString(threads));
 
-		WuffyServer.setInstance(new Wuffy(debug));
+		new Wuffy(debug);
 	}
 
 	private final Thread masterThread;
 
-	private final LoggerManager loggerManager;
 	private final ShardProvider shardProvider;
 	private final CommandManager commandManager;
 	private final ModuleStorageService moduleStorageService;
@@ -63,10 +62,10 @@ public class Wuffy extends WuffyServer {
 	private final Map<Long, IWuffyUser> users = new HashMap<Long, IWuffyUser>();
 
 	public Wuffy(boolean debug) {
-		this.loggerManager = new LoggerManager();
+		WuffyServer.setInstance(this);
 
 		/* SETTINGS START */
-		
+		this.configService = new ConfigService();
 		/* SETTINGS END */
 
 		/* DATABASE START */
@@ -113,19 +112,14 @@ public class Wuffy extends WuffyServer {
 
 	@Override
 	protected void stop() {
-		LOGGER.info("Stopping wuffy");
+		getLogger().info("Stopping wuffy");
 
-		this.loggerManager.close();
+		LoggerManager.close();
 	}
 
 	@Override
 	protected ILogger getLogger0() {
-		return this.loggerManager.getLogger();
-	}
-
-	@Override
-	protected ILoggerManager getLoggerManager0() {
-		return this.loggerManager;
+		return LoggerManager.getLogger();
 	}
 
 	@Override

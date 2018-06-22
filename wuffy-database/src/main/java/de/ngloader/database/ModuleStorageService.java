@@ -1,18 +1,13 @@
 package de.ngloader.database;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import de.ngloader.api.WuffyServer;
+import de.ngloader.api.database.DatabaseConfig;
 import de.ngloader.api.database.IStorageExtension;
 import de.ngloader.api.database.IStorageService;
 import de.ngloader.api.database.Storage;
@@ -35,22 +30,7 @@ public final class ModuleStorageService implements IStorageService {
 	private boolean init;
 
 	public ModuleStorageService(Path path) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		if(Files.notExists(path)) {
-			try {
-				Files.createDirectories(path.getParent());
-				Files.copy(ModuleStorageService.class.getResourceAsStream("/database.yml"), path);
-			} catch (Exception e) {
-				e.printStackTrace();
-				LOGGER.fatal("Failed to create database.yml", e);
-			}
-		}
-
-		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			this.config = gson.fromJson(reader, DatabaseConfig.class);
-		} catch (IOException e) {
-			throw new Error(e);
-		}
+		this.config = WuffyServer.getConfigLoader().getConfig(DatabaseConfig.class);
 
 		if(this.config.mongo.enabled)
 			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.config.mongo));

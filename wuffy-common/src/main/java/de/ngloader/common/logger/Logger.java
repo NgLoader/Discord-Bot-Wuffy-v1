@@ -1,6 +1,6 @@
-package de.ngloader.api.logger;
+package de.ngloader.common.logger;
 
-import de.ngloader.api.WuffyServer;
+import de.ngloader.api.logger.ILogger;
 
 /**
  * @author Ingrim4
@@ -9,7 +9,7 @@ public class Logger implements ILogger {
 
 	@Override
 	public final void log(Level level, String message) {
-		WuffyServer.getLoggerManager().log0(level, message);
+		LoggerManager.log0(level, message);
 	}
 
 	@Override

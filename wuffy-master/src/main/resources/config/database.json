@@ -1,0 +1,29 @@
+{
+  "mongo": {
+    "enabled": false,
+    "address": "localhost",
+    "port": 27017,
+    "username": "username",
+    "password": "password",
+    "database": "database",
+    "collectionPrefix": "imprex_",
+    "ssl": {
+      "enabled": false,
+      "invalidHostNames": false,
+      "trustStoreFile": "",
+      "trustStorePasswordFile": "",
+      "keyStoreFile": "",
+      "keyStorePassword": ""
+    }
+  },
+  "sql": {
+    "enabled": false,
+    "driver": "com.mysql.jdbc.Driver",
+    "uri": "jdbc:mysql://localhost/database?user=username&password=password",
+    "prefix": "imprex_"
+  },
+  "extensions": {
+    "guild": "mongo",
+    "user": "mongo"
+  }
+}
