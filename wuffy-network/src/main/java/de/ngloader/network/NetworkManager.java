@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import de.ngloader.api.WuffyServer;
 import de.ngloader.api.logger.ILogger;
 import de.ngloader.api.util.ITickable;
+import de.ngloader.common.logger.LoggerManager;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -187,7 +188,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 
 	public void setNetHandler(INetHandler handler) {
 		Objects.nonNull(handler);
-		if(WuffyServer.getLoggerManager().isDebug())
+		if(LoggerManager.isDebug())
 			LOGGER.debug("NetworkManager", String.format("Set handler of %s to %s", this, handler));
 		this.handler = handler;
 	}

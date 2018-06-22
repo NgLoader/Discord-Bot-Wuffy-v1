@@ -64,8 +64,6 @@ public class CommandManager implements ICommandManager, ITickable {
 
 			var locale = user.getLocale() != null ? user.getLocale() : guild.getLocale();
 
-			if(())
-
 			if(commands.containsKey(locale)) {
 				var split = message.split("\\s+");
 
@@ -76,6 +74,7 @@ public class CommandManager implements ICommandManager, ITickable {
 					switch (command.getExecutor().onCommand(event, guild, user, Arrays.copyOfRange(split, 1, split.length)).getCommandResult()) {
 					case SUCCESS:
 						LOGGER.debug("Command executor", String.format("Successful executed command '%s'", message));
+						event.getMessage().addReaction(Reactions.WHITE_CHECK_MARK.getAsUnicode()).queue();
 						break;
 
 					case SYNTAX:
