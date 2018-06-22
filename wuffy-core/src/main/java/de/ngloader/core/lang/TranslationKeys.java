@@ -1,4 +1,4 @@
-package de.ngloader.lang;
+package de.ngloader.core.lang;
 
 public enum TranslationKeys {
 

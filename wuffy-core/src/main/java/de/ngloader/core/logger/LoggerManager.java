@@ -1,4 +1,4 @@
-package de.ngloader.common.logger;
+package de.ngloader.core.logger;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -11,9 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.ngloader.api.logger.ILogger;
-import de.ngloader.api.logger.ILogger.Level;
-import de.ngloader.common.util.FileUtil;
+import de.ngloader.core.api.logger.ILogger;
+import de.ngloader.core.api.logger.ILogger.Level;
+import de.ngloader.core.util.FileUtil;
 
 /**
  * @author Ingrim4

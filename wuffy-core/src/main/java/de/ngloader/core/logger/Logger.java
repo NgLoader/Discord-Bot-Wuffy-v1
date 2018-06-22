@@ -1,6 +1,6 @@
-package de.ngloader.common.logger;
+package de.ngloader.core.logger;
 
-import de.ngloader.api.logger.ILogger;
+import de.ngloader.core.api.logger.ILogger;
 
 /**
  * @author Ingrim4

@@ -1,4 +1,4 @@
-package de.ngloader.common.util;
+package de.ngloader.core.util;
 
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;

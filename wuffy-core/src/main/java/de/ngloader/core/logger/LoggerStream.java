@@ -1,4 +1,4 @@
-package de.ngloader.common.logger;
+package de.ngloader.core.logger;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,7 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.ngloader.api.logger.ILogger.Level;
+import de.ngloader.core.api.logger.ILogger.Level;
 
 /**
  * @author Ingrim4
