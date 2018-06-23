@@ -1,43 +1,43 @@
 package de.ngloader.core.database;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import de.ngloader.core.config.ConfigService;
+import de.ngloader.core.config.configs.DatabaseConfig;
+import de.ngloader.core.database.mongo.MongoStorage;
+import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.logger.Logger;
 
-public final class ModuleStorageService implements IStorageService {
+public final class ModuleStorageService {
 
-	private final DatabaseConfig config;
+	private static final DatabaseConfig config = ConfigService.getConfig(DatabaseConfig.class);
 
-	private final Map<Class<? extends Storage<?>>, Storage<?>> storages = new HashMap<Class<? extends Storage<?>>, Storage<?>>();
-	private final Map<String, Storage<?>> storageNames = new HashMap<String, Storage<?>>();
+	private static final Map<Class<? extends Storage<?>>, Storage<?>> storages = new HashMap<Class<? extends Storage<?>>, Storage<?>>();
+	private static final Map<String, Storage<?>> storageNames = new HashMap<String, Storage<?>>();
 
-	private final Map<String, Class<? extends IStorageExtension>> storageExtensions = new HashMap<String, Class<? extends IStorageExtension>>();
-	private final Map<Class<? extends IStorageExtension>, IStorageExtension> defaultProvider = new HashMap<Class<? extends IStorageExtension>, IStorageExtension>();
+	private static final Map<String, Class<? extends IStorageExtension>> storageExtensions = new HashMap<String, Class<? extends IStorageExtension>>();
+	private static final Map<Class<? extends IStorageExtension>, IStorageExtension> defaultProvider = new HashMap<Class<? extends IStorageExtension>, IStorageExtension>();
 
-	private boolean init;
+	private static boolean init;
 
-	public ModuleStorageService(Path path) {
-		this.config = null;
-//		this.config = WuffyServer.getConfigService().getConfig(DatabaseConfig.class);//TODO setConfig
-//
-//		if(this.config.mongo.enabled)
-//			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.config.mongo));
-//
-//		if(this.config.sql.enabled)
-//			this.registerStorage(SQLStorage.class, "sql",  new SQLStorage(this.config.sql));
+	static {
+		if(ModuleStorageService.config.mongo.enabled)
+			ModuleStorageService.registerStorage(MongoStorage.class, "mongo", new MongoStorage(ModuleStorageService.config.mongo));
+
+		if(ModuleStorageService.config.sql.enabled)
+			ModuleStorageService.registerStorage(SQLStorage.class, "sql",  new SQLStorage(ModuleStorageService.config.sql));
 	}
 
-	public void enable() {
-		if(this.config == null || this.init)
+	public static void enable() {
+		if(ModuleStorageService.config == null || ModuleStorageService.init)
 			return;
 		Logger.debug("database", "Loading database modules");
 
-		for(Entry<String, String> extension : this.config.extensions.entrySet()) {
-			Class<? extends IStorageExtension> extensionClass = this.storageExtensions.get(extension.getKey());
+		for(Entry<String, String> extension : ModuleStorageService.config.extensions.entrySet()) {
+			Class<? extends IStorageExtension> extensionClass = ModuleStorageService.storageExtensions.get(extension.getKey());
 			if(extensionClass == null) {
 				Logger.warn("database", String.format("Unknown extension: %s", extension.getKey()));
 				continue;
@@ -61,80 +61,74 @@ public final class ModuleStorageService implements IStorageService {
 
 		Logger.debug("database", "Loading database modules finished");
 
-		this.init = true;
+		ModuleStorageService.init = true;
 	}
 
-	public void disable() {
-		if(!this.init)
+	public static void disable() {
+		if(!ModuleStorageService.init)
 			return;
 
-		this.storages.forEach((storageClass, storage) -> {
-			this.storageExtensions.forEach((name, extensionClass) -> {
+		ModuleStorageService.storages.forEach((storageClass, storage) -> {
+			ModuleStorageService.storageExtensions.forEach((name, extensionClass) -> {
 				storage.unregisterProvider(extensionClass);
 			});
 		});
 
-		this.init = false;
+		ModuleStorageService.init = false;
 	}
 
-	@Override
-	public <T extends Storage<T>> boolean registerStorage(Class<T> storageClass, String name, T storage) {
+	public static <T extends Storage<T>> boolean registerStorage(Class<T> storageClass, String name, T storage) {
 		Objects.requireNonNull(storageClass);
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(storage);
 
-		if(!storages.containsKey(storageClass) && !storageNames.containsKey(name)) {
-			storages.put(storageClass, storage);
-			storageNames.put(name, storage);
+		if(!ModuleStorageService.storages.containsKey(storageClass) && !ModuleStorageService.storageNames.containsKey(name)) {
+			ModuleStorageService.storages.put(storageClass, storage);
+			ModuleStorageService.storageNames.put(name, storage);
 			return true;
 		}
 
 		return false;
 	}
 
-	@Override
-	public <T extends Storage<T>> boolean unregisterStorage(Class<T> storageClass) {
+	public static <T extends Storage<T>> boolean unregisterStorage(Class<T> storageClass) {
 		Objects.requireNonNull(storageClass);
 
-		return storages.remove(storageClass) != null;
+		return ModuleStorageService.storages.remove(storageClass) != null;
 	}
 
-	@Override
-	public <T extends Storage<T>> T getStorage(Class<T> storageClass) {
+	public static <T extends Storage<T>> T getStorage(Class<T> storageClass) {
 		Objects.requireNonNull(storageClass);
 
-		return storageClass.cast(storages.get(storageClass));
+		return storageClass.cast(ModuleStorageService.storages.get(storageClass));
 	}
 
-	@Override
-	public <T extends IStorageExtension> boolean registerExtension(String name, Class<T> extenionClass) {
+	public static <T extends IStorageExtension> boolean registerExtension(String name, Class<T> extenionClass) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(extenionClass);
 
-		if(this.storageExtensions.containsKey(name))
+		if(ModuleStorageService.storageExtensions.containsKey(name))
 			return false;
 
-		this.storageExtensions.put(name, extenionClass);
+		ModuleStorageService.storageExtensions.put(name, extenionClass);
 		Logger.debug("database storage", "registerExtension '" + extenionClass.getSimpleName() + "'");
 		return true;
 	}
 
-	@Override
-	public <T extends IStorageExtension> boolean unregisterExtension(String name) {
+	public static <T extends IStorageExtension> boolean unregisterExtension(String name) {
 		Objects.requireNonNull(name);
 
-		if(this.storageExtensions.containsKey(name)) {
-			this.defaultProvider.remove(this.storageExtensions.remove(name));
+		if(ModuleStorageService.storageExtensions.containsKey(name)) {
+			ModuleStorageService.defaultProvider.remove(ModuleStorageService.storageExtensions.remove(name));
 			return true;
 		}
 
 		return false;
 	}
 
-	@Override
-	public <T extends IStorageExtension> T getExtension(Class<T> extenionClass) {
+	public static <T extends IStorageExtension> T getExtension(Class<T> extenionClass) {
 		Objects.requireNonNull(extenionClass);
 
-		return extenionClass.cast(this.defaultProvider.get(extenionClass));
+		return extenionClass.cast(ModuleStorageService.defaultProvider.get(extenionClass));
 	}
 }

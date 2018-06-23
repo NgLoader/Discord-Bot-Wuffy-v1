@@ -14,12 +14,11 @@ import java.util.Objects;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.util.GsonUtil;
 
-public class ConfigService implements IConfigService {
+public class ConfigService {
 
-	private final Map<Class<? extends IConfig>, IConfig> configs = new HashMap<Class<? extends IConfig>, IConfig>();
+	private static final Map<Class<? extends IConfig>, IConfig> configs = new HashMap<Class<? extends IConfig>, IConfig>();
 
-	@Override
-	public <T extends IConfig> void loadConfig(Class<? extends T> configClass) {
+	public static <T extends IConfig> void loadConfig(Class<? extends T> configClass) {
 		Objects.isNull(configClass);
 
 		Config config = configClass.getDeclaredAnnotation(Config.class);
@@ -51,14 +50,12 @@ public class ConfigService implements IConfigService {
 		}
 	}
 
-	@Override
-	public <T extends IConfig> void saveConfig(Class<T> configClass, T config) {
+	public static <T extends IConfig> void saveConfig(Class<T> configClass, T config) {
 		Objects.isNull(configClass);
 		Objects.isNull(config);
 	}
 
-	@Override
-	public <T extends IConfig> T getConfig(Class<? extends T> configClass) {
+	public static <T extends IConfig> T getConfig(Class<? extends T> configClass) {
 		Objects.isNull(configClass);
 
 		if(!configs.containsKey(configClass))
