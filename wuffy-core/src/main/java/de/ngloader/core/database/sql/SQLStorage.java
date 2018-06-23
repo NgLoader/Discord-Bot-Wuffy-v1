@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import de.ngloader.api.database.Storage;
+import de.ngloader.core.database.Storage;
 
 public final class SQLStorage extends Storage<SQLStorage> {
 

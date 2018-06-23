@@ -9,7 +9,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import de.ngloader.api.database.Storage;
+import de.ngloader.core.database.Storage;
 
 public final class MongoStorage extends Storage<MongoStorage> {
 

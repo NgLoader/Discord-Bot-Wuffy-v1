@@ -1,15 +1,14 @@
-package de.ngloader.database.impl.user;
+package de.ngloader.core.database.impl.user;
 
 import java.util.List;
 
-import de.ngloader.api.database.impl.user.IWuffyUser;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.requests.RestAction;
 
-public class WuffyUser implements IWuffyUser {
+public class WuffyUser implements User {
 
 	private final User user;
 
@@ -18,35 +17,6 @@ public class WuffyUser implements IWuffyUser {
 			throw new NullPointerException("User is null");
 
 		this.user = user;
-	}
-
-	@Override
-	public boolean isBlocked() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setBlocked(boolean blocked, String reason, Long expire) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getLocale() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLocale(String locale) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isAdmin() {
-		return false;
 	}
 
 	@Override

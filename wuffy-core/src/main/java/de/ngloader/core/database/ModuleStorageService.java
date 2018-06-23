@@ -1,4 +1,4 @@
-package de.ngloader.database;
+package de.ngloader.core.database;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -6,18 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import de.ngloader.api.WuffyServer;
-import de.ngloader.api.database.DatabaseConfig;
-import de.ngloader.api.database.IStorageExtension;
-import de.ngloader.api.database.IStorageService;
-import de.ngloader.api.database.Storage;
-import de.ngloader.api.database.mongo.MongoStorage;
-import de.ngloader.api.database.sql.SQLStorage;
-import de.ngloader.core.logger.ILogger;
+import de.ngloader.core.logger.Logger;
 
 public final class ModuleStorageService implements IStorageService {
-
-	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private final DatabaseConfig config;
 
@@ -30,44 +21,45 @@ public final class ModuleStorageService implements IStorageService {
 	private boolean init;
 
 	public ModuleStorageService(Path path) {
-		this.config = WuffyServer.getConfigService().getConfig(DatabaseConfig.class);
-
-		if(this.config.mongo.enabled)
-			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.config.mongo));
-
-		if(this.config.sql.enabled)
-			this.registerStorage(SQLStorage.class, "sql",  new SQLStorage(this.config.sql));
+		this.config = null;
+//		this.config = WuffyServer.getConfigService().getConfig(DatabaseConfig.class);//TODO setConfig
+//
+//		if(this.config.mongo.enabled)
+//			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.config.mongo));
+//
+//		if(this.config.sql.enabled)
+//			this.registerStorage(SQLStorage.class, "sql",  new SQLStorage(this.config.sql));
 	}
 
 	public void enable() {
 		if(this.config == null || this.init)
 			return;
-		LOGGER.debug("database", "Loading database modules");
+		Logger.debug("database", "Loading database modules");
 
 		for(Entry<String, String> extension : this.config.extensions.entrySet()) {
 			Class<? extends IStorageExtension> extensionClass = this.storageExtensions.get(extension.getKey());
 			if(extensionClass == null) {
-				LOGGER.warn("database", String.format("Unknown extension: %s", extension.getKey()));
+				Logger.warn("database", String.format("Unknown extension: %s", extension.getKey()));
 				continue;
 			}
 
 			Storage<?> storage = storageNames.get(extension.getValue());
 			if(storage == null) {
-				LOGGER.warn("database", String.format("Unknown storage: %s", extension.getValue()));
+				Logger.warn("database", String.format("Unknown storage: %s", extension.getValue()));
 				continue;
 			}
 
 			IStorageExtension provider = storage.getProvider(extensionClass);
 			if(provider == null) {
-				LOGGER.warn("database", String.format("Unknown provider: %s/%s", extension.getValue(), extension.getKey()));
+				Logger.warn("database", String.format("Unknown provider: %s/%s", extension.getValue(), extension.getKey()));
 				continue;
 			}
 
 			defaultProvider.put(extensionClass, provider);
-			LOGGER.debug("database", "Enabled database module " + extensionClass.getSimpleName());
+			Logger.debug("database", "Enabled database module " + extensionClass.getSimpleName());
 		}
 
-		LOGGER.debug("database", "Loading database modules finished");
+		Logger.debug("database", "Loading database modules finished");
 
 		this.init = true;
 	}
@@ -123,7 +115,7 @@ public final class ModuleStorageService implements IStorageService {
 			return false;
 
 		this.storageExtensions.put(name, extenionClass);
-		LOGGER.debug("database storage", "registerExtension '" + extenionClass.getSimpleName() + "'");
+		Logger.debug("database storage", "registerExtension '" + extenionClass.getSimpleName() + "'");
 		return true;
 	}
 

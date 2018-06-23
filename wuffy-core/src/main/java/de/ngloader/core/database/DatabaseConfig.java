@@ -2,8 +2,8 @@ package de.ngloader.core.database;
 
 import java.util.Map;
 
-import de.ngloader.api.config.Config;
-import de.ngloader.api.config.IConfig;
+import de.ngloader.core.config.Config;
+import de.ngloader.core.config.IConfig;
 import de.ngloader.core.database.mongo.MongoConfig;
 import de.ngloader.core.database.sql.SQLConfig;
 

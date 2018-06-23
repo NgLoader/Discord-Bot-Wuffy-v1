@@ -4,12 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import de.ngloader.api.WuffyServer;
-import de.ngloader.core.logger.ILogger;
+import de.ngloader.core.logger.Logger;
 
 public abstract class Storage<S extends Storage<S>> {
-
-	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	protected final Map<Class<? extends IStorageExtension>, IStorageProvider<S>> storageExtensions = new HashMap<Class<? extends IStorageExtension>, IStorageProvider<S>>();
 
@@ -35,7 +32,7 @@ public abstract class Storage<S extends Storage<S>> {
 
 		this.storageExtensions.put(extensionClass, provider);
 		provider.registered((S) this);
-		LOGGER.debug("database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
+		Logger.debug("database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
 		return true;
 	}
 	
@@ -49,7 +46,7 @@ public abstract class Storage<S extends Storage<S>> {
 		if(this.storageExtensions.isEmpty())
 			this.disconnect();
 
-		LOGGER.debug("database storage", "unregisterProvider '" + extensionClass.getSimpleName() + "'");
+		Logger.debug("database storage", "unregisterProvider '" + extensionClass.getSimpleName() + "'");
 		return provider != null;
 	}
 

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import de.ngloader.api.lang.TranslationKey;
+import de.ngloader.core.lang.TranslationKeys;
 import net.dv8tion.jda.core.AccountType;
 
 @Target(ElementType.TYPE)
@@ -14,9 +14,9 @@ public @interface Command {
 
 	AccountType accountType() default AccountType.BOT;
 
-	TranslationKey name() default TranslationKey.UNKNOWN;
+	TranslationKeys name() default TranslationKeys.UNKNOWN;
 
-	TranslationKey description() default TranslationKey.UNKNOWN;
+	TranslationKeys description() default TranslationKeys.UNKNOWN;
 
 	String[] aliases();
 

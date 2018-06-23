@@ -11,8 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.ngloader.core.api.logger.ILogger;
-import de.ngloader.core.api.logger.ILogger.Level;
+import de.ngloader.core.logger.Logger.Level;
 import de.ngloader.core.util.FileUtil;
 
 /**
@@ -22,8 +21,6 @@ public class LoggerManager {
 
 	protected static final Path LOG_DIR = Paths.get("./logs/");
 	protected static final Path LATEST = LOG_DIR.resolve("latest.log");
-
-	private static final ILogger LOGGER = new Logger();
 
 	private static final DateFormat SAVE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
@@ -57,10 +54,6 @@ public class LoggerManager {
 
 	public static boolean isDebug() {
 		return LoggerManager.debug;
-	}
-
-	public static ILogger getLogger() {
-		return LoggerManager.LOGGER;
 	}
 
 	public static void close() {
