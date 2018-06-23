@@ -2,9 +2,8 @@ package de.ngloader.network;
 
 import java.util.List;
 
-import de.ngloader.api.WuffyServer;
-import de.ngloader.api.logger.ILogger;
-import de.ngloader.common.logger.LoggerManager;
+import de.ngloader.core.logger.Logger;
+import de.ngloader.core.logger.LoggerManager;
 import de.ngloader.network.PacketRegistry.EnumProtocolDirection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,8 +14,6 @@ import io.netty.handler.codec.DecoderException;
  * @author Ingrim4
  */
 public class NettyPacketDecoder extends ByteToMessageDecoder {
-
-	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private EnumProtocolDirection protocolDirection;
 
@@ -41,7 +38,7 @@ public class NettyPacketDecoder extends ByteToMessageDecoder {
 
 			out.add(packet);
 			if(LoggerManager.isDebug())
-				LOGGER.debug(String.format("Decoder/%s/%s", protocolState, packetId), String.format("IN: %s", packet.getClass().getName()));
+				Logger.debug(String.format("Decoder/%s/%s", protocolState, packetId), String.format("IN: %s", packet.getClass().getName()));
 		}
 	}
 }

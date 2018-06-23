@@ -8,10 +8,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.crypto.SecretKey;
 
-import de.ngloader.api.WuffyServer;
-import de.ngloader.api.logger.ILogger;
-import de.ngloader.api.util.ITickable;
-import de.ngloader.common.logger.LoggerManager;
+import de.ngloader.core.logger.Logger;
+import de.ngloader.core.logger.LoggerManager;
+import de.ngloader.core.util.ITickable;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,8 +26,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandler>> implements ITickable {
 
 	public static final AttributeKey<EnumProtocolState> PROTOCOL = AttributeKey.valueOf("protocol");
-
-	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private final Queue<QueuedPacket> packetsQueue = new ConcurrentLinkedQueue<QueuedPacket>();
 	private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -126,7 +123,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 	public void handleDisconnect() {
 		if(this.channel != null && !this.channel.isOpen()) {
 			if(this.disconnected) {
-				LOGGER.warn("handleDisconnection() called twice");
+				Logger.warn("handleDisconnection() called twice");
 			} else {
 				this.disconnected = true;
 				if(this.handler != null)
@@ -189,7 +186,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 	public void setNetHandler(INetHandler handler) {
 		Objects.nonNull(handler);
 		if(LoggerManager.isDebug())
-			LOGGER.debug("NetworkManager", String.format("Set handler of %s to %s", this, handler));
+			Logger.debug("NetworkManager", String.format("Set handler of %s to %s", this, handler));
 		this.handler = handler;
 	}
 

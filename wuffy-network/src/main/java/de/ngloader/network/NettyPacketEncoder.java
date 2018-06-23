@@ -1,8 +1,7 @@
 package de.ngloader.network;
 
-import de.ngloader.api.WuffyServer;
-import de.ngloader.api.logger.ILogger;
-import de.ngloader.common.logger.LoggerManager;
+import de.ngloader.core.logger.Logger;
+import de.ngloader.core.logger.LoggerManager;
 import de.ngloader.network.PacketRegistry.EnumProtocolDirection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,8 +12,6 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @author Ingrim4
  */
 public class NettyPacketEncoder extends MessageToByteEncoder<Packet<?>> {
-
-	private static final ILogger LOGGER = WuffyServer.getLogger();
 
 	private EnumProtocolDirection protocolDirection;
 
@@ -35,6 +32,6 @@ public class NettyPacketEncoder extends MessageToByteEncoder<Packet<?>> {
 		packet.write(packetBuffer);
 
 		if(LoggerManager.isDebug())
-			LOGGER.debug(String.format("Encoder/%s/%s", protocolState, packetId), String.format("OUT: %s", packet.getClass().getName()));
+			Logger.debug(String.format("Encoder/%s/%s", protocolState, packetId), String.format("OUT: %s", packet.getClass().getName()));
 	}
 }

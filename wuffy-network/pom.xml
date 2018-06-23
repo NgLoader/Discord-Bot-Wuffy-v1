@@ -15,15 +15,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-api</artifactId>
+			<artifactId>wuffy-core</artifactId>
 			<version>${wuffy.version}</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-common</artifactId>
-			<version>${wuffy.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
