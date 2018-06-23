@@ -28,7 +28,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-
 		<module>wuffy-bot</module>
 		<module>wuffy-client</module>
 		<module>wuffy-core</module>
