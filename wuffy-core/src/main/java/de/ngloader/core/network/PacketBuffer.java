@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +15,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import org.apache.commons.codec.DecoderException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.handler.codec.DecoderException;
 import io.netty.util.ByteProcessor;
 
 /**
@@ -48,8 +49,9 @@ public class PacketBuffer extends ByteBuf {
 	 * Returns variable int
 	 * 
 	 * @return read variable int
+	 * @throws DecoderException 
 	 */
-	public int readVarInt() {
+	public int readVarInt() throws DecoderException {
 		int out = 0;
 		int bytes = 0;
 		byte in;
@@ -86,8 +88,9 @@ public class PacketBuffer extends ByteBuf {
 	 * Returns variable long
 	 * 
 	 * @return read variable int
+	 * @throws DecoderException 
 	 */
-	public long readVarLong() {
+	public long readVarLong() throws DecoderException {
 		long out = 0;
 		int bytes = 0;
 		byte in;
@@ -123,8 +126,9 @@ public class PacketBuffer extends ByteBuf {
 	/**
 	 * Reads a string with max length of {@link Short#MAX_VALUE}
 	 * @return string
+	 * @throws DecoderException 
 	 */
-	public String readString() {
+	public String readString() throws DecoderException {
 		return this.readString(Short.MAX_VALUE);
 	}
 
@@ -132,8 +136,9 @@ public class PacketBuffer extends ByteBuf {
 	 * Reads a string with specific max length
 	 * @param max max allowed length of string
 	 * @return string
+	 * @throws DecoderException 
 	 */
-	public String readString(int length) {
+	public String readString(int length) throws DecoderException {
 		final int len = this.readVarInt();
 		if(len > length)
 			throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + len + " > " + length + ")");
@@ -145,8 +150,9 @@ public class PacketBuffer extends ByteBuf {
 	/**
 	 * Writes string with max length of {@link Short#MAX_VALUE}
 	 * @param value string to write
+	 * @throws DecoderException 
 	 */
-	public void writeString(String value) {
+	public void writeString(String value) throws DecoderException {
 		final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
 		if (bytes.length >= Short.MAX_VALUE)
 			throw new DecoderException("Attempt to write a string with a length greater than " + Short.MAX_VALUE + " to ByteBuf!");
@@ -160,8 +166,9 @@ public class PacketBuffer extends ByteBuf {
 	 * @param <T> your {@link Enum}
 	 * @param clazz class of {@link Enum}
 	 * @return read {@link Enum}
+	 * @throws DecoderException 
 	 */
-	public <T extends Enum<T>> T readEnum(Class<T> clazz) {
+	public <T extends Enum<T>> T readEnum(Class<T> clazz) throws DecoderException {
 		return (T) clazz.getEnumConstants()[this.readVarInt()];
 	}
 
@@ -177,8 +184,9 @@ public class PacketBuffer extends ByteBuf {
 	/**
 	 * Reads a byte array which got write byte {@link PacketBuffer#writeByteArray(byte[])}
 	 * @return byte[]
+	 * @throws DecoderException 
 	 */
-	public byte[] readByteArray() {
+	public byte[] readByteArray() throws DecoderException {
 		byte array[] = new byte[this.readVarInt()];
 		this.readBytes(array);
 		return array;
@@ -216,8 +224,9 @@ public class PacketBuffer extends ByteBuf {
 	 * Reads {@link InetSocketAddress}
 	 * 
 	 * @return read {@link InetSocketAddress}
+	 * @throws DecoderException 
 	 */
-	public InetSocketAddress readAddress() throws UnknownHostException {
+	public InetSocketAddress readAddress() throws UnknownHostException, DecoderException {
 		return new InetSocketAddress(InetAddress.getByAddress(this.readByteArray()), this.readUnsignedShort());
 	}
 

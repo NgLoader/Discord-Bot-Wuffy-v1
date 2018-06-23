@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

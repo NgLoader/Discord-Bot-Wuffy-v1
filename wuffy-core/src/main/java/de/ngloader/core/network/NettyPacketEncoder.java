@@ -1,8 +1,8 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.logger.LoggerManager;
-import de.ngloader.network.PacketRegistry.EnumProtocolDirection;
+import de.ngloader.core.network.PacketRegistry.EnumProtocolDirection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;

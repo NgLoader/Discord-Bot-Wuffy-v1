@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import java.util.List;
 import java.util.zip.Inflater;

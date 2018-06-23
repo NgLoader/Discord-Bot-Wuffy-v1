@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

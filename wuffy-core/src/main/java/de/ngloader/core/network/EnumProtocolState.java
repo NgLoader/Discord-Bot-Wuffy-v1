@@ -1,16 +1,16 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
-import de.ngloader.network.PacketRegistry.EnumProtocolDirection;
-import de.ngloader.network.authentication.AuthenticationRegistry;
-import de.ngloader.network.music.MusicRegistry;
+import de.ngloader.core.network.PacketRegistry.EnumProtocolDirection;
+import de.ngloader.core.network.universal.UniversalRegistry;
 
 /**
  * @author Ingrim4
  */
 public enum EnumProtocolState {
 
-	AUTH(AuthenticationRegistry.INSTANCE),
-	MUSIC(MusicRegistry.INSTANCE);
+//	AUTH(AuthenticationRegistry.INSTANCE),
+//	MUSIC(MusicRegistry.INSTANCE);
+	UNIVERSAL(UniversalRegistry.INSTANCE);
 
 	private PacketRegistry registry;
 

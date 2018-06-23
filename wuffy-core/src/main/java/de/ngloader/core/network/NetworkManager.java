@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
@@ -8,9 +8,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.crypto.SecretKey;
 
+import de.ngloader.core.ITickable;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.logger.LoggerManager;
-import de.ngloader.core.util.ITickable;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -41,7 +41,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 		super.channelActive(ctx);
 		this.channel = ctx.channel();
 
-		this.setProtocol(EnumProtocolState.AUTH);
+//		this.setProtocol(EnumProtocolState.AUTH); TODO create
 		this.flushPacketQueue();
 	}
 

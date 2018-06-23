@@ -1,4 +1,4 @@
-package de.ngloader.network;
+package de.ngloader.core.network;
 
 import java.net.SocketAddress;
 import java.util.ArrayList;

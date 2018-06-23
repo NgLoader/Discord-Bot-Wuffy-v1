@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import de.ngloader.core.ITickable;
 import de.ngloader.core.logger.Logger;
-import de.ngloader.core.util.ITickable;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class CommandManager implements ICommandManager, ITickable {
