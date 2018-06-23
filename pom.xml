@@ -93,7 +93,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>de.ng.master.Wuffy</mainClass>
+							<mainClass>de.ngloader.bootstrap.Wuffy</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

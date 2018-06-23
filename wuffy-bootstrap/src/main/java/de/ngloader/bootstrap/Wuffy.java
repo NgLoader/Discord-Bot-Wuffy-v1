@@ -1,4 +1,4 @@
-package de.ngloader.wuffy;
+package de.ngloader.bootstrap;
 
 import de.ngloader.core.logger.LoggerManager;
 
