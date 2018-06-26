@@ -5,6 +5,10 @@ import de.ngloader.core.config.IConfig;
 
 public class WuffyClient extends Core {
 
+	static {
+//		CommandRegistry.addCommand(AccountType.CLIENT, null);
+	}
+
 	public WuffyClient(IConfig config) {
 		super(config);
 	}

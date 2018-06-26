@@ -1,21 +1,33 @@
 package de.ngloader.bot;
 
-import de.ngloader.bot.command.CommandManager;
-import de.ngloader.bot.command.CommandRegestry;
+import de.ngloader.core.Core;
+import de.ngloader.core.config.IConfig;
 
-public class WuffyBot {
-
-	private static final CommandManager COMMAND_MANAGER;
+public class WuffyBot extends Core {
 
 	static {
-		COMMAND_MANAGER = new CommandManager();
+//		CommandRegistry.addCommand(AccountType.BOT, null);
 	}
 
-	public static CommandManager getCommandManager() {
-		return COMMAND_MANAGER;
+	public WuffyBot(IConfig config) {
+		super(config);
 	}
 
-	public static void main(String[] args) {
-		CommandRegestry.registerCommands();
+	@Override
+	protected void onLoad() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void onDisable() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void onUpdate() {
+		// TODO Auto-generated method stub
+		
 	}
 }
