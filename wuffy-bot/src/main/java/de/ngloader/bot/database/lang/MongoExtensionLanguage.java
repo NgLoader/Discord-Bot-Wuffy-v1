@@ -1,9 +1,9 @@
-package de.ngloader.core.database.impl.user;
+package de.ngloader.bot.database.lang;
 
 import de.ngloader.core.database.IStorageProvider;
 import de.ngloader.core.database.mongo.MongoStorage;
 
-public class MongoExtensionUser implements IStorageProvider<MongoStorage>, IExtensionUser {
+public class MongoExtensionLanguage implements IStorageProvider<MongoStorage>, IExtensionLang {
 
 	@Override
 	public void registered(MongoStorage storage) {

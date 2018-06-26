@@ -1,4 +1,4 @@
-package de.ngloader.core.database.impl.guild;
+package de.ngloader.bot.database.guild;
 
 import java.util.EnumSet;
 import java.util.List;

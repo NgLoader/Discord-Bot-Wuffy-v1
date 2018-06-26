@@ -1,9 +1,9 @@
-package de.ngloader.core.database.impl.user;
+package de.ngloader.bot.database.guild;
 
 import de.ngloader.core.database.IStorageProvider;
 import de.ngloader.core.database.sql.SQLStorage;
 
-public class SQLExtensionUser implements IStorageProvider<SQLStorage>, IExtensionUser {
+public class SQLExtensionGuild implements IStorageProvider<SQLStorage>, IExtensionGuild {
 
 	@Override
 	public void registered(SQLStorage storage) {

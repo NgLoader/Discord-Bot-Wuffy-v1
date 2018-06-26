@@ -1,4 +1,4 @@
-package de.ngloader.core.database.impl.guild;
+package de.ngloader.bot.database.guild;
 
 import de.ngloader.core.database.IStorageProvider;
 import de.ngloader.core.database.mongo.MongoStorage;

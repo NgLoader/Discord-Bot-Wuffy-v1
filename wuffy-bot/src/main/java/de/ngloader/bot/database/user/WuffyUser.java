@@ -1,4 +1,4 @@
-package de.ngloader.core.database.impl.user;
+package de.ngloader.bot.database.user;
 
 import java.util.List;
 
