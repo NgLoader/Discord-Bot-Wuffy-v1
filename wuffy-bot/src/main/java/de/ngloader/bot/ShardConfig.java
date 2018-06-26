@@ -1,4 +1,4 @@
-package de.ngloader.core.config.configs;
+package de.ngloader.bot;
 
 import java.util.List;
 

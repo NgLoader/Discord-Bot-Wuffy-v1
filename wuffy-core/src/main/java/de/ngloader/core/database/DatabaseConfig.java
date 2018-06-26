@@ -1,4 +1,4 @@
-package de.ngloader.core.config.configs;
+package de.ngloader.core.database;
 
 import java.util.Map;
 

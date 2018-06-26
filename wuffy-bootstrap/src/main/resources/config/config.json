@@ -1,0 +1,26 @@
+{
+  "bots": [
+    {
+      "enabled": false,
+      "token": "TOKEN"
+    },
+    {
+      "enabled": false,
+      "token": "TOKEN"
+    }
+  ],
+  //
+  //!ACHTUNG! Nutzung auf eigene Gefahr, da Selfbots in den Discord TOS verboten sind!
+  //!WARNING! Use at your own risk, Selfbots are not allowed in Discord TOS!
+  //
+  "clients": [
+    {
+      "enabled": false,
+      "token": "TOKEN"
+    },
+    {
+      "enabled": false,
+      "token": "TOKEN"
+    }
+  ]
+}

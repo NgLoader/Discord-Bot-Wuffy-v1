@@ -1,7 +1,8 @@
-package de.ngloader.core.config.configs;
+package de.ngloader.client;
 
 import java.util.List;
 
+import de.ngloader.core.GameConfig;
 import de.ngloader.core.config.Config;
 import de.ngloader.core.config.IConfig;
 import net.dv8tion.jda.core.OnlineStatus;

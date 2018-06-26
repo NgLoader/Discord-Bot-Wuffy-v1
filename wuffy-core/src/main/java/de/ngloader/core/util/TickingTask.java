@@ -7,7 +7,7 @@ import de.ngloader.core.logger.Logger;
  */
 public abstract class TickingTask implements Runnable {
 
-	private static final long MS_PER_TICK = 1000L /50L;
+	private static final long MS_PER_TICK = 1000L / 20L;
 
 	protected boolean running = true;
 	private long lastTickTime;
@@ -34,7 +34,7 @@ public abstract class TickingTask implements Runnable {
 				}
 
 				if(delta < 0L) {
-					Logger.warn("Time ran backwards! Didi the system time change?");
+					Logger.warn("Time ran backwards! Did the system time change?");
 					delta = 0L;
 				}
 

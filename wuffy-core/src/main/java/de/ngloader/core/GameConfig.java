@@ -1,4 +1,4 @@
-package de.ngloader.core.config.configs;
+package de.ngloader.core;
 import net.dv8tion.jda.core.entities.Game.GameType;
 
 public class GameConfig {

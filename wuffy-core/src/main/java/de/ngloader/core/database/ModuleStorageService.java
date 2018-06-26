@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import de.ngloader.core.config.ConfigService;
-import de.ngloader.core.config.configs.DatabaseConfig;
 import de.ngloader.core.database.mongo.MongoStorage;
 import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.logger.Logger;

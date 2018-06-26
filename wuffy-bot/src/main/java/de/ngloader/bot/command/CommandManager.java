@@ -1,4 +1,4 @@
-package de.ngloader.core.command;
+package de.ngloader.bot.command;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,6 +7,10 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import de.ngloader.core.ITickable;
+import de.ngloader.core.command.Command;
+import de.ngloader.core.command.Commands;
+import de.ngloader.core.command.ICommandExecutor;
+import de.ngloader.core.command.ICommandManager;
 import de.ngloader.core.logger.Logger;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
