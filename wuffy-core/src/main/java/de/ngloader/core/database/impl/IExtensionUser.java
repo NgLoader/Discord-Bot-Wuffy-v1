@@ -1,4 +1,4 @@
-package de.ngloader.bot.database.user;
+package de.ngloader.core.database.impl;
 
 import de.ngloader.core.database.IStorageExtension;
 

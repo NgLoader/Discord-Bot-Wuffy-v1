@@ -14,9 +14,9 @@ public class BotConfig implements IConfig {
 
 	public String token;
 
-	public String mentionId;
+	public List<Long> admins;
 
-	public List<String> admins;
+	public String mentionId;
 
 	public OnlineStatus status;
 	public GameConfig game;

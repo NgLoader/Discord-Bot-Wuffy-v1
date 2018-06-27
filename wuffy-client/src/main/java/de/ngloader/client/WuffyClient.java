@@ -1,7 +1,9 @@
 package de.ngloader.client;
 
 import de.ngloader.core.Core;
-import de.ngloader.core.config.IConfig;
+import de.ngloader.core.database.impl.IWuffyGuild;
+import de.ngloader.core.database.impl.IWuffyMemeber;
+import de.ngloader.core.database.impl.IWuffyUser;
 
 public class WuffyClient extends Core {
 
@@ -9,7 +11,7 @@ public class WuffyClient extends Core {
 //		CommandRegistry.addCommand(AccountType.CLIENT, null);
 	}
 
-	public WuffyClient(IConfig config) {
+	public WuffyClient(ClientConfig config) {
 		super(config);
 	}
 
@@ -23,5 +25,23 @@ public class WuffyClient extends Core {
 
 	@Override
 	protected void onUpdate() {
+	}
+
+	@Override
+	public IWuffyGuild getGuild(long guildId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IWuffyUser getUser(long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IWuffyMemeber getMember(long guildId, long memberId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

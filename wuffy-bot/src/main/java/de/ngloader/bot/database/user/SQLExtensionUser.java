@@ -1,6 +1,7 @@
 package de.ngloader.bot.database.user;
 
 import de.ngloader.core.database.IStorageProvider;
+import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.sql.SQLStorage;
 
 public class SQLExtensionUser implements IStorageProvider<SQLStorage>, IExtensionUser {

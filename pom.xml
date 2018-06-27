@@ -32,6 +32,7 @@
 		<module>wuffy-client</module>
 		<module>wuffy-core</module>
 		<module>wuffy-bootstrap</module>
+		<module>wuffy-command</module>
 	</modules>
 
 	<developers>

@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.ngloader.bot.WuffyBot;
 import de.ngloader.client.WuffyClient;
 import de.ngloader.core.Core;
 import de.ngloader.core.config.ConfigService;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.logger.LoggerManager;
-import de.ngloader.core.util.GsonUtil;
 
 public class Wuffy {
 
@@ -43,12 +43,8 @@ public class Wuffy {
 
 		Logger.info("Bootstrap", "Initializing bots and clients");
 
-//		config.bots.stream().filter(bot -> bot.enabled).forEach(bot -> Wuffy.BOTS.add(new WuffyBot(bot)));
+		config.bots.stream().filter(bot -> bot.enabled).forEach(bot -> Wuffy.BOTS.add(new WuffyBot(bot)));
 		config.clients.stream().filter(client -> client.enabled).forEach(client -> Wuffy.CLIENTS.add(new WuffyClient(client)));
-
-		Logger.info("Bootstrap", "Starting tickingtask's");
-
-//		Wuffy.BOTS.forEach(bot -> bot);
 	}
 
 	public static List<Core> getBots() {

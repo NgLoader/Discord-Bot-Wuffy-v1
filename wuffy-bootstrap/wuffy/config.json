@@ -1,12 +1,53 @@
 {
+  //Global owners of all instances
+  "admins": [
+    98065835859382272,
+    128286216708685824
+  ],
   "bots": [
     {
-      "enabled": false,
-      "token": "TOKEN"
+      "enabled": true,
+      "token": "MzI3MjY3OTUzMTc3NTI2Mjcz.DhUVIA.dxNi0J8FOcD6Sb24IMD5z5zKUtk",
+      "admins": [],
+      "mentionId": "",
+      "status": "ONLINE",
+      "game": {
+        "gameType": WATCHING,
+        "name": "over this creator",
+        "url": ""
+      },
+      "sharding": {
+        "enabled": true,
+        "shardIds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "total": 4
+      }
     },
     {
       "enabled": false,
-      "token": "TOKEN"
+      "token": "TOKEN",
+      "admins": [],
+      "mentionId": "",
+      "status": "ONLINE",
+      "game": {
+        "gameType": WATCHING,
+        "name": "Watching crazy thinks",
+        "url": ""
+      },
+      "sharding": {
+        "enabled": true,
+        "shardIds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "total": 4
+      }
     }
   ],
   //
@@ -15,12 +56,14 @@
   //
   "clients": [
     {
-      "enabled": true,
-      "token": "TOKEN"
+      "enabled": false,
+      "token": "TOKEN",
+      "admins": []
     },
     {
-      "enabled": true,
-      "token": "TOKEN"
+      "enabled": false,
+      "token": "TOKEN",
+      "admins": []
     }
   ]
 }

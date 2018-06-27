@@ -1,4 +1,4 @@
-package de.ngloader.bot.database.guild;
+package de.ngloader.core.database.impl;
 
 import de.ngloader.core.database.IStorageExtension;
 

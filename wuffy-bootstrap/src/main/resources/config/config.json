@@ -1,12 +1,70 @@
 {
+  //Global admins of all instances
+  "admins": [],
   "bots": [
     {
-      "enabled": false,
-      "token": "TOKEN"
+      //Is it true the instance will launch
+      "enabled": true,
+
+      //Bot token for currently instance
+      "token": "TOKEN",
+
+      //Only instance admins
+      "admins": [],
+
+      "mentionId": "",
+
+      //Status types
+      // - ONLINE
+      // - IDLE
+      // - DO_NOT_DISTURB
+      // - OFFLINE
+      // - UNKNOWN
+      "status": "ONLINE",
+
+      "game": {
+        //GameType types
+        // - DEFAULT
+        // - STREAMING
+        // - LISTENING
+        // - WATCHING
+        "gameType": WATCHING,
+        "name": "Watching crazy thinks",
+        //URL will only support twitch links and must start with 'https://twitch.tv'. Only used when gameType is STREAMING
+        "url": ""
+      },
+
+      "sharding": {
+        //Is it true sharding will enabled (!!!use this only when your guild size is over 2500!!!)
+        "enabled": true,
+        //Witch shardIds will be used by the currently instance (!!!shardIds starts by zero!!!)
+        "shardIds": [
+          0,
+          1,
+          2,
+          3
+        ],
+
+        //Total count of shardIds (!!!shardIds starts by zero!!!)
+        "total": 4
+      }
     },
     {
       "enabled": false,
-      "token": "TOKEN"
+      "token": "TOKEN",
+      "admins": [],
+      "mentionId": "",
+      "status": "ONLINE",
+      "game": {
+        "gameType": DEFAULT,
+        "name": "",
+        "url": ""
+      },
+      "sharding": {
+        "enabled": false,
+        "shardIds": [],
+        "total": 0
+      }
     }
   ],
   //
@@ -16,11 +74,13 @@
   "clients": [
     {
       "enabled": false,
-      "token": "TOKEN"
+      "token": "TOKEN",
+      "admins": []
     },
     {
       "enabled": false,
-      "token": "TOKEN"
+      "token": "TOKEN",
+      "admins": []
     }
   ]
 }

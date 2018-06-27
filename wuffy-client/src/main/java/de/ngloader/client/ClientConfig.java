@@ -17,7 +17,7 @@ public class ClientConfig implements IConfig {
 	public boolean mention;
 	public String mentionId;
 
-	public List<String> admins;
+	public List<Long> admins;
 
 	public OnlineStatus status;
 	public GameConfig game;
