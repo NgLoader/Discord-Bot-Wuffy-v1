@@ -1,7 +1,5 @@
 package de.ngloader.bot;
 
-import de.ngloader.bot.command.CommandExecutor;
-import de.ngloader.bot.command.CommandTrigger;
 import de.ngloader.core.Core;
 import de.ngloader.core.command.CommandManager;
 import de.ngloader.core.database.impl.IWuffyGuild;
@@ -10,20 +8,12 @@ import de.ngloader.core.database.impl.IWuffyUser;
 
 public class WuffyBot extends Core {
 
-	static {
-//		CommandRegistry.addCommand(AccountType.BOT, null);
-	}
-
 	private CommandManager<WuffyBot> commandManager;
 
 	public WuffyBot(BotConfig config) {
 		super(config);
 
-		this.commandManager = new CommandManager<WuffyBot>(this, new CommandExecutor(this.commandManager), new CommandTrigger(this.commandManager));
-	}
-
-	@Override
-	protected void onLoad() {
+		this.commandManager = new de.ngloader.bot.command.CommandManager(this);
 	}
 
 	@Override

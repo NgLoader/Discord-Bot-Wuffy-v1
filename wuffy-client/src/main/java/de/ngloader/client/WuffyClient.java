@@ -16,10 +16,6 @@ public class WuffyClient extends Core {
 	}
 
 	@Override
-	protected void onLoad() {
-	}
-
-	@Override
 	protected void onDisable() {
 	}
 

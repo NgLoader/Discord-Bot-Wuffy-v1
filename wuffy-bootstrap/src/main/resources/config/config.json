@@ -12,6 +12,40 @@
       //Only instance admins
       "admins": [],
 
+      "database": {
+        "mongo": {
+          "enabled": false,
+          "address": "localhost",
+          "port": 27017,
+          "username": "username",
+          "password": "password",
+          "database": "database",
+          "collectionPrefix": "wuffy_",
+          "ssl": {
+            "enabled": false,
+            "invalidHostNames": false,
+            "trustStoreFile": "",
+            "trustStorePasswordFile": "",
+            "keyStoreFile": "",
+            "keyStorePassword": ""
+          }
+        },
+        "sql": {
+          "enabled": false,
+          "driver": "com.mysql.jdbc.Driver",
+          "uri": "jdbc:mysql://localhost/database?user=username&password=password",
+          "prefix": "wuffy_"
+        },
+        "locale": {
+          "directory": "./save/"
+        }
+        "extensions": {
+          "user": "mongo",
+          "guild": "mongo",
+          "member": "mongo"
+        }
+      },
+
       "mentionId": "",
 
       //Status types

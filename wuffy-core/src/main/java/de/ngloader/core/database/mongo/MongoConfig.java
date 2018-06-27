@@ -2,9 +2,9 @@ package de.ngloader.core.database.mongo;
 
 public class MongoConfig {
 
-	public boolean enabled;
+	public Boolean enabled;
 	public String address;
-	public int port;
+	public Integer port;
 	public String username;
 	public String password;
 	public String database;
@@ -12,8 +12,8 @@ public class MongoConfig {
 	public Ssl ssl;
 
 	public class Ssl {
-		public boolean enabled;
-		public boolean invalidHostNames;
+		public Boolean enabled;
+		public Boolean invalidHostNames;
 		public String trustStoreFile;
 		public String trustStorePasswordFile;
 		public String keyStoreFile;

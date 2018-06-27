@@ -10,9 +10,7 @@ import de.ngloader.core.util.TickingTask;
 
 public abstract class Core extends TickingTask {
 
-	protected abstract void onLoad();
 	protected abstract void onDisable();
-
 	protected abstract void onUpdate();
 
 	public abstract IWuffyGuild getGuild(long guildId);
@@ -27,14 +25,12 @@ public abstract class Core extends TickingTask {
 
 	protected final WuffyScheduler scheduler;
 
-	public Core(IConfig config) {
+	public Core(CoreConfig config) {
 		this.config = config;
 
-		this.storageService = new ModuleStorageService();
+		this.storageService = new ModuleStorageService(config.database);
 		this.scheduler = new WuffyScheduler(this);
 		this.master = new Thread(this, "Wuffy Discord Bot - Core");
-
-		this.onLoad();
 
 		this.master.start();
 	}
