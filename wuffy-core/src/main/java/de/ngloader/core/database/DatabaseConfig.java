@@ -8,7 +8,6 @@ import de.ngloader.core.database.locale.LocaleConfig;
 import de.ngloader.core.database.mongo.MongoConfig;
 import de.ngloader.core.database.sql.SQLConfig;
 
-@Config(path = "./wuffy/database.json", sourcePath = "/config/database.json")
 public class DatabaseConfig implements IConfig {
 
 	public MongoConfig mongo;
