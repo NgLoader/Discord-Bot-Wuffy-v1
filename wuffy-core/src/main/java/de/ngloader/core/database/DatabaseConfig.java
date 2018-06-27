@@ -2,7 +2,6 @@ package de.ngloader.core.database;
 
 import java.util.Map;
 
-import de.ngloader.core.config.Config;
 import de.ngloader.core.config.IConfig;
 import de.ngloader.core.database.locale.LocaleConfig;
 import de.ngloader.core.database.mongo.MongoConfig;

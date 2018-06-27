@@ -2,7 +2,7 @@
 bin/
 target/
 tmp/
-/wuffy/
+/wuffy-bootstrap/wuffy/
 *.tmp
 *.bak
 *.swp
