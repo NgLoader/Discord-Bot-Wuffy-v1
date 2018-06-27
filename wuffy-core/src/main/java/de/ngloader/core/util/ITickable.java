@@ -1,4 +1,4 @@
-package de.ngloader.core;
+package de.ngloader.core.util;
 
 /**
  * @author Ingrim4

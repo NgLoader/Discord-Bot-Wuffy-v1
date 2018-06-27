@@ -6,8 +6,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import de.ngloader.core.Core;
-import de.ngloader.core.ITickable;
 import de.ngloader.core.logger.Logger;
+import de.ngloader.core.util.ITickable;
 
 public class WuffyScheduler implements ITickable {
 

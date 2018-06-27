@@ -1,8 +1,8 @@
 package de.ngloader.core.command;
 
 import de.ngloader.core.Core;
-import de.ngloader.core.ITickable;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
+import de.ngloader.core.util.ITickable;
 
 public abstract class CommandExecutor <C extends Core, COMMAND extends ICommand> implements ITickable {
 

@@ -10,6 +10,14 @@ import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.Event;
 
+/**
+ * @author DV8FromTheWorld
+ * <p>{@link net.dv8tion.jda.core.events.message.GenericMessageEvent GenericMessageEvent}
+ * 
+ * @Changes
+ * - Changed Guild to IWuffyGuild
+ * <br>- Added Core
+ */
 public class WuffyGenericMessageEvent extends Event {
 
 	protected final Core core;

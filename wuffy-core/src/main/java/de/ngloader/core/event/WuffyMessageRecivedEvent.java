@@ -7,6 +7,14 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 
+/**
+ * @author DV8FromTheWorld
+ * <p>{@link net.dv8tion.jda.core.events.message.MessageReceivedEvent MessageReceivedEvent}
+ * 
+ * @Changes
+ * - Changed User to IWuffyUser
+ * <br>- Changed Member to IWuffyMember
+ */
 public class WuffyMessageRecivedEvent extends WuffyGenericMessageEvent {
 
 	private final Message message;
@@ -25,7 +33,9 @@ public class WuffyMessageRecivedEvent extends WuffyGenericMessageEvent {
 	}
 
 	public IWuffyMemeber getMember() {
-		return isFromType(ChannelType.TEXT) && !isWebhookMessage() ? this.core.getMember(this.message.getGuild().getIdLong(), this.message.getAuthor().getIdLong()) : null;
+		return isFromType(ChannelType.TEXT) && !isWebhookMessage()
+				? this.core.getMember(this.message.getGuild().getIdLong(), this.message.getAuthor().getIdLong())
+				: null;
 	}
 
 	public boolean isWebhookMessage() {

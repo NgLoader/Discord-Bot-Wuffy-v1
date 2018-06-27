@@ -8,9 +8,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.crypto.SecretKey;
 
-import de.ngloader.core.ITickable;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.logger.LoggerManager;
+import de.ngloader.core.util.ITickable;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
