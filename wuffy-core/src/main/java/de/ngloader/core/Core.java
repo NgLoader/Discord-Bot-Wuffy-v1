@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 
 import de.ngloader.core.config.IConfig;
 import de.ngloader.core.database.ModuleStorageService;
-import de.ngloader.core.database.impl.IWuffyGuild;
-import de.ngloader.core.database.impl.IWuffyMemeber;
-import de.ngloader.core.database.impl.IWuffyUser;
+import de.ngloader.core.database.impl.IExtensionGuild;
+import de.ngloader.core.database.impl.IExtensionLang;
+import de.ngloader.core.database.impl.IExtensionUser;
+import de.ngloader.core.database.locale.LocaleStorage;
+import de.ngloader.core.database.mongo.MongoStorage;
+import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.scheduler.WuffyScheduler;
 import de.ngloader.core.util.ITickable;
 import de.ngloader.core.util.TickingTask;
@@ -17,7 +20,7 @@ import net.dv8tion.jda.core.AccountType;
 
 public abstract class Core extends TickingTask {
 
-	private static final List<Core> INSTANCES = new CopyOnWriteArrayList<>();
+	private static final List<Core> INSTANCES = new CopyOnWriteArrayList<Core>();
 
 	public static List<Core> getBots() {
 		return Core.INSTANCES.stream().filter(instance -> instance.accountType == AccountType.BOT).collect(Collectors.toList());
@@ -33,10 +36,6 @@ public abstract class Core extends TickingTask {
 
 	protected abstract void onEnable();
 	protected abstract void onDisable();
-
-	public abstract IWuffyGuild getGuild(long guildId);
-	public abstract IWuffyUser getUser(long userId);
-	public abstract IWuffyMemeber getMember(long guildId, long memberId);
 
 	protected final Thread masterThread;
 
@@ -60,6 +59,17 @@ public abstract class Core extends TickingTask {
 		this.storageService = new ModuleStorageService(config.database);
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
 
+		this.storageService.registerExtension("guild", IExtensionGuild.class);
+		this.storageService.registerExtension("user", IExtensionUser.class);
+		this.storageService.registerExtension("lang", IExtensionLang.class);
+
+		if(config.database.mongo.enabled)
+			this.storageService.registerStorage(MongoStorage.class, "mongo", new MongoStorage(config.database.mongo));
+		if(config.database.sql.enabled)
+			this.storageService.registerStorage(SQLStorage.class, "sql", new SQLStorage(config.database.sql));
+		if(config.database.locale.enabled)
+			this.storageService.registerStorage(LocaleStorage.class, "locale", new LocaleStorage(config.database.locale));
+
 		Core.INSTANCES.add(this);
 
 		this.masterThread.start();
@@ -74,11 +84,9 @@ public abstract class Core extends TickingTask {
 
 	@Override
 	protected void stop() {
-		this.running = false;
-		this.scheduler.cancelAllTasks();
-
 		this.onDisable();
 
+		this.scheduler.cancelAllTasks();
 		this.storageService.disable();
 	}
 
@@ -87,6 +95,14 @@ public abstract class Core extends TickingTask {
 			return;
 		enabled = true;
 		onEnable();
+	}
+
+	public void destroy() {
+		if(!this.running)
+			return;
+		this.running = false;
+
+		Core.INSTANCES.remove(this);
 	}
 
 	public void addTickable(ITickable tickable) {

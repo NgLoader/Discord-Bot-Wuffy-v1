@@ -1,13 +1,13 @@
-package de.ngloader.bot.database.guild;
+package de.ngloader.client.database.guild;
 
 import de.ngloader.core.database.IStorageProvider;
 import de.ngloader.core.database.impl.IExtensionGuild;
-import de.ngloader.core.database.sql.SQLStorage;
+import de.ngloader.core.database.locale.LocaleStorage;
 
-public class SQLExtensionGuild implements IStorageProvider<SQLStorage>, IExtensionGuild<WuffyGuild, WuffyMember> {
+public class LocaleExtensionGuild implements IStorageProvider<LocaleStorage>, IExtensionGuild<WuffyGuild, WuffyMember> {
 
 	@Override
-	public void registered(SQLStorage storage) {
+	public void registered(LocaleStorage storage) {
 	}
 
 	@Override

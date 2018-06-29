@@ -103,6 +103,10 @@ public final class ModuleStorageService {
 		return storageClass.cast(this.storages.get(storageClass));
 	}
 
+	public <T extends Storage<T>> boolean isStorageRegisterd(Class<T> storageClass) {
+		return this.storages.containsKey(storageClass);
+	}
+
 	public <T extends IStorageExtension> boolean registerExtension(String name, Class<T> extenionClass) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(extenionClass);
@@ -130,5 +134,9 @@ public final class ModuleStorageService {
 		Objects.requireNonNull(extenionClass);
 
 		return extenionClass.cast(this.defaultProvider.get(extenionClass));
+	}
+
+	public <T extends IStorageExtension> boolean isExtensionRegisterd(Class<T> extenionClass) {
+		return this.defaultProvider.containsKey(extenionClass);
 	}
 }

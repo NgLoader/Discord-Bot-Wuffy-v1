@@ -8,7 +8,7 @@ import de.ngloader.core.database.Storage;
 
 public final class SQLStorage extends Storage<SQLStorage> {
 
-	private final SQLConfig config;
+	protected final SQLConfig config;
 
 	private Connection connection;
 	private SQLConnectionWrapper wrapperConnection;

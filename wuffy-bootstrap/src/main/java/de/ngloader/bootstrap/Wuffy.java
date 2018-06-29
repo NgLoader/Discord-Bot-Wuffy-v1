@@ -35,6 +35,7 @@ public class Wuffy extends TickingTask {
 		System.setProperty("io.netty.eventLoopThreads", Integer.toString(threads));
 
 		Logger.info("Bootstrap", "Initializing bots and clients");
+
 		GlobalConfig config = ConfigService.getConfig(GlobalConfig.class);
 
 		Logger.info("Bootstrap", "Loading bots...");

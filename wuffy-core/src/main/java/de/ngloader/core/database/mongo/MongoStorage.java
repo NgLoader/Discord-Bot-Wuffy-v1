@@ -13,7 +13,7 @@ import de.ngloader.core.database.Storage;
 
 public final class MongoStorage extends Storage<MongoStorage> {
 
-	private final MongoConfig config;
+	protected final MongoConfig config;
 
 	private MongoClient client;
 	private MongoDatabase database;

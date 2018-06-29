@@ -2,12 +2,12 @@ package de.ngloader.bot.database.user;
 
 import de.ngloader.core.database.IStorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;
-import de.ngloader.core.database.mongo.MongoStorage;
+import de.ngloader.core.database.locale.LocaleStorage;
 
-public class MongoExtensionUser implements IStorageProvider<MongoStorage>, IExtensionUser<WuffyUser> {
+public class LocaleExtensionUser implements IStorageProvider<LocaleStorage>, IExtensionUser<WuffyUser> {
 
 	@Override
-	public void registered(MongoStorage storage) {
+	public void registered(LocaleStorage storage) {
 	}
 
 	@Override

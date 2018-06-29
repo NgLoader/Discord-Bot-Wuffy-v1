@@ -1,4 +1,4 @@
-package de.ngloader.bot.database.user;
+package de.ngloader.client.database.user;
 
 import de.ngloader.core.database.IStorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;

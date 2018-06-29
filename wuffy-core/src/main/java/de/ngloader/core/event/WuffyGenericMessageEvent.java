@@ -1,7 +1,8 @@
 package de.ngloader.core.event;
 
 import de.ngloader.core.Core;
-import de.ngloader.core.database.impl.IWuffyGuild;
+import de.ngloader.core.database.impl.IExtensionGuild;
+import de.ngloader.core.database.impl.ImplGuild;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -56,8 +57,8 @@ public class WuffyGenericMessageEvent extends Event {
 		return channel.getType();
 	}
 
-	public IWuffyGuild getGuild() {
-		return isFromType(ChannelType.TEXT) ? this.core.getGuild(getTextChannel().getGuild().getIdLong()) : null;
+	public ImplGuild getGuild() {
+		return isFromType(ChannelType.TEXT) ? this.core.getStorageService().getExtension(IExtensionGuild.class).getGuild(getTextChannel().getGuild().getIdLong()) : null;
 	}
 
 	public TextChannel getTextChannel() {

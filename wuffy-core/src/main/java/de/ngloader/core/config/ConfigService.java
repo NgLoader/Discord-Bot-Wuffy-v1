@@ -53,6 +53,7 @@ public class ConfigService {
 	public static <T extends IConfig> void saveConfig(Class<T> configClass, T config) {
 		Objects.isNull(configClass);
 		Objects.isNull(config);
+		//TODO fill out
 	}
 
 	public static <T extends IConfig> T getConfig(Class<? extends T> configClass) {

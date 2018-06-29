@@ -1,8 +1,10 @@
 package de.ngloader.core.event;
 
 import de.ngloader.core.Core;
-import de.ngloader.core.database.impl.IWuffyMemeber;
-import de.ngloader.core.database.impl.IWuffyUser;
+import de.ngloader.core.database.impl.IExtensionGuild;
+import de.ngloader.core.database.impl.IExtensionUser;
+import de.ngloader.core.database.impl.ImplMemeber;
+import de.ngloader.core.database.impl.ImplUser;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
@@ -28,14 +30,13 @@ public class WuffyMessageRecivedEvent extends WuffyGenericMessageEvent {
 		return message;
 	}
 
-	public IWuffyUser getAuthor() {
-		return this.core.getUser(this.message.getAuthor().getIdLong());
+	public ImplUser getAuthor() {
+		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.message.getAuthor().getIdLong());
 	}
 
-	public IWuffyMemeber getMember() {
+	public ImplMemeber getMember() {
 		return isFromType(ChannelType.TEXT) && !isWebhookMessage()
-				? this.core.getMember(this.message.getGuild().getIdLong(), this.message.getAuthor().getIdLong())
-				: null;
+				? this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.message.getGuild().getIdLong(), this.message.getAuthor().getIdLong()) : null;
 	}
 
 	public boolean isWebhookMessage() {
