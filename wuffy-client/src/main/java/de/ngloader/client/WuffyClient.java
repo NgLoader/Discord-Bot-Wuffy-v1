@@ -4,23 +4,24 @@ import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.IWuffyGuild;
 import de.ngloader.core.database.impl.IWuffyMemeber;
 import de.ngloader.core.database.impl.IWuffyUser;
+import net.dv8tion.jda.core.AccountType;
 
 public class WuffyClient extends Core {
 
 	static {
-//		CommandRegistry.addCommand(AccountType.CLIENT, null);
+		//TODO Add commands
 	}
 
 	public WuffyClient(ClientConfig config) {
-		super(config);
+		super(config, AccountType.CLIENT);
+	}
+
+	@Override
+	protected void onEnable() {	
 	}
 
 	@Override
 	protected void onDisable() {
-	}
-
-	@Override
-	protected void onUpdate() {
 	}
 
 	@Override

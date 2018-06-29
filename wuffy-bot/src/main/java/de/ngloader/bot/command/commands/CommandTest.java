@@ -4,7 +4,7 @@ import de.ngloader.bot.command.BotCommand;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 
-@Command(getAliases = { "1", "2", "3", "4" })
+@Command(aliases = { "1", "2", "3", "4" })
 public class CommandTest implements BotCommand {
 
 	@Override

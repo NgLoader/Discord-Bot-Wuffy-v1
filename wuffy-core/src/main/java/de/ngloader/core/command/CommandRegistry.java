@@ -19,7 +19,7 @@ public class CommandRegistry {
 
 		if(!CommandRegistry.commands.containsKey(type))
 			CommandRegistry.commands.put(type, new HashMap<String, ICommand>());
-		Arrays.asList(annotation.getAliases()).forEach(alias -> CommandRegistry.commands.get(type).put(alias.toLowerCase(), command));
+		Arrays.asList(annotation.aliases()).forEach(alias -> CommandRegistry.commands.get(type).put(alias.toLowerCase(), command));
 	}
 
 	public static final ICommand getCommand(AccountType type, String command) {
