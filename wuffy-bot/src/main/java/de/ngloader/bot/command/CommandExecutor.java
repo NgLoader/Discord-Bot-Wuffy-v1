@@ -5,10 +5,7 @@ import java.util.Queue;
 
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.core.command.CommandManager;
-import de.ngloader.core.command.CommandRegistry;
-import de.ngloader.core.command.ICommand;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import net.dv8tion.jda.core.AccountType;
 
 public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<WuffyBot, BotCommand> {
 
@@ -37,12 +34,13 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 
 	@Override
 	protected void queue(WuffyMessageRecivedEvent event, String command, String[] args) {
-		ICommand commandInfo = CommandRegistry.getCommand(AccountType.BOT, command);
-
-		System.out.println(commandInfo);
+		BotCommand commandInfo = (BotCommand) this.manager.getRegistry().getCommand(command);
 
 		if(commandInfo != null)
-			this.queue.add(new CommandInfo(event, CommandExecutor.CAST_CLASS.cast(commandInfo), args));
+			if(!commandInfo.isCommandBlocked())
+				this.queue.add(new CommandInfo(event, CommandExecutor.CAST_CLASS.cast(commandInfo), args));
+			else
+				event.getChannel().sendMessage("This command is currently disabled.");
 	}
 
 	public class CommandInfo {

@@ -8,6 +8,7 @@
 
       //Instance name
       "instanceName": "Unknown",
+      "instanceVersion": "0.0.1_? (Alpha)",
 
       //Bot token for currently instance
       "token": "TOKEN",
@@ -90,6 +91,7 @@
     {
       "enabled": false,
       "instanceName": "Unknown",
+      "instanceVersion": "0.0.1_? (Alpha)",
       "token": "TOKEN",
       "admins": [],
       "mentionId": "",
@@ -114,12 +116,14 @@
     {
       "enabled": false,
       "instanceName": "Unknown",
+      "instanceVersion": "0.0.1_? (Alpha)",
       "token": "TOKEN",
       "admins": []
     },
     {
       "enabled": false,
       "instanceName": "Unknown",
+      "instanceVersion": "0.0.1_? (Alpha)",
       "token": "TOKEN",
       "admins": []
     }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import de.ngloader.core.config.IConfig;
 import de.ngloader.core.database.StorageService;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
@@ -42,7 +41,7 @@ public abstract class Core extends TickingTask {
 
 	protected final Thread masterThread;
 
-	protected final IConfig config;
+	protected final CoreConfig config;
 
 	protected final AccountType accountType;
 
@@ -134,8 +133,8 @@ public abstract class Core extends TickingTask {
 		return jdaProviderClass.cast(this.jdaAdapter);
 	}
 
-	public IConfig getConfig() {
-		return config;
+	public CoreConfig getConfig() {
+		return this.config;
 	}
 
 	public AccountType getAccountType() {
@@ -151,6 +150,6 @@ public abstract class Core extends TickingTask {
 	}
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 }

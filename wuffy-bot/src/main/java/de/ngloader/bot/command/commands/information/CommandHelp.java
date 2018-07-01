@@ -1,4 +1,4 @@
-package de.ngloader.bot.command.commands;
+package de.ngloader.bot.command.commands.information;
 
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
@@ -6,12 +6,13 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 
-@Command(aliases = { "test" })
-@CommandConfig(category = CommandCategory.OTHER)
-public class CommandTest extends BotCommand {
+@Command(aliases = { "help", "h" })
+@CommandConfig(category = CommandCategory.INFORMATION)
+public class CommandHelp extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		event.getChannel().sendMessage("Test: " + String.join(", ", args)).queue();
+		//TODO fillout
+		this.setCommandBlocked(true);
 	}
 }

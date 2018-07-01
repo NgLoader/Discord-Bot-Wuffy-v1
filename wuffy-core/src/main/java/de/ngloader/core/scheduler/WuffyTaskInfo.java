@@ -8,7 +8,7 @@ public class WuffyTaskInfo {
 
 	private final int taskId;
 
-	private final WuffyTask task;
+	private final Runnable task;
 
 	private int delay = 0;
 	private int ticks = 0;
@@ -18,7 +18,7 @@ public class WuffyTaskInfo {
 
 	private boolean loop = false;
 
-	public WuffyTaskInfo(Core core, WuffyTask task, int taskId, int delay) {
+	public WuffyTaskInfo(Core core, Runnable task, int taskId, int delay) {
 		this.core = core;
 		this.task = task;
 		this.taskId = taskId;
@@ -26,7 +26,7 @@ public class WuffyTaskInfo {
 		this.currentlyDelay = delay;
 	}
 
-	public WuffyTaskInfo(Core core, WuffyTask task, int taskId, int delay, int ticks) {
+	public WuffyTaskInfo(Core core, Runnable task, int taskId, int delay, int ticks) {
 		this.core = core;
 		this.task = task;
 		this.taskId = taskId;
@@ -36,7 +36,7 @@ public class WuffyTaskInfo {
 		this.currentlyTick = ticks;
 	}
 
-	public WuffyTaskInfo(Core core, WuffyTask task, boolean loop, int taskId, int delay, int ticks) {
+	public WuffyTaskInfo(Core core, Runnable task, boolean loop, int taskId, int delay, int ticks) {
 		this.core = core;
 		this.task = task;
 		this.taskId = taskId;
@@ -84,7 +84,7 @@ public class WuffyTaskInfo {
 		return this.taskId;
 	}
 
-	public WuffyTask getTask() {
+	public Runnable getTask() {
 		return this.task;
 	}
 

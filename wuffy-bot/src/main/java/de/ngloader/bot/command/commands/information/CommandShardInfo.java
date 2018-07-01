@@ -1,13 +1,16 @@
-package de.ngloader.bot.command.commands;
+package de.ngloader.bot.command.commands.information;
 
 import de.ngloader.bot.command.BotCommand;
+import de.ngloader.bot.command.CommandCategory;
+import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.jda.JDAAdapter;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.util.TableMessageBuilder;
 
-@Command(aliases = { "shardInfo", "sInfo", "shardI" })
-public class CommandShardInfo implements BotCommand {
+@Command(aliases = { "shardInfo", "sInfo", "shardI", "clusterinfo" })
+@CommandConfig(category = CommandCategory.INFORMATION)
+public class CommandShardInfo extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {

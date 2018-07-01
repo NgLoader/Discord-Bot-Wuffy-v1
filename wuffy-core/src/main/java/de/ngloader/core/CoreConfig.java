@@ -12,6 +12,7 @@ public class CoreConfig implements IConfig {
 	public Boolean enabled;
 
 	public String instanceName;
+	public String instanceVersion;
 
 	public String token;
 

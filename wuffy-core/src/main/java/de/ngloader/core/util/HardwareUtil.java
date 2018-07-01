@@ -18,13 +18,18 @@ public class HardwareUtil {
 		return OS_BEAN.getAvailableProcessors();
 	}
 
-	public static double getCpuLoad() {
+	public static double getSystemCpuLoad() {
 		var cpuLoad = OS_BEAN.getSystemCpuLoad();
 		return cpuLoad < 0 ? 0.0D : cpuLoad;
 	}
 
-	public static double getAverageCpuLoad() {
+	public static double getSystemAverageCpuLoad() {
 		var cpuLoad = OS_BEAN.getSystemLoadAverage();
+		return cpuLoad < 0 ? 0.0D : cpuLoad;
+	}
+
+	public static double getProcessCpuLoad() {
+		var cpuLoad = OS_BEAN.getProcessCpuLoad();
 		return cpuLoad < 0 ? 0.0D : cpuLoad;
 	}
 

@@ -32,25 +32,8 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 					args = Arrays.copyOfRange(args, 1, args.length);
 				}
 
-//				var shardGuilds = this.getManager().getCore().getJdaAdapter(JDAAdapter.class).getShardManager().getShards().stream()
-//					.map(shard -> "Shard:" + shard.getShardInfo().getShardId() + "\n-  " + shard.getGuilds().stream()
-//						.map(guild -> String.format("%s (%s Member)", guild.getName(), Integer.toString(guild.getMembers().size())))
-//						.collect(Collectors.joining("\n-  ")))
-//					.collect(Collectors.joining("\n\n"));
-
-//				event.getChannel().sendMessage("Command: '" + command + "' args: '" + String.join("', '", args) + "'\n"
-//						+ "Shard: " + event.getJDA().getShardInfo().getShardId() + "\n"
-//								+ "Total shard count: " + event.getJDA().getShardInfo().getShardTotal() + "\n\n" +
-//								shardGuilds).queue(); //TODO remove
-
 				Logger.debug("Command Trigger", "Command: '" + command + "' args: '" + String.join("', '", args) + "'");
 				onTrigger(new WuffyMessageRecivedEvent(this.manager.getCore(), event.getJDA(), event.getResponseNumber(), event.getMessage()), command, args);
-
-//				this.manager.getCore().getConfig().sharding.total = 8;
-//				this.manager.getCore().getConfig().sharding.shardIds = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
-//				this.manager.getCore().getConfig().sharding.total = 2;
-//				this.manager.getCore().getConfig().sharding.shardIds = Arrays.asList(0, 1);
-//				this.manager.getCore().getJdaAdapter(JDAAdapter.class).restart();
 				return;
 			}
 	}

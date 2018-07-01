@@ -1,7 +1,5 @@
 package de.ngloader.bot;
 
-import de.ngloader.bot.command.commands.CommandShardInfo;
-import de.ngloader.bot.command.commands.CommandTest;
 import de.ngloader.bot.database.guild.LocaleExtensionGuild;
 import de.ngloader.bot.database.guild.MongoExtensionGuild;
 import de.ngloader.bot.database.guild.SQLExtensionGuild;
@@ -14,7 +12,6 @@ import de.ngloader.bot.database.user.SQLExtensionUser;
 import de.ngloader.bot.jda.JDAAdapter;
 import de.ngloader.core.Core;
 import de.ngloader.core.command.CommandManager;
-import de.ngloader.core.command.CommandRegistry;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
@@ -24,12 +21,6 @@ import de.ngloader.core.database.sql.SQLStorage;
 import net.dv8tion.jda.core.AccountType;
 
 public class WuffyBot extends Core {
-
-	static {
-		//TODO Add commands
-		CommandRegistry.addCommand(AccountType.BOT, new CommandTest());
-		CommandRegistry.addCommand(AccountType.BOT, new CommandShardInfo());
-	}
 
 	private final BotConfig config;
 

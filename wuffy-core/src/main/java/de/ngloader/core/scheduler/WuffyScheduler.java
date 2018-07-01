@@ -28,13 +28,13 @@ public class WuffyScheduler implements ITickable {
 			for(WuffyTaskInfo taskInfo : taskAfter)
 				if(taskInfo.tick()) {
 					taskAfter.remove(taskInfo);
-					taskInfo.getTask().onRun();
+					taskInfo.getTask().run();
 				}
 
 			this.taskRepeat.forEach(taskInfo -> {
 				try {
 					if(taskInfo.tick())
-						taskInfo.getTask().onRun();
+						taskInfo.getTask().run();
 				} catch(Exception e) {
 					e.printStackTrace();
 					Logger.fatal("Tickingtask - Scheduler (Repeat)", "Error by running repeating task. Removing task from scheduler", e);
@@ -53,7 +53,7 @@ public class WuffyScheduler implements ITickable {
 	 * @param delay in ticks (20 ticks -> 1 second)
 	 * @return WuffyInfoTask
 	 */
-	public int runTaskAfter(WuffyTask task, int delay) {
+	public int runTaskAfter(Runnable task, int delay) {
 		return this.runTaskAfter(this.core, task, delay);
 	}
 
@@ -64,7 +64,7 @@ public class WuffyScheduler implements ITickable {
 	 * @param delay in ticks (20 ticks -> 1 second)
 	 * @return WuffyInfoTask
 	 */
-	public int runTaskAfter(Core core, WuffyTask task, int delay) {
+	public int runTaskAfter(Core core, Runnable task, int delay) {
 		var taskInfo = new WuffyTaskInfo(core, task, this.taskIds.incrementAndGet(), delay);
 		this.taskAfter.add(taskInfo);
 		return taskInfo.getTaskId();
@@ -77,7 +77,7 @@ public class WuffyScheduler implements ITickable {
 	 * @param repeat in ticks (20 ticks -> 1 second)
 	 * @return WuffyInfoTask
 	 */
-	public int runTaskRepeat(WuffyTask task, int delay, int repeat) {
+	public int runTaskRepeat(Runnable task, int delay, int repeat) {
 		return this.runTaskRepeat(this.core, task, delay, repeat);
 	}
 
@@ -89,7 +89,7 @@ public class WuffyScheduler implements ITickable {
 	 * @param repeat in ticks (20 ticks -> 1 second)
 	 * @return WuffyInfoTask
 	 */
-	public int runTaskRepeat(Core core, WuffyTask task, int delay, int repeat) {
+	public int runTaskRepeat(Core core, Runnable task, int delay, int repeat) {
 		var taskInfo = new WuffyTaskInfo(core, task, true, this.taskIds.incrementAndGet(), delay, repeat);
 		this.taskRepeat.add(taskInfo);
 		return taskInfo.getTaskId();
@@ -100,7 +100,7 @@ public class WuffyScheduler implements ITickable {
 	 * @param task
 	 * @return true when the task was stopped or false when the task can not be stopped (not exist)
 	 */
-	public boolean cancelTask(WuffyTask task) {
+	public boolean cancelTask(Runnable task) {
 		if(!this.taskAfter.stream().anyMatch(taskInfo -> taskInfo.getTask().equals(task)) && !this.taskRepeat.stream().anyMatch(taskInfo -> taskInfo.getTask().equals(task)))
 			return false;
 
