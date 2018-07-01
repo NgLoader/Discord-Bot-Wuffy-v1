@@ -2,6 +2,7 @@ package de.ngloader.core.command;
 
 import de.ngloader.core.Core;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
+import de.ngloader.core.jda.IJDAAdapter;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public abstract class CommandTrigger <C extends Core> extends ListenerAdapter {
@@ -10,12 +11,11 @@ public abstract class CommandTrigger <C extends Core> extends ListenerAdapter {
 
 	public CommandTrigger(CommandManager<C> manager) {
 		this.manager = manager;
-
-		//TODO !!!add this to jda listener!!! "this.manager.getCore().getJDA();"
+		this.manager.getCore().getJdaAdapter(IJDAAdapter.class).addListener(this);
 	}
 
-	public void onTrigger(WuffyMessageRecivedEvent event, String[] args) {
-		this.manager.executor.queue(event, args);
+	public void onTrigger(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.manager.executor.queue(event, command, args);
 	}
 
 	public CommandManager<C> getManager() {

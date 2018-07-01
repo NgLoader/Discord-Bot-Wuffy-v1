@@ -6,6 +6,9 @@
       //Is it true the instance will launch
       "enabled": true,
 
+      //Instance name
+      "instanceName": "Unknown",
+
       //Bot token for currently instance
       "token": "TOKEN",
 
@@ -37,6 +40,7 @@
           "prefix": "wuffy_"
         },
         "locale": {
+          "enabled": false,
           "directory": "./save/"
         }
         "extensions": {
@@ -85,6 +89,7 @@
     },
     {
       "enabled": false,
+      "instanceName": "Unknown",
       "token": "TOKEN",
       "admins": [],
       "mentionId": "",
@@ -108,11 +113,13 @@
   "clients": [
     {
       "enabled": false,
+      "instanceName": "Unknown",
       "token": "TOKEN",
       "admins": []
     },
     {
       "enabled": false,
+      "instanceName": "Unknown",
       "token": "TOKEN",
       "admins": []
     }

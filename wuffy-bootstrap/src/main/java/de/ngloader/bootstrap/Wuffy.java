@@ -61,6 +61,11 @@ public class Wuffy extends TickingTask {
 
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
 		this.masterThread.start();
+
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			this.running = false;
+			stop();
+		}));
 	}
 
 	@Override

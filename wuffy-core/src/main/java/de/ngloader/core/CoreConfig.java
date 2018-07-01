@@ -11,6 +11,8 @@ public class CoreConfig implements IConfig {
 
 	public Boolean enabled;
 
+	public String instanceName;
+
 	public String token;
 
 	public List<Long> admins;

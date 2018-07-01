@@ -1,18 +1,21 @@
 package de.ngloader.core;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import de.ngloader.core.config.IConfig;
-import de.ngloader.core.database.ModuleStorageService;
+import de.ngloader.core.database.StorageService;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.locale.LocaleStorage;
 import de.ngloader.core.database.mongo.MongoStorage;
 import de.ngloader.core.database.sql.SQLStorage;
+import de.ngloader.core.jda.IJDAAdapter;
+import de.ngloader.core.logger.Logger;
 import de.ngloader.core.scheduler.WuffyScheduler;
 import de.ngloader.core.util.ITickable;
 import de.ngloader.core.util.TickingTask;
@@ -43,20 +46,26 @@ public abstract class Core extends TickingTask {
 
 	protected final AccountType accountType;
 
-	protected final ModuleStorageService storageService;
-
+	protected final IJDAAdapter jdaAdapter;
+	protected final StorageService storageService;
 	protected final WuffyScheduler scheduler;
 
 	private List<ITickable> tickables = new ArrayList<ITickable>();
 
 	private boolean enabled = false;
 
-	public Core(CoreConfig config, AccountType accountType) {
+	public Core(CoreConfig config, AccountType accountType, Class<? extends IJDAAdapter> jdaAdapter) {
 		this.config = config;
 		this.accountType = accountType;
+		try {
+			this.jdaAdapter = jdaAdapter.getConstructor(Core.class).newInstance(this);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new Error(e);
+		}
 
 		this.scheduler = new WuffyScheduler(this);
-		this.storageService = new ModuleStorageService(config.database);
+		this.storageService = new StorageService(config.database);
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
 
 		this.storageService.registerExtension("guild", IExtensionGuild.class);
@@ -88,21 +97,29 @@ public abstract class Core extends TickingTask {
 
 		this.scheduler.cancelAllTasks();
 		this.storageService.disable();
+		this.jdaAdapter.logout();
+
+		Core.INSTANCES.remove(this);
 	}
 
 	public void enable() {
 		if(enabled)
 			return;
 		enabled = true;
-		onEnable();
+
+		try {
+			this.jdaAdapter.login();
+			onEnable();
+		} catch(Exception e) {
+			Logger.warn("Core", "Failed to login");
+			stop();
+		}
 	}
 
 	public void destroy() {
 		if(!this.running)
 			return;
 		this.running = false;
-
-		Core.INSTANCES.remove(this);
 	}
 
 	public void addTickable(ITickable tickable) {
@@ -113,11 +130,19 @@ public abstract class Core extends TickingTask {
 		this.tickables.remove(tickable);
 	}
 
+	public <T extends IJDAAdapter> T getJdaAdapter(Class<T> jdaProviderClass) {
+		return jdaProviderClass.cast(this.jdaAdapter);
+	}
+
+	public IConfig getConfig() {
+		return config;
+	}
+
 	public AccountType getAccountType() {
 		return this.accountType;
 	}
 
-	public ModuleStorageService getStorageService() {
+	public StorageService getStorageService() {
 		return this.storageService;
 	}
 

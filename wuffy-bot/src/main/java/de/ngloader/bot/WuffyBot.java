@@ -1,5 +1,7 @@
 package de.ngloader.bot;
 
+import de.ngloader.bot.command.commands.CommandShardInfo;
+import de.ngloader.bot.command.commands.CommandTest;
 import de.ngloader.bot.database.guild.LocaleExtensionGuild;
 import de.ngloader.bot.database.guild.MongoExtensionGuild;
 import de.ngloader.bot.database.guild.SQLExtensionGuild;
@@ -9,8 +11,10 @@ import de.ngloader.bot.database.lang.SQLExtensionLang;
 import de.ngloader.bot.database.user.LocaleExtensionUser;
 import de.ngloader.bot.database.user.MongoExtensionUser;
 import de.ngloader.bot.database.user.SQLExtensionUser;
+import de.ngloader.bot.jda.JDAAdapter;
 import de.ngloader.core.Core;
 import de.ngloader.core.command.CommandManager;
+import de.ngloader.core.command.CommandRegistry;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
@@ -23,12 +27,17 @@ public class WuffyBot extends Core {
 
 	static {
 		//TODO Add commands
+		CommandRegistry.addCommand(AccountType.BOT, new CommandTest());
+		CommandRegistry.addCommand(AccountType.BOT, new CommandShardInfo());
 	}
 
-	private CommandManager<WuffyBot> commandManager;
+	private final BotConfig config;
+
+	private final CommandManager<WuffyBot> commandManager;
 
 	public WuffyBot(BotConfig config) {
-		super(config, AccountType.BOT);
+		super(config, AccountType.BOT, JDAAdapter.class);
+		this.config = config;
 
 		if(this.storageService.isStorageRegisterd(MongoStorage.class)) {
 			this.storageService.getStorage(MongoStorage.class).registerProvider(IExtensionGuild.class, new MongoExtensionGuild());
@@ -59,6 +68,10 @@ public class WuffyBot extends Core {
 	}
 
 	public CommandManager<WuffyBot> getCommandManager() {
-		return commandManager;
+		return this.commandManager;
+	}
+
+	public BotConfig getConfig() {
+		return this.config;
 	}
 }

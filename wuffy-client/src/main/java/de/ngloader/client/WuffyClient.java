@@ -9,6 +9,7 @@ import de.ngloader.client.database.lang.SQLExtensionLang;
 import de.ngloader.client.database.user.LocaleExtensionUser;
 import de.ngloader.client.database.user.MongoExtensionUser;
 import de.ngloader.client.database.user.SQLExtensionUser;
+import de.ngloader.client.jda.JDAAdapter;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
@@ -25,7 +26,7 @@ public class WuffyClient extends Core {
 	}
 
 	public WuffyClient(ClientConfig config) {
-		super(config, AccountType.CLIENT);
+		super(config, AccountType.CLIENT, JDAAdapter.class);
 
 		if(this.storageService.isStorageRegisterd(MongoStorage.class)) {
 			this.storageService.getStorage(MongoStorage.class).registerProvider(IExtensionGuild.class, new MongoExtensionGuild());

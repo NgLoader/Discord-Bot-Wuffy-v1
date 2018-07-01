@@ -8,7 +8,7 @@ public abstract class CommandExecutor <C extends Core, COMMAND extends ICommand>
 
 	protected abstract void execute(WuffyMessageRecivedEvent event, COMMAND command, String[] args);
 
-	protected abstract void queue(WuffyMessageRecivedEvent event, String[] args);
+	protected abstract void queue(WuffyMessageRecivedEvent event, String command, String[] args);
 
 	protected final CommandManager<C> manager;
 

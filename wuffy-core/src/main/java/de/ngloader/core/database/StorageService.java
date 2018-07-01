@@ -9,7 +9,7 @@ import de.ngloader.core.database.mongo.MongoStorage;
 import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.logger.Logger;
 
-public final class ModuleStorageService {
+public final class StorageService {
 
 	private final Map<Class<? extends Storage<?>>, Storage<?>> storages = new HashMap<Class<? extends Storage<?>>, Storage<?>>();
 	private final Map<String, Storage<?>> storageNames = new HashMap<String, Storage<?>>();
@@ -21,7 +21,7 @@ public final class ModuleStorageService {
 
 	private boolean init = false;
 
-	public ModuleStorageService(DatabaseConfig config) {
+	public StorageService(DatabaseConfig config) {
 		this.config = config;
 
 		if(this.config.mongo.enabled)

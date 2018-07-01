@@ -36,13 +36,13 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 	}
 
 	@Override
-	protected void queue(WuffyMessageRecivedEvent event, String[] args) {
-		if(args.length > 0) {
-			ICommand command = CommandRegistry.getCommand(AccountType.BOT, args[0]);
+	protected void queue(WuffyMessageRecivedEvent event, String command, String[] args) {
+		ICommand commandInfo = CommandRegistry.getCommand(AccountType.BOT, command);
 
-			if(command != null)
-				this.queue.add(new CommandInfo(event, CommandExecutor.CAST_CLASS.cast(command), args));
-		}
+		System.out.println(commandInfo);
+
+		if(commandInfo != null)
+			this.queue.add(new CommandInfo(event, CommandExecutor.CAST_CLASS.cast(commandInfo), args));
 	}
 
 	public class CommandInfo {

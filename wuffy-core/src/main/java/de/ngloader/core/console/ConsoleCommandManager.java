@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import de.ngloader.core.console.command.ConsoleCommandExit;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.util.ITickable;
 
@@ -25,6 +26,7 @@ public class ConsoleCommandManager implements ITickable {
 
 	public ConsoleCommandManager() {
 		this.registerExecutor(new de.ngloader.core.console.command.ConsoleCommandHelp(this));
+		this.registerExecutor(new ConsoleCommandExit());
 
 		Thread commandThread = new Thread(() -> {
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
