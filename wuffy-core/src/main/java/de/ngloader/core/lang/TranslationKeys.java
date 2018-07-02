@@ -1,6 +1,6 @@
 package de.ngloader.core.lang;
 
-public enum TranslationKeys {
+public class TranslationKeys {
 
-	UNKNOWN();
+	public static final String UNKNOWN = "unknown";
 }

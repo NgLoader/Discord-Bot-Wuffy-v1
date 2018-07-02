@@ -1,10 +1,10 @@
 package de.ngloader.bot.database.user;
 
-import de.ngloader.core.database.IStorageProvider;
+import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.mongo.MongoStorage;
 
-public class MongoExtensionUser implements IStorageProvider<MongoStorage>, IExtensionUser<WuffyUser> {
+public class MongoExtensionUser extends StorageProvider<MongoStorage> implements IExtensionUser<WuffyUser> {
 
 	@Override
 	public void registered(MongoStorage storage) {

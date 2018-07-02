@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import de.ngloader.core.Core;
 import de.ngloader.core.logger.Logger;
 
 public abstract class Storage<S extends Storage<S>> {
 
-	protected final Map<Class<? extends IStorageExtension>, IStorageProvider<S>> storageExtensions = new HashMap<Class<? extends IStorageExtension>, IStorageProvider<S>>();
+	protected final Map<Class<? extends IStorageExtension>, StorageProvider<S>> storageExtensions = new HashMap<Class<? extends IStorageExtension>, StorageProvider<S>>();
 
 	protected abstract void connect();
 
@@ -16,8 +17,14 @@ public abstract class Storage<S extends Storage<S>> {
 
 	protected abstract void disconnect();
 
+	protected Core core;
+
+	public Storage(Core core) {
+		this.core = core;
+	}
+
 	@SuppressWarnings("unchecked")
-	public final <U extends IStorageExtension, T extends IStorageProvider<S>> boolean registerProvider(Class<U> extensionClass, T provider) {
+	public final <U extends IStorageExtension, T extends StorageProvider<S>> boolean registerProvider(Class<U> extensionClass, T provider) {
 		Objects.requireNonNull(extensionClass);
 		Objects.requireNonNull(provider);
 
@@ -30,6 +37,8 @@ public abstract class Storage<S extends Storage<S>> {
 		if(this.storageExtensions.isEmpty())
 			this.connect();
 
+		provider.setCore(this.core);
+
 		this.storageExtensions.put(extensionClass, provider);
 		provider.registered((S) this);
 		Logger.debug("database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
@@ -39,7 +48,7 @@ public abstract class Storage<S extends Storage<S>> {
 	public final <U extends IStorageExtension> boolean unregisterProvider(Class<U> extensionClass) {
 		Objects.requireNonNull(extensionClass);
 
-		IStorageProvider<?> provider = this.storageExtensions.remove(extensionClass);
+		StorageProvider<?> provider = this.storageExtensions.remove(extensionClass);
 		if(provider != null)
 			provider.unregistered();
 

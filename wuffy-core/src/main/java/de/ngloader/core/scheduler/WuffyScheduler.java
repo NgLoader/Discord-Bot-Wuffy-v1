@@ -1,6 +1,6 @@
 package de.ngloader.core.scheduler;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -15,8 +15,8 @@ public class WuffyScheduler implements ITickable {
 
 	private final AtomicInteger taskIds = new AtomicInteger();
 
-	private final List<WuffyTaskInfo> taskAfter = new LinkedList<>();
-	private final List<WuffyTaskInfo> taskRepeat = new LinkedList<>();
+	private final List<WuffyTaskInfo> taskAfter = new ArrayList<>();
+	private final List<WuffyTaskInfo> taskRepeat = new ArrayList<>();
 
 	public WuffyScheduler(Core core) {
 		this.core = core;
@@ -26,9 +26,15 @@ public class WuffyScheduler implements ITickable {
 	public void update() {
 		try {
 			for(WuffyTaskInfo taskInfo : taskAfter)
-				if(taskInfo.tick()) {
-					taskAfter.remove(taskInfo);
-					taskInfo.getTask().run();
+				try {
+					if(taskInfo.tick()) {
+						taskAfter.remove(taskInfo);
+						taskInfo.getTask().run();
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+					Logger.fatal("Tickingtask - Scheduler (After)", "Error by running repeating task. Removing task from scheduler", e);
+					taskRepeat.remove(taskInfo);
 				}
 
 			this.taskRepeat.forEach(taskInfo -> {

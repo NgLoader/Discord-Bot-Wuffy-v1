@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import de.ngloader.core.Core;
 import de.ngloader.core.database.Storage;
 
 public final class SQLStorage extends Storage<SQLStorage> {
@@ -13,7 +14,8 @@ public final class SQLStorage extends Storage<SQLStorage> {
 	private Connection connection;
 	private SQLConnectionWrapper wrapperConnection;
 
-	public SQLStorage(SQLConfig config) {
+	public SQLStorage(Core core, SQLConfig config) {
+		super(core);
 		if (!config.uri.startsWith("jdbc:mysql://"))
 			throw new IllegalArgumentException("Invalid mysql connection uri");
 		this.config = config;

@@ -9,6 +9,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import de.ngloader.core.Core;
 import de.ngloader.core.database.Storage;
 
 public final class MongoStorage extends Storage<MongoStorage> {
@@ -18,7 +19,8 @@ public final class MongoStorage extends Storage<MongoStorage> {
 	private MongoClient client;
 	private MongoDatabase database;
 
-	public MongoStorage(MongoConfig config) {
+	public MongoStorage(Core core, MongoConfig config) {
+		super(core);
 		this.config = config;
 	}
 

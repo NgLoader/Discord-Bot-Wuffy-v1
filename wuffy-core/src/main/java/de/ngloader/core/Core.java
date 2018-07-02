@@ -10,10 +10,8 @@ import de.ngloader.core.database.StorageService;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
-import de.ngloader.core.database.locale.LocaleStorage;
-import de.ngloader.core.database.mongo.MongoStorage;
-import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.jda.IJDAAdapter;
+import de.ngloader.core.lang.I18n;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.scheduler.WuffyScheduler;
 import de.ngloader.core.util.ITickable;
@@ -48,6 +46,7 @@ public abstract class Core extends TickingTask {
 	protected final IJDAAdapter jdaAdapter;
 	protected final StorageService storageService;
 	protected final WuffyScheduler scheduler;
+	protected final I18n i18n;
 
 	private List<ITickable> tickables = new ArrayList<ITickable>();
 
@@ -64,19 +63,14 @@ public abstract class Core extends TickingTask {
 		}
 
 		this.scheduler = new WuffyScheduler(this);
-		this.storageService = new StorageService(config.database);
+		this.storageService = new StorageService(this, config.database);
+		this.i18n = new I18n(this);
+
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
 
 		this.storageService.registerExtension("guild", IExtensionGuild.class);
 		this.storageService.registerExtension("user", IExtensionUser.class);
 		this.storageService.registerExtension("lang", IExtensionLang.class);
-
-		if(config.database.mongo.enabled)
-			this.storageService.registerStorage(MongoStorage.class, "mongo", new MongoStorage(config.database.mongo));
-		if(config.database.sql.enabled)
-			this.storageService.registerStorage(SQLStorage.class, "sql", new SQLStorage(config.database.sql));
-		if(config.database.locale.enabled)
-			this.storageService.registerStorage(LocaleStorage.class, "locale", new LocaleStorage(config.database.locale));
 
 		Core.INSTANCES.add(this);
 
@@ -105,9 +99,11 @@ public abstract class Core extends TickingTask {
 		if(enabled)
 			return;
 		enabled = true;
+		this.storageService.getExtension(IExtensionUser.class).getUser(0L);
 
 		try {
 			this.jdaAdapter.login();
+			this.i18n.loadLangs(this.storageService.getExtension(IExtensionLang.class));
 			onEnable();
 		} catch(Exception e) {
 			Logger.warn("Core", "Failed to login");
@@ -129,6 +125,10 @@ public abstract class Core extends TickingTask {
 		this.tickables.remove(tickable);
 	}
 
+	public IJDAAdapter getJdaAdapter() {
+		return this.jdaAdapter;
+	}
+
 	public <T extends IJDAAdapter> T getJdaAdapter(Class<T> jdaProviderClass) {
 		return jdaProviderClass.cast(this.jdaAdapter);
 	}
@@ -147,6 +147,10 @@ public abstract class Core extends TickingTask {
 
 	public WuffyScheduler getScheduler() {
 		return this.scheduler;
+	}
+
+	public I18n getI18n() {
+		return this.i18n;
 	}
 
 	public boolean isEnabled() {

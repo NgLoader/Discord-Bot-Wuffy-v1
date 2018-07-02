@@ -1,10 +1,10 @@
 package de.ngloader.bot.database.user;
 
-import de.ngloader.core.database.IStorageProvider;
+import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.locale.LocaleStorage;
 
-public class LocaleExtensionUser implements IStorageProvider<LocaleStorage>, IExtensionUser<WuffyUser> {
+public class LocaleExtensionUser extends StorageProvider<LocaleStorage> implements IExtensionUser<WuffyUser> {
 
 	@Override
 	public void registered(LocaleStorage storage) {

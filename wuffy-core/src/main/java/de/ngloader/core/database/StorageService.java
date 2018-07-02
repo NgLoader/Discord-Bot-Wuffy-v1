@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import de.ngloader.core.Core;
+import de.ngloader.core.database.locale.LocaleStorage;
 import de.ngloader.core.database.mongo.MongoStorage;
 import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.logger.Logger;
@@ -19,16 +21,22 @@ public final class StorageService {
 
 	private final DatabaseConfig config;
 
+	private final Core core;
+
 	private boolean init = false;
 
-	public StorageService(DatabaseConfig config) {
+	public StorageService(Core core, DatabaseConfig config) {
+		this.core = core;
 		this.config = config;
 
 		if(this.config.mongo.enabled)
-			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.config.mongo));
+			this.registerStorage(MongoStorage.class, "mongo", new MongoStorage(this.core, this.config.mongo));
 
 		if(this.config.sql.enabled)
-			this.registerStorage(SQLStorage.class, "sql",  new SQLStorage(this.config.sql));
+			this.registerStorage(SQLStorage.class, "sql",  new SQLStorage(this.core, this.config.sql));
+
+		if(this.config.locale.enabled)
+			this.registerStorage(LocaleStorage.class, "locale", new LocaleStorage(this.core, this.config.locale));
 	}
 
 	public void enable() {

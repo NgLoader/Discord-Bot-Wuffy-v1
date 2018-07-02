@@ -1,10 +1,10 @@
 package de.ngloader.bot.database.guild;
 
-import de.ngloader.core.database.IStorageProvider;
+import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.sql.SQLStorage;
 
-public class SQLExtensionGuild implements IStorageProvider<SQLStorage>, IExtensionGuild<WuffyGuild, WuffyMember> {
+public class SQLExtensionGuild extends StorageProvider<SQLStorage> implements IExtensionGuild<WuffyGuild, WuffyMember> {
 
 	@Override
 	public void registered(SQLStorage storage) {

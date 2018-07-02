@@ -1,10 +1,10 @@
 package de.ngloader.bot.database.guild;
 
-import de.ngloader.core.database.IStorageProvider;
+import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.mongo.MongoStorage;
 
-public class MongoExtensionGuild implements IStorageProvider<MongoStorage>, IExtensionGuild<WuffyGuild, WuffyMember> {
+public class MongoExtensionGuild extends StorageProvider<MongoStorage> implements IExtensionGuild<WuffyGuild, WuffyMember> {
 
 	//TODO fill out
 //	private final Gson gson = new GsonBuilder()
