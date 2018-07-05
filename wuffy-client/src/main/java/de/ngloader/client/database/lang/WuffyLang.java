@@ -1,4 +1,4 @@
-package de.ngloader.bot.database.lang;
+package de.ngloader.client.database.lang;
 
 import java.util.HashMap;
 import java.util.Locale;

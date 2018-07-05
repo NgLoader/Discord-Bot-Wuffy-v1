@@ -29,4 +29,8 @@ public class JDAAdapter implements IJDAAdapter {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Core getCore() {
+		return core;
+	}
 }

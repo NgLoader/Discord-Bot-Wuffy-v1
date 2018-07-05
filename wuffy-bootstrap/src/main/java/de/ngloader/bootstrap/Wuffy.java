@@ -1,8 +1,12 @@
 package de.ngloader.bootstrap;
 
+import de.ngloader.bootstrap.command.ConsoleCommandGarbageCollector;
+import de.ngloader.bootstrap.command.ConsoleCommandStartInstance;
+import de.ngloader.bootstrap.command.ConsoleCommandStopInstance;
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.client.WuffyClient;
 import de.ngloader.core.Core;
+import de.ngloader.core.WuffyPhantomRefernce;
 import de.ngloader.core.config.ConfigService;
 import de.ngloader.core.console.ConsoleCommandManager;
 import de.ngloader.core.logger.Logger;
@@ -13,7 +17,13 @@ public class Wuffy extends TickingTask {
 
 	public static final Long START_TIME_IN_MILLIS = System.currentTimeMillis();
 
-	public static void main(String[] args) {
+	private static Wuffy instance;
+
+	public static Wuffy getInstance() {
+		return Wuffy.instance;
+	}
+
+	public static void main(String[] args) throws Exception {
 		if(Float.parseFloat(System.getProperty( "java.class.version" )) < 54) {
 			System.err.println("*** ERROR *** Wuffy equires Java 10 or above to work! Please download and install it!");
 			return;
@@ -34,7 +44,7 @@ public class Wuffy extends TickingTask {
 
 		System.setProperty("io.netty.eventLoopThreads", Integer.toString(threads));
 
-		Logger.info("Bootstrap", "Initializing bots and clients");
+		Logger.info("Bootstrap", "Loading and initializing bots and clients");
 
 		GlobalConfig config = ConfigService.getConfig(GlobalConfig.class);
 
@@ -46,18 +56,23 @@ public class Wuffy extends TickingTask {
 		config.clients.stream().filter(client -> client.enabled).forEach(client -> new WuffyClient(client));
 		Logger.info("Bootstrap", "Loaded clients: " + Core.getClients().size());
 
-		Logger.info("Bootstrap", "Starting all enabled instances...");
-		Core.getInstances().forEach(Core::enable);
-
-		new Wuffy();
+		Wuffy.instance = new Wuffy(config);
 	}
 
-	private ConsoleCommandManager consoleCommandManager;
+	private final GlobalConfig config;
 
-	private Thread masterThread;
+	private final ConsoleCommandManager consoleCommandManager;
 
-	public Wuffy() {
+	private final Thread masterThread;
+
+	public Wuffy(GlobalConfig config) {
+		this.config = config;
+
 		this.consoleCommandManager = new ConsoleCommandManager();
+
+		this.consoleCommandManager.registerExecutor(new ConsoleCommandStartInstance());
+		this.consoleCommandManager.registerExecutor(new ConsoleCommandStopInstance());
+		this.consoleCommandManager.registerExecutor(new ConsoleCommandGarbageCollector());
 
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
 		this.masterThread.start();
@@ -66,11 +81,15 @@ public class Wuffy extends TickingTask {
 			this.running = false;
 			stop();
 		}));
+
+		Logger.info("Bootstrap", "Enabling all instances...");
+		Core.getInstances().forEach(Core::enable);
 	}
 
 	@Override
 	protected void update() {
 		this.consoleCommandManager.update();
+		WuffyPhantomRefernce.getInstance().update();
 	}
 
 	@Override
@@ -79,7 +98,17 @@ public class Wuffy extends TickingTask {
 
 		this.consoleCommandManager.close();
 
+		Core.getInstances().forEach(Core::disable);
+
 		Logger.info("Shutdown", "Goodbye");
 		LoggerManager.close();
+	}
+
+	public GlobalConfig getConfig() {
+		return config;
+	}
+
+	public ConsoleCommandManager getConsoleCommandManager() {
+		return consoleCommandManager;
 	}
 }

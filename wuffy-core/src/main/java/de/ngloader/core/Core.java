@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import de.ngloader.core.database.IStorageService;
 import de.ngloader.core.database.StorageService;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
@@ -37,9 +38,12 @@ public abstract class Core extends TickingTask {
 	protected abstract void onEnable();
 	protected abstract void onDisable();
 
-	protected final Thread masterThread;
+	protected final Long startTimeInMillis = System.currentTimeMillis();
 
 	protected final CoreConfig config;
+
+	protected final Thread masterThread;
+	protected final Thread shutdownHookThread;
 
 	protected final AccountType accountType;
 
@@ -53,12 +57,14 @@ public abstract class Core extends TickingTask {
 	private boolean enabled = false;
 
 	public Core(CoreConfig config, AccountType accountType, Class<? extends IJDAAdapter> jdaAdapter) {
+		WuffyPhantomRefernce.getInstance().add(this, config != null ? config.instanceName : "UNKNOWN");
+
 		this.config = config;
 		this.accountType = accountType;
+
 		try {
 			this.jdaAdapter = jdaAdapter.getConstructor(Core.class).newInstance(this);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new Error(e);
 		}
 
@@ -67,6 +73,16 @@ public abstract class Core extends TickingTask {
 		this.i18n = new I18n(this);
 
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
+
+		this.shutdownHookThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				stop();
+			}
+		}, "Wuffy Discord Bot - Core ShutdownHook");
+
+		Runtime.getRuntime().addShutdownHook(this.shutdownHookThread);
 
 		this.storageService.registerExtension("guild", IExtensionGuild.class);
 		this.storageService.registerExtension("user", IExtensionUser.class);
@@ -86,24 +102,29 @@ public abstract class Core extends TickingTask {
 
 	@Override
 	protected void stop() {
+		Core.INSTANCES.remove(this);
+
+		this.running = false;
+
 		this.onDisable();
 
 		this.scheduler.cancelAllTasks();
-		this.storageService.disable();
 		this.jdaAdapter.logout();
+		this.storageService.disable();
 
-		Core.INSTANCES.remove(this);
+		Logger.info("Core", String.format("Stopped instance (%s)", this.config != null ? this.config.instanceName : "NULL"));
 	}
 
 	public void enable() {
 		if(enabled)
 			return;
 		enabled = true;
-		this.storageService.getExtension(IExtensionUser.class).getUser(0L);
 
 		try {
-			this.jdaAdapter.login();
+			this.storageService.enable();
 			this.i18n.loadLangs(this.storageService.getExtension(IExtensionLang.class));
+			this.jdaAdapter.login();
+
 			onEnable();
 		} catch(Exception e) {
 			Logger.warn("Core", "Failed to login");
@@ -111,10 +132,23 @@ public abstract class Core extends TickingTask {
 		}
 	}
 
-	public void destroy() {
-		if(!this.running)
-			return;
-		this.running = false;
+	public void disable() {
+		try {
+			System.out.println(String.format("Stopping instance (%s)", this.config != null ? this.config.instanceName : "NULL"));
+
+			Runtime.getRuntime().removeShutdownHook(this.shutdownHookThread);
+
+			this.running = false;
+		} catch(Exception e) {
+			Logger.err("Core", String.format("Error by disable core (%s)", this.config != null ? this.config.instanceName : "NULL"));
+
+			if(this.masterThread != null)
+				try {
+					this.masterThread.interrupt();
+				} catch(Exception e2) {
+					Logger.err("Core", String.format("Error by interrupt core (%s)", this.config != null ? this.config.instanceName : "NULL"));
+				}
+		}
 	}
 
 	public void addTickable(ITickable tickable) {
@@ -123,6 +157,18 @@ public abstract class Core extends TickingTask {
 
 	public void removeTickable(ITickable tickable) {
 		this.tickables.remove(tickable);
+	}
+
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+
+	public AccountType getAccountType() {
+		return this.accountType;
+	}
+
+	public Long getStartTimeInMillis() {
+		return this.startTimeInMillis;
 	}
 
 	public IJDAAdapter getJdaAdapter() {
@@ -137,23 +183,31 @@ public abstract class Core extends TickingTask {
 		return this.config;
 	}
 
-	public AccountType getAccountType() {
-		return this.accountType;
+	public <T extends CoreConfig> T getConfig(Class<T> coreConfigClass) {
+		return coreConfigClass.cast(this.config);
 	}
 
 	public StorageService getStorageService() {
 		return this.storageService;
 	}
 
+	public <T extends IStorageService> T getStorageService(Class<T> storageServiceClass) {
+		return storageServiceClass.cast(this.storageService);
+	}
+
 	public WuffyScheduler getScheduler() {
 		return this.scheduler;
+	}
+
+	public <T extends WuffyScheduler> T getScheduler(Class<T> schedulerClass) {
+		return schedulerClass.cast(this.scheduler);
 	}
 
 	public I18n getI18n() {
 		return this.i18n;
 	}
 
-	public boolean isEnabled() {
-		return this.enabled;
+	public <T extends I18n> T getI18n(Class<T> i18nClass) {
+		return i18nClass.cast(this.i18n);
 	}
 }

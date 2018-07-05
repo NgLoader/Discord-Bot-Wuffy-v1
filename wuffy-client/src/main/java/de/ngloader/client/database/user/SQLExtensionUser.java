@@ -4,7 +4,7 @@ import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.sql.SQLStorage;
 
-public class SQLExtensionUser implements StorageProvider<SQLStorage>, IExtensionUser<WuffyUser> {
+public class SQLExtensionUser extends StorageProvider<SQLStorage> implements IExtensionUser<WuffyUser> {
 
 	@Override
 	public void registered(SQLStorage storage) {

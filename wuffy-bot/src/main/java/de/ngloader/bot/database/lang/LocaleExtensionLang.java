@@ -14,7 +14,7 @@ public class LocaleExtensionLang extends StorageProvider<LocaleStorage> implemen
 
 	@Override
 	public WuffyLang getLang(String lang) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
 		return null;
 	}
 

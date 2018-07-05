@@ -12,8 +12,8 @@ public class CommandPing extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		var start = System.currentTimeMillis();
+		Long start = System.currentTimeMillis();
 
-		event.getChannel().sendMessage("Pong: calculating").complete().editMessage("Ping: " + (System.currentTimeMillis() - start) + "ms").queue();
+		event.getChannel().sendMessage("Pong: calculating").complete().editMessage(String.format("Ping: %s", Long.toString(System.currentTimeMillis() - start))).queue();
 	}
 }

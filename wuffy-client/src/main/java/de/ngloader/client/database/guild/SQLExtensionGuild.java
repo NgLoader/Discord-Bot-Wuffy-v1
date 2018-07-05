@@ -4,7 +4,7 @@ import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.sql.SQLStorage;
 
-public class SQLExtensionGuild implements StorageProvider<SQLStorage>, IExtensionGuild<WuffyGuild, WuffyMember> {
+public class SQLExtensionGuild extends StorageProvider<SQLStorage> implements IExtensionGuild<WuffyGuild, WuffyMember> {
 
 	@Override
 	public void registered(SQLStorage storage) {

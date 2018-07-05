@@ -71,7 +71,7 @@ public class WuffyScheduler implements ITickable {
 	 * @return WuffyInfoTask
 	 */
 	public int runTaskAfter(Core core, Runnable task, int delay) {
-		var taskInfo = new WuffyTaskInfo(core, task, this.taskIds.incrementAndGet(), delay);
+		var taskInfo = new WuffyTaskInfo(core, task, this.taskIds.getAndIncrement(), delay);
 		this.taskAfter.add(taskInfo);
 		return taskInfo.getTaskId();
 	}
@@ -96,7 +96,7 @@ public class WuffyScheduler implements ITickable {
 	 * @return WuffyInfoTask
 	 */
 	public int runTaskRepeat(Core core, Runnable task, int delay, int repeat) {
-		var taskInfo = new WuffyTaskInfo(core, task, true, this.taskIds.incrementAndGet(), delay, repeat);
+		var taskInfo = new WuffyTaskInfo(core, task, true, this.taskIds.getAndIncrement(), delay, repeat);
 		this.taskRepeat.add(taskInfo);
 		return taskInfo.getTaskId();
 	}

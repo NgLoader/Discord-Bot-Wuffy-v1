@@ -22,13 +22,10 @@ import net.dv8tion.jda.core.AccountType;
 
 public class WuffyBot extends Core {
 
-	private final BotConfig config;
-
-	private final CommandManager<WuffyBot> commandManager;
+	private CommandManager<WuffyBot> commandManager;
 
 	public WuffyBot(BotConfig config) {
 		super(config, AccountType.BOT, JDAAdapter.class);
-		this.config = config;
 
 		if(this.storageService.isStorageRegisterd(MongoStorage.class)) {
 			this.storageService.getStorage(MongoStorage.class).registerProvider(IExtensionGuild.class, new MongoExtensionGuild());
@@ -51,7 +48,6 @@ public class WuffyBot extends Core {
 
 	@Override
 	protected void onEnable() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -63,6 +59,6 @@ public class WuffyBot extends Core {
 	}
 
 	public BotConfig getConfig() {
-		return this.config;
+		return this.getConfig(BotConfig.class);
 	}
 }

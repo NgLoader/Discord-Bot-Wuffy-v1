@@ -65,7 +65,7 @@ public class LoggerManager {
 			var log = LOG_DIR.resolve(String.format("%s.log", SAVE_FORMAT.format(new Date())));
 			FileUtil.copy(LATEST, log);
 		} catch (Exception e) {
-			throw new Error("Failed to close all logger", e);
+			throw new Error("Failed to close logger", e);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package de.ngloader.core.lang;
 
-public class TranslationKeys {
+public class TranslationKeysCore {
 
 	public static final String UNKNOWN = "unknown";
 }
