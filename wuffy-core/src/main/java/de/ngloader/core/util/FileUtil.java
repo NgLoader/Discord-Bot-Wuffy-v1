@@ -5,6 +5,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
@@ -32,10 +33,8 @@ public class FileUtil {
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 				Path targetPath = target.resolve(source.relativize(file));
-				if(Files.notExists(targetPath))
-					Files.createFile(targetPath);
 
-				Files.copy(file, targetPath);
+				Files.copy(file, targetPath, StandardCopyOption.REPLACE_EXISTING);
 
 				return FileVisitResult.CONTINUE;
 			}

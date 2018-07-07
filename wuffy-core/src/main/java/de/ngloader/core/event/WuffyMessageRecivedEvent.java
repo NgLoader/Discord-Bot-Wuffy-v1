@@ -31,12 +31,20 @@ public class WuffyMessageRecivedEvent extends WuffyGenericMessageEvent {
 	}
 
 	public ImplUser getAuthor() {
-		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.message.getAuthor().getIdLong());
+		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.message.getAuthor());
+	}
+
+	public <T extends ImplUser> T getAuthor(Class<T> userClass) {
+		return userClass.cast(this.getAuthor());
 	}
 
 	public ImplMemeber getMember() {
 		return isFromType(ChannelType.TEXT) && !isWebhookMessage()
-				? this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.message.getGuild().getIdLong(), this.message.getAuthor().getIdLong()) : null;
+				? this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.message.getGuild(), this.message.getMember()) : null;
+	}
+
+	public <T extends ImplMemeber> T getMember(Class<T> memeberClass) {
+		return memeberClass.cast(this.getMember());
 	}
 
 	public boolean isWebhookMessage() {

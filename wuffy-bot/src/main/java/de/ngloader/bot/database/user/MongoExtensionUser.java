@@ -3,6 +3,7 @@ package de.ngloader.bot.database.user;
 import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.mongo.MongoStorage;
+import net.dv8tion.jda.core.entities.User;
 
 public class MongoExtensionUser extends StorageProvider<MongoStorage> implements IExtensionUser<WuffyUser> {
 
@@ -11,8 +12,7 @@ public class MongoExtensionUser extends StorageProvider<MongoStorage> implements
 	}
 
 	@Override
-	public WuffyUser getUser(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public WuffyUser getUser(User user) {
+		return new WuffyUser(this.core, user);
 	}
 }

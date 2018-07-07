@@ -72,7 +72,8 @@ public abstract class Core extends TickingTask {
 		this.storageService = new StorageService(this, config.database);
 		this.i18n = new I18n(this);
 
-		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
+		this.masterThread = new Thread(this, String.format("Wuffy Discord Bot - Core (%s)", this.config.instanceName));
+		this.masterThread.setDaemon(true);
 
 		this.shutdownHookThread = new Thread(new Runnable() {
 			
@@ -80,7 +81,7 @@ public abstract class Core extends TickingTask {
 			public void run() {
 				stop();
 			}
-		}, "Wuffy Discord Bot - Core ShutdownHook");
+		}, String.format("Wuffy Discord Bot - Core ShutdownHook (%s)", this.config.instanceName));
 
 		Runtime.getRuntime().addShutdownHook(this.shutdownHookThread);
 

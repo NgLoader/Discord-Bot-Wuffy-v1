@@ -22,10 +22,12 @@ public class I18n {
 	}
 
 	public void loadLangs(IExtensionLang<?> extensionLang) {
-		extensionLang.getLangs().forEach(lang -> this.langs.put(lang.getLocale().toLanguageTag(), lang));
+		extensionLang.getLangs().forEach(lang -> this.langs.put(lang.getLocale().toLanguageTag().toLowerCase(), lang));
 	}
 
 	public String format(String key, String locale, String... params) {
+		locale = locale.toLowerCase();
+
 		if(!this.langs.containsKey(locale))
 			return String.format("%s_%s", locale, key);
 

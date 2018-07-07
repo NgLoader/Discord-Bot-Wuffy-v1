@@ -74,7 +74,7 @@ public class Wuffy extends TickingTask {
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandStopInstance());
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandGarbageCollector());
 
-		this.masterThread = new Thread(this, "Wuffy Discord Bot - Core");
+		this.masterThread = new Thread(this, "Wuffy Discord Bot - Master");
 		this.masterThread.start();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {

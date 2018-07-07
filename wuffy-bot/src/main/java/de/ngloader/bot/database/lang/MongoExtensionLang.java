@@ -2,7 +2,9 @@ package de.ngloader.bot.database.lang;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.bson.Document;
@@ -17,12 +19,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
 import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.mongo.MongoStorage;
+import de.ngloader.core.logger.Logger;
 
 public class MongoExtensionLang extends StorageProvider<MongoStorage> implements IExtensionLang<WuffyLang> {
 
@@ -52,14 +56,34 @@ public class MongoExtensionLang extends StorageProvider<MongoStorage> implements
 
 	@Override
 	public WuffyLang getLang(String lang) {
-		Document document = this.collection.find(Filters.eq("lang", lang)).first();
-		gson.fromJson(document.toJson(), LangDocument.class);
-		return null;
+		Locale locale = Locale.forLanguageTag(lang);
+
+		Document document = this.collection.find(Filters.eq("lang", locale.toLanguageTag())).first();
+
+		if(document == null) {
+			this.collection.insertOne(Document.parse(gson.toJson(new LangDocument())).append("lang", locale.toLanguageTag()));
+			return new WuffyLang(this.core, locale, new HashMap<String, String>());
+		}
+
+		LangDocument langDocument = gson.fromJson(document.toJson(), LangDocument.class);
+		return new WuffyLang(this.core, locale, langDocument.translations);
 	}
 
 	@Override
 	public List<WuffyLang> getLangs() {
-		return new ArrayList<>();
+		List<WuffyLang> langs = new ArrayList<WuffyLang>();
+
+		this.collection.find().forEach((Block<Document>) block -> {
+			try {
+				LangDocument langDocument = gson.fromJson(block.toJson(), LangDocument.class);
+				langs.add(new WuffyLang(this.core, Locale.forLanguageTag(langDocument.lang), langDocument.translations));
+			} catch(Exception e) {
+				e.printStackTrace();
+				Logger.err("Database", String.format("Failed to load language (%s)", block.toJson()));
+			}
+		});
+
+		return langs;
 	}
 
 	private class LangDocument {

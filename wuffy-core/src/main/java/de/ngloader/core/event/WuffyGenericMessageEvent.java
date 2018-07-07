@@ -37,6 +37,10 @@ public class WuffyGenericMessageEvent extends Event {
 		return core;
 	}
 
+	public <T extends Core> T getCore(Class<T> coreClass) {
+		return coreClass.cast(this.getCore());
+	}
+
 	public MessageChannel getChannel() {
 		return channel;
 	}
@@ -58,7 +62,11 @@ public class WuffyGenericMessageEvent extends Event {
 	}
 
 	public ImplGuild getGuild() {
-		return isFromType(ChannelType.TEXT) ? this.core.getStorageService().getExtension(IExtensionGuild.class).getGuild(getTextChannel().getGuild().getIdLong()) : null;
+		return isFromType(ChannelType.TEXT) ? this.core.getStorageService().getExtension(IExtensionGuild.class).getGuild(this.getTextChannel().getGuild()) : null;
+	}
+
+	public <T extends ImplGuild> T getGuild(Class<T> guildClass) {
+		return guildClass.cast(this.getGuild());
 	}
 
 	public TextChannel getTextChannel() {

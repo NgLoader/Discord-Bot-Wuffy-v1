@@ -12,6 +12,5 @@ public class CommandTest extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		event.getChannel().sendMessage("Test: " + String.join(", ", args)).queue();
 	}
 }

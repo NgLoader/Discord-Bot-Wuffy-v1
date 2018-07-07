@@ -1,6 +1,6 @@
 package de.ngloader.core.scheduler;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -15,8 +15,8 @@ public class WuffyScheduler implements ITickable {
 
 	private final AtomicInteger taskIds = new AtomicInteger();
 
-	private final List<WuffyTaskInfo> taskAfter = new ArrayList<>();
-	private final List<WuffyTaskInfo> taskRepeat = new ArrayList<>();
+	private final List<WuffyTaskInfo> taskAfter = new LinkedList<WuffyTaskInfo>();
+	private final List<WuffyTaskInfo> taskRepeat = new LinkedList<WuffyTaskInfo>();
 
 	public WuffyScheduler(Core core) {
 		this.core = core;

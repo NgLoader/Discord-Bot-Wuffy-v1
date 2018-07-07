@@ -6,6 +6,7 @@ import java.util.Queue;
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.core.command.CommandManager;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
+import de.ngloader.core.logger.Logger;
 
 public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<WuffyBot, BotCommand> {
 
@@ -19,8 +20,13 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 
 	@Override
 	public void update() {
-		if(!this.queue.isEmpty())
-			execute(this.queue.poll());
+		try {
+			if(!this.queue.isEmpty())
+				execute(this.queue.poll());
+		} catch(Exception e) {
+			e.printStackTrace();
+			Logger.fatal("CommandExecutor", "Error by executing command queue", e);
+		}
 	}
 
 	private void execute(CommandInfo commandInfo) {
@@ -29,7 +35,13 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 
 	@Override
 	protected void execute(WuffyMessageRecivedEvent event, BotCommand command, String[] args) {
+		Long time = System.currentTimeMillis();
+
+		event.getChannel().sendTyping().queue();
+
 		command.execute(event, args);
+
+		Logger.debug("CommandExecutor", String.format("Command (%s) was executed in %sms", command.getClass().getSimpleName(), Long.toString(System.currentTimeMillis() - time)));
 	}
 
 	@Override

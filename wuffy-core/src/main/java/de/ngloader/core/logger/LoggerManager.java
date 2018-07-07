@@ -62,9 +62,11 @@ public class LoggerManager {
 			LoggerManager.errStream.close();
 			LoggerManager.printWriter.close();
 
-			var log = LOG_DIR.resolve(String.format("%s.log", SAVE_FORMAT.format(new Date())));
+			Path log = LOG_DIR.resolve(String.format("%s-%s.log", SAVE_FORMAT.format(new Date()), Long.toString(Files.list(LOG_DIR).count())));
+
 			FileUtil.copy(LATEST, log);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new Error("Failed to close logger", e);
 		}
 	}

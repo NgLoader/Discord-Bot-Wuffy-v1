@@ -1,9 +1,13 @@
 package de.ngloader.bot.command;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import de.ngloader.bot.WuffyBot;
+import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.core.command.CommandManager;
+import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.logger.Logger;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -21,7 +25,12 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 		var args = Arrays.copyOfRange(split, 1, split.length);
 		var command = split[0].toLowerCase();
 
-		var prefixes = Arrays.asList("~", "<@327267953177526273>"); //TODO get prefixes from database and check mention
+		WuffyGuild guild = (WuffyGuild) this.manager.getCore().getStorageService().getExtension(IExtensionGuild.class).getGuild(event.getGuild());
+
+		List<String> prefixes = new ArrayList<String>(guild.getPrefixes());
+
+		if(guild.isMention())
+			prefixes.add(String.format("<@%s>", Long.toString(event.getGuild().getSelfMember().getUser().getIdLong())));
 
 		for(String prefix : prefixes)
 			if(command.startsWith(prefix)) {
@@ -32,7 +41,8 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 					args = Arrays.copyOfRange(args, 1, args.length);
 				}
 
-				Logger.debug("Command Trigger", "Command: '" + command + "' args: '" + String.join("', '", args) + "'");
+				Logger.debug("Command Trigger", String.format("Command: '%s' args: '%s'", command, String.join("', '", args)));
+
 				onTrigger(new WuffyMessageRecivedEvent(this.manager.getCore(), event.getJDA(), event.getResponseNumber(), event.getMessage()), command, args);
 				return;
 			}

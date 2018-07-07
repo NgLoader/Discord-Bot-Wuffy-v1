@@ -63,12 +63,12 @@ public class ImplMemeber implements Member {
 
 	@Override
 	public ImplUser getUser() {
-		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.member.getUser().getIdLong());
+		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.member.getUser());
 	}
 
 	@Override
 	public ImplGuild getGuild() {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getGuild(this.member.getGuild().getIdLong());
+		return this.core.getStorageService().getExtension(IExtensionGuild.class).getGuild(this.member.getGuild());
 	}
 
 	@Override

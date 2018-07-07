@@ -3,6 +3,8 @@ package de.ngloader.bot.database.guild;
 import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.locale.LocaleStorage;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 
 public class LocaleExtensionGuild extends StorageProvider<LocaleStorage> implements IExtensionGuild<WuffyGuild, WuffyMember> {
 
@@ -11,13 +13,13 @@ public class LocaleExtensionGuild extends StorageProvider<LocaleStorage> impleme
 	}
 
 	@Override
-	public WuffyGuild getGuild(Long guildId) {
+	public WuffyGuild getGuild(Guild guild) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public WuffyMember getMemeber(Long guildId, Long memberId) {
+	public WuffyMember getMemeber(Guild guild, Member member) {
 		// TODO Auto-generated method stub
 		return null;
 	}
