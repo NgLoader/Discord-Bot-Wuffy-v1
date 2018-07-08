@@ -29,6 +29,8 @@ public class ConsoleCommandStartInstance implements IConsoleCommandExecutor {
 					continue;
 
 				Logger.info("Bootstrap", String.format("Starting client instance '%s'", clientConfig.instanceName));
+
+				clientConfig.admins.addAll(Wuffy.getInstance().getConfig().admins);
 				new WuffyClient(clientConfig).enable();
 				return ConsoleCommandResult.SUCCESS;
 			}
@@ -38,6 +40,8 @@ public class ConsoleCommandStartInstance implements IConsoleCommandExecutor {
 					continue;
 
 				Logger.info("Bootstrap", String.format("Starting bot instance '%s'", botConfig.instanceName));
+
+				botConfig.admins.addAll(Wuffy.getInstance().getConfig().admins);
 				new WuffyBot(botConfig).enable();
 				return ConsoleCommandResult.SUCCESS;
 			}

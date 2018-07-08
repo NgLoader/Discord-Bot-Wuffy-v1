@@ -2,8 +2,8 @@ package de.ngloader.bot.database.guild;
 
 import java.util.List;
 
-import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 
 public interface IWuffyExtensionGuild {
@@ -38,13 +38,13 @@ public interface IWuffyExtensionGuild {
 
 	public boolean hasPermission(Guild guild, Long channel, User user, List<String> permission);
 
-	public List<String> getPermission(Guild guild, Long channel, List<Group> group);
+	public List<String> getPermission(Guild guild, Long channel, List<Role> roles);
 
-	public void setPermission(Guild guild, Long channel, List<Group> group, List<String> permission);
+	public void setPermission(Guild guild, Long channel, List<Role> roles, List<String> permission);
 
-	public void addPermission(Guild guild, Long channel, List<Group> group, List<String> permission);
+	public void addPermission(Guild guild, Long channel, List<Role> roles, List<String> permission);
 
-	public void removePermission(Guild guild, Long channel, List<Group> group, List<String> permission);
+	public void removePermission(Guild guild, Long channel, List<Role> roles, List<String> permission);
 
-	public boolean hasPermission(Guild guild, Long channel, List<Group> group, List<String> permission);
+	public boolean hasPermission(Guild guild, Long channel, List<Role> roles, List<String> permission);
 }

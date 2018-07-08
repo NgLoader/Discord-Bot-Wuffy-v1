@@ -4,9 +4,9 @@ import java.util.List;
 
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.ImplGuild;
-import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 
 public class WuffyGuild extends ImplGuild {
@@ -79,26 +79,26 @@ public class WuffyGuild extends ImplGuild {
 	}
 
 	public boolean hasPermission(Long channel, User user, List<String> permission) {
-		return this.extension.hasPermission(this.guild, channel, user, permission);
+		return this.core.isAdmin(user) || this.extension.hasPermission(this.guild, channel, user, permission);
 	}
 
-	public List<String> getPermission(Long channel, List<Group> group) {
+	public List<String> getPermission(Long channel, List<Role> group) {
 		return this.extension.getPermission(this.guild, channel, group);
 	}
 
-	public void setPermission(Long channel, List<Group> group, List<String> permission) {
+	public void setPermission(Long channel, List<Role> group, List<String> permission) {
 		this.extension.setPermission(this.guild, channel, group, permission);
 	}
 
-	public void addPermission(Long channel, List<Group> group, List<String> permission) {
+	public void addPermission(Long channel, List<Role> group, List<String> permission) {
 		this.extension.addPermission(this.guild, channel, group, permission);
 	}
 
-	public void removePermission(Long channel, List<Group> group, List<String> permission) {
+	public void removePermission(Long channel, List<Role> group, List<String> permission) {
 		this.extension.removePermission(this.guild, channel, group, permission);
 	}
 
-	public boolean hasPermission(Long channel, List<Group> group, List<String> permission) {
+	public boolean hasPermission(Long channel, List<Role> group, List<String> permission) {
 		return this.extension.hasPermission(this.guild, channel, group, permission);
 	}
 }

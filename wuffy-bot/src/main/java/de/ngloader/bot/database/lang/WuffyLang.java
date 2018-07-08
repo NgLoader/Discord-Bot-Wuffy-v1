@@ -18,6 +18,6 @@ public class WuffyLang extends ImplLang {
 
 	@Override
 	public String getTranslation(String key) {
-		return this.translations.getOrDefault(key, String.format("LANG_NOT_EXIT_(%s)", key));
+		return this.translations.getOrDefault(key, key);
 	}
 }

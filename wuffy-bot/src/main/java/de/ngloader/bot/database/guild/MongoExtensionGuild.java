@@ -13,9 +13,9 @@ import com.mongodb.client.model.Filters;
 import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.mongo.MongoStorage;
-import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 
 public class MongoExtensionGuild extends StorageProvider<MongoStorage> implements IExtensionGuild<WuffyGuild, WuffyMember>, IWuffyExtensionGuild {
@@ -65,8 +65,12 @@ public class MongoExtensionGuild extends StorageProvider<MongoStorage> implement
 		Document document = this.collection.find(Filters.eq("guildId", guild.getIdLong())).first();
 
 		if(document == null) {
-			this.collection.insertOne(new Document("guildId", guild.getIdLong()));
-			return new Document();
+			Document insertDocument = new Document("guildId", guild.getIdLong())
+					.append("prefixes", Arrays.asList("~"));
+
+			this.collection.insertOne(insertDocument);
+
+			return insertDocument;
 		}
 
 		return document;
@@ -87,7 +91,7 @@ public class MongoExtensionGuild extends StorageProvider<MongoStorage> implement
 
 	@Override
 	public WuffyMember getMemeber(Guild guild, Member member) {
-		return new WuffyMember(this.core, member);
+		return new WuffyMember(this.core, member, this);
 	}
 
 	@Override
@@ -172,7 +176,7 @@ public class MongoExtensionGuild extends StorageProvider<MongoStorage> implement
 	}
 
 	@Override
-	public List<String> getPermission(Guild guild, Long channel, List<Group> group) {
+	public List<String> getPermission(Guild guild, Long channel, List<Role> group) {
 		Document document = this.getDocument(guild);
 		List<String> permission = new ArrayList<String>();
 
@@ -182,22 +186,22 @@ public class MongoExtensionGuild extends StorageProvider<MongoStorage> implement
 	}
 
 	@Override
-	public void setPermission(Guild guild, Long channel, List<Group> group, List<String> permission) {
+	public void setPermission(Guild guild, Long channel, List<Role> group, List<String> permission) {
 		group.forEach(g -> this.execute(guild, new Document("$set", new Document(String.format("perm.%s.groups.%s", Long.toString(channel), Long.toString(g.getIdLong())), permission)))); //TODO use bulk write
 	}
 
 	@Override
-	public void addPermission(Guild guild, Long channel, List<Group> group, List<String> permission) {
+	public void addPermission(Guild guild, Long channel, List<Role> group, List<String> permission) {
 		group.forEach(g -> this.execute(guild, new Document("$addToSet", new Document(String.format("perm.%s.groups.%s", Long.toString(channel), Long.toString(g.getIdLong())), new Document("$each", permission))))); //TODO use bulk write
 	}
 
 	@Override
-	public void removePermission(Guild guild, Long channel, List<Group> group, List<String> permission) {
+	public void removePermission(Guild guild, Long channel, List<Role> group, List<String> permission) {
 		group.forEach(g -> this.execute(guild, new Document("$pullAll", new Document(String.format("perm.%s.groups.%s", Long.toString(channel), Long.toString(g.getIdLong())), permission)))); //TODO use bulk write
 	}
 
 	@Override
-	public boolean hasPermission(Guild guild, Long channel, List<Group> group, List<String> permission) {
+	public boolean hasPermission(Guild guild, Long channel, List<Role> group, List<String> permission) {
 		Document document = this.getDocument(guild);
 		List<String> permissions = new ArrayList<String>();
 

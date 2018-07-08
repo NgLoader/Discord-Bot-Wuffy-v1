@@ -18,6 +18,7 @@ import de.ngloader.core.scheduler.WuffyScheduler;
 import de.ngloader.core.util.ITickable;
 import de.ngloader.core.util.TickingTask;
 import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.entities.User;
 
 public abstract class Core extends TickingTask {
 
@@ -150,6 +151,14 @@ public abstract class Core extends TickingTask {
 					Logger.err("Core", String.format("Error by interrupt core (%s)", this.config != null ? this.config.instanceName : "NULL"));
 				}
 		}
+	}
+
+	public boolean isAdmin(User user) {
+		return isAdmin(user.getIdLong());
+	}
+
+	public boolean isAdmin(Long longId) {
+		return this.config.admins.contains(longId);
 	}
 
 	public void addTickable(ITickable tickable) {

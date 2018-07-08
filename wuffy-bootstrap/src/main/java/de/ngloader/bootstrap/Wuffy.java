@@ -49,11 +49,11 @@ public class Wuffy extends TickingTask {
 		GlobalConfig config = ConfigService.getConfig(GlobalConfig.class);
 
 		Logger.info("Bootstrap", "Loading bots...");
-		config.bots.stream().filter(bot -> bot.enabled).forEach(bot -> new WuffyBot(bot));
+		config.bots.stream().filter(bot -> bot.enabled).forEach(bot -> { bot.admins.addAll(config.admins); new WuffyBot(bot); });
 		Logger.info("Bootstrap", "Loaded bots: " + Core.getBots().size());
 
 		Logger.info("Bootstrap", "Loading clients...");
-		config.clients.stream().filter(client -> client.enabled).forEach(client -> new WuffyClient(client));
+		config.clients.stream().filter(client -> client.enabled).forEach(client -> { client.admins.addAll(config.admins); new WuffyClient(client); });
 		Logger.info("Bootstrap", "Loaded clients: " + Core.getClients().size());
 
 		Wuffy.instance = new Wuffy(config);
