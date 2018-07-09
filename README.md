@@ -1,13 +1,12 @@
 # Wuffy discord bot [![Build Status](https://jenkins.wuffy.eu/buildStatus/icon?job=Wuffy)](https://jenkins.wuffy.eu/job/Wuffy/)
 #
-#
 ### Links
+- **[Invite to Discord](https://discordapp.com/oauth2/authorize?client_id=327267953177526273&permissions=8&response_type=code&scope=bot)**
+- **[Join Discord Server](https://discord.gg/Y8dqpu9)**
+#
 - **[Jenkins](https://jenkins.wuffy.eu/job/Wuffy%20Discord%20Bot/)**
 - **[Bitbucket](https://bitbucket.org/wuffy-official/bot)**
 - **[Trello](https://trello.com/b/FzkNBHYB/wuffy)**
-#
-- **[Invite to Discord](https://discordapp.com/oauth2/authorize?client_id=327267953177526273&permissions=8&response_type=code&scope=bot)**
-- **[Join Discord Server](https://discord.gg/Y8dqpu9)**
 
 ### Selfhosting
 - Your allowed to use the **bot** or **client** for selfhosting
