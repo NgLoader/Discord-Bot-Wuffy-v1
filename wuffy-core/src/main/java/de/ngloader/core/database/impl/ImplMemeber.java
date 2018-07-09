@@ -61,9 +61,17 @@ public class ImplMemeber implements Member {
 		return this.member.hasPermission(channel, permissions);
 	}
 
+	public <T extends ImplUser> T getUser(Class<T> userClass) {
+		return userClass.cast(this.getUser());
+	}
+
 	@Override
 	public ImplUser getUser() {
 		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.member.getUser());
+	}
+
+	public <T extends ImplGuild> T getGuild(Class<T> guildClass) {
+		return guildClass.cast(this.getGuild());
 	}
 
 	@Override
