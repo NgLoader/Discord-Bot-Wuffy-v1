@@ -1,14 +1,14 @@
 package de.ngloader.bot;
 
-import de.ngloader.bot.database.guild.LocaleExtensionGuild;
-import de.ngloader.bot.database.guild.MongoExtensionGuild;
-import de.ngloader.bot.database.guild.SQLExtensionGuild;
+import de.ngloader.bot.database.guild.locale.LocaleExtensionGuild;
+import de.ngloader.bot.database.guild.mongo.MongoExtensionGuild;
+import de.ngloader.bot.database.guild.sql.SQLExtensionGuild;
 import de.ngloader.bot.database.lang.LocaleExtensionLang;
 import de.ngloader.bot.database.lang.MongoExtensionLang;
 import de.ngloader.bot.database.lang.SQLExtensionLang;
-import de.ngloader.bot.database.user.LocaleExtensionUser;
-import de.ngloader.bot.database.user.MongoExtensionUser;
-import de.ngloader.bot.database.user.SQLExtensionUser;
+import de.ngloader.bot.database.user.locale.LocaleExtensionUser;
+import de.ngloader.bot.database.user.mongo.MongoExtensionUser;
+import de.ngloader.bot.database.user.sql.SQLExtensionUser;
 import de.ngloader.bot.jda.JDAAdapter;
 import de.ngloader.core.Core;
 import de.ngloader.core.command.CommandManager;
@@ -27,20 +27,24 @@ public class WuffyBot extends Core {
 	public WuffyBot(BotConfig config) {
 		super(config, AccountType.BOT, JDAAdapter.class);
 
-		if(this.storageService.isStorageRegisterd(MongoStorage.class)) {
-			this.storageService.getStorage(MongoStorage.class).registerProvider(IExtensionGuild.class, new MongoExtensionGuild());
-			this.storageService.getStorage(MongoStorage.class).registerProvider(IExtensionUser.class, new MongoExtensionUser());
-			this.storageService.getStorage(MongoStorage.class).registerProvider(IExtensionLang.class, new MongoExtensionLang());
+		LocaleStorage localeStorage = this.storageService.getStorage(LocaleStorage.class);
+		MongoStorage mongoStorage = this.storageService.getStorage(MongoStorage.class);
+		SQLStorage sqlStorage = this.storageService.getStorage(SQLStorage.class);
+
+		if(localeStorage != null) {
+			localeStorage.registerProvider(IExtensionGuild.class, new LocaleExtensionGuild());
+			localeStorage.registerProvider(IExtensionUser.class, new LocaleExtensionUser());
+			localeStorage.registerProvider(IExtensionLang.class, new LocaleExtensionLang());
 		}
-		if(this.storageService.isStorageRegisterd(SQLStorage.class)) {
-			this.storageService.getStorage(SQLStorage.class).registerProvider(IExtensionGuild.class, new SQLExtensionGuild());
-			this.storageService.getStorage(SQLStorage.class).registerProvider(IExtensionUser.class, new SQLExtensionUser());
-			this.storageService.getStorage(SQLStorage.class).registerProvider(IExtensionLang.class, new SQLExtensionLang());
+		if(mongoStorage != null) {
+			mongoStorage.registerProvider(IExtensionGuild.class, new MongoExtensionGuild());
+			mongoStorage.registerProvider(IExtensionUser.class, new MongoExtensionUser());
+			mongoStorage.registerProvider(IExtensionLang.class, new MongoExtensionLang());
 		}
-		if(this.storageService.isStorageRegisterd(LocaleStorage.class)) {
-			this.storageService.getStorage(LocaleStorage.class).registerProvider(IExtensionGuild.class, new LocaleExtensionGuild());
-			this.storageService.getStorage(LocaleStorage.class).registerProvider(IExtensionUser.class, new LocaleExtensionUser());
-			this.storageService.getStorage(LocaleStorage.class).registerProvider(IExtensionLang.class, new LocaleExtensionLang());
+		if(sqlStorage != null) {
+			sqlStorage.registerProvider(IExtensionGuild.class, new SQLExtensionGuild());
+			sqlStorage.registerProvider(IExtensionUser.class, new SQLExtensionUser());
+			sqlStorage.registerProvider(IExtensionLang.class, new SQLExtensionLang());
 		}
 
 		this.commandManager = new de.ngloader.bot.command.CommandManager(this);

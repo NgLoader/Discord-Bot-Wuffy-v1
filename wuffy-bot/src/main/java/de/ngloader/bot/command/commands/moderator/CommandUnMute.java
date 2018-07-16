@@ -8,6 +8,7 @@ import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
+import de.ngloader.core.lang.I18n;
 import net.dv8tion.jda.core.entities.Member;
 
 @Command(aliases = { "unmute", "umute" })
@@ -16,26 +17,29 @@ public class CommandUnMute extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		var executer = event.getMember(WuffyMember.class);
-		var locale = event.getGuild(WuffyGuild.class).getLocale();
-		var i18n = event.getCore().getI18n();
+		WuffyMember member = event.getMember(WuffyMember.class);
+		WuffyGuild guild = event.getGuild(WuffyGuild.class);
+		I18n i18n = event.getCore().getI18n();
+		String locale = member.getLocale();
 
 		event.getMessage().delete().queue();
 
-		if(executer.hasPermission(event.getChannel().getIdLong(), "command.unmute"))
+		if(member.hasPermission(event.getTextChannel(), "command.unmute"))
 			if(args.length > 0) {
 				if(args[0].matches("<@[0-9]{14,20}>")) {
-					Member member = event.getGuild().getMemberById(args[0].substring(2, args[0].length() - 1));
+					Member memberSelected = event.getGuild().getMemberById(args[0].substring(2, args[0].length() - 1));
 
-					if(member != null) {
+					if(memberSelected != null) {
 						event.getMessage().delete().queue();
 
-						if(!member.isOwner()) {
-							if(member.getVoiceState().isGuildMuted()) {
-								event.getGuild().getController().setMute(member, false).queue();
-								this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNMUTE_UNMUTED, locale, "%m", member.getEffectiveName()));
-							} else
-								this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNMUTE_ALREADY_UNMUTED, locale, "%m", member.getEffectiveName()));
+						if(!memberSelected.isOwner()) {
+							if(guild.hasHighestRole(member, memberSelected))
+								if(memberSelected.getVoiceState().isGuildMuted()) {
+									event.getGuild().getController().setMute(memberSelected, false).queue();
+									this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNMUTE_UNMUTED, locale, "%m", memberSelected.getEffectiveName()));
+								} else
+									this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNMUTE_ALREADY_UNMUTED, locale, "%m", memberSelected.getEffectiveName()));
+							this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNMUTE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
 						} else
 							this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_NOT_ALLOWED_BY_GUILD_OWNER, locale));
 					} else

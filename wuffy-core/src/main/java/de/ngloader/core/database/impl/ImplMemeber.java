@@ -20,11 +20,16 @@ import net.dv8tion.jda.core.entities.TextChannel;
 public class ImplMemeber implements Member {
 
 	protected final Core core;
+
+	protected final ImplGuild guild;
+	protected final ImplUser user;
 	protected final Member member;
 
-	public ImplMemeber(Core core, Member member) {
+	public ImplMemeber(Core core, ImplUser user, Member member, ImplGuild guild) {
 		this.core = core;
+		this.user = user;
 		this.member = member;
+		this.guild = guild;
 	}
 
 	public Core getCore() {
@@ -67,16 +72,16 @@ public class ImplMemeber implements Member {
 
 	@Override
 	public ImplUser getUser() {
-		return this.core.getStorageService().getExtension(IExtensionUser.class).getUser(this.member.getUser());
+		return ImplUser.class.cast(this.user);
 	}
 
 	public <T extends ImplGuild> T getGuild(Class<T> guildClass) {
-		return guildClass.cast(this.getGuild());
+		return guildClass.cast(this.guild);
 	}
 
 	@Override
 	public ImplGuild getGuild() {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getGuild(this.member.getGuild());
+		return ImplGuild.class.cast(this.guild);
 	}
 
 	@Override

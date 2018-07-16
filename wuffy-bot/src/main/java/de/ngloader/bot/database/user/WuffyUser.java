@@ -1,20 +1,21 @@
 package de.ngloader.bot.database.user;
 
+import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.ImplUser;
 import net.dv8tion.jda.core.entities.User;
 
-public class WuffyUser extends ImplUser {
+public abstract class WuffyUser extends ImplUser {
 
-	protected final IWuffyExtensionUser extension;
+	public abstract BlockedInfo getBlocked();
 
-	public WuffyUser(Core core, User user, IWuffyExtensionUser extension) {
+	public abstract void setBlocked(BlockedInfo blockedInfo);
+
+	public abstract String getUserLocale();
+
+	public abstract void setUserLocale(String locale);
+
+	public WuffyUser(Core core, User user) {
 		super(core, user);
-
-		this.extension = extension;
-	}
-
-	public String getUserLocale() {
-		return this.extension.getLocale(this.user);
 	}
 }

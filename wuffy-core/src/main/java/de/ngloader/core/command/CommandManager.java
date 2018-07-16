@@ -23,7 +23,7 @@ public abstract class CommandManager <C extends Core> {
 			public void run() {
 				executor.update();
 			}
-		}, 0, 5); //4 commands per seconds (20 ticks / 5 = 4)
+		}, 0, 2); //10 commands per seconds (20 ticks / 2 = 10)
 	}
 
 	public CommandTrigger<C> getTrigger() {

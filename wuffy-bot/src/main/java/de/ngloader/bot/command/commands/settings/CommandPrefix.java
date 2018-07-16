@@ -10,6 +10,7 @@ import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
+import de.ngloader.core.lang.I18n;
 
 @Command(aliases = { "prefix" })
 @CommandConfig(category = CommandCategory.SETTINGS)
@@ -17,12 +18,12 @@ public class CommandPrefix extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		var executer = event.getMember(WuffyMember.class);
-		var guild = event.getGuild(WuffyGuild.class);
-		var locale = guild.getLocale();
-		var i18n = event.getCore().getI18n();
+		WuffyMember member = event.getMember(WuffyMember.class);
+		WuffyGuild guild = event.getGuild(WuffyGuild.class);
+		I18n i18n = event.getCore().getI18n();
+		String locale = member.getLocale();
 
-		if(executer.hasPermission(event.getChannel().getIdLong(), "command.prefix")) {
+		if(member.hasPermission(event.getTextChannel(), "command.prefix")) {
 			if(args.length > 0) {
 				List<String> prefixes = guild.getPrefixes();
 				if(args[0].equalsIgnoreCase("list")) {

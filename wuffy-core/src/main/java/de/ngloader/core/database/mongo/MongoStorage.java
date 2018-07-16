@@ -38,6 +38,7 @@ public final class MongoStorage extends Storage<MongoStorage> {
 			credential = MongoCredential.createCredential(this.config.username, this.config.database, this.config.password.toCharArray());
 
 		ServerAddress address = new ServerAddress(this.config.address, this.config.port);
+
 		MongoClientOptions options = MongoClientOptions.builder().sslEnabled(this.config.ssl.enabled).sslInvalidHostNameAllowed(this.config.ssl.invalidHostNames).build();
 		this.client = new MongoClient(address, credential, options);
 		this.database = this.client.getDatabase(config.database);

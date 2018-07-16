@@ -33,6 +33,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_INVITE = "message_invite";
 
 	public static final String MESSAGE_VCKICK_KICKED = "message_vckick_kicked";
+	public static final String MESSAGE_VCKICK_LOWER_ROLE = "message_vckick_lower_role";
 	public static final String MESSAGE_VCKICK_NOT_IN_VOICE = "message_vckick_not_in_voice";
 	public static final String MESSAGE_VCKICK_MEMBER_NOT_FOUND = "message_vckick_member_not_found";
 	public static final String MESSAGE_VCKICK_USER_CAN_NOT_EXIST = "message_vckick_user_can_not_exist";
@@ -48,24 +49,28 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_CLEAR_FALSE_ARGS = "message_clear_false_args";
 
 	public static final String MESSAGE_MUTE_MUTED = "message_mute_muted";
+	public static final String MESSAGE_MUTE_LOWER_ROLE = "message_mute_lower_role";
 	public static final String MESSAGE_MUTE_ALREADY_MUTED = "message_mute_already_muted";
 	public static final String MESSAGE_MUTE_MEMBER_NOT_FOUND = "message_mute_member_not_found";
 	public static final String MESSAGE_MUTE_USER_CAN_NOT_EXIST = "message_mute_user_can_not_exist";
 	public static final String MESSAGE_MUTE_FALSE_ARGS = "message_mute_false_args";
 
 	public static final String MESSAGE_UNMUTE_UNMUTED = "message_unmute_unmuted";
+	public static final String MESSAGE_UNMUTE_LOWER_ROLE = "message_unmute_lower_role";
 	public static final String MESSAGE_UNMUTE_ALREADY_UNMUTED = "message_unmute_already_unmuted";
 	public static final String MESSAGE_UNMUTE_MEMBER_NOT_FOUND = "message_unmute_member_not_found";
 	public static final String MESSAGE_UNMUTE_USER_CAN_NOT_EXIST = "message_unmute_user_can_not_exist";
 	public static final String MESSAGE_UNMUTE_FALSE_ARGS = "message_unmute_false_args";
 
 	public static final String MESSAGE_KICK_KICKED = "message_kick_kicked";
+	public static final String MESSAGE_KICK_LOWER_ROLE = "message_kick_lower_role";
 	public static final String MESSAGE_KICK_KICKED_REASON = "message_kick_kicked_reason";
 	public static final String MESSAGE_KICK_MEMBER_NOT_FOUND = "message_kick_member_not_found";
 	public static final String MESSAGE_KICK_USER_CAN_NOT_EXIST = "message_kick_user_can_not_exist";
 	public static final String MESSAGE_KICK_FALSE_ARGS = "message_kick_false_args";
 
 	public static final String MESSAGE_BAN = "message_ban";
+	public static final String MESSAGE_BAN_LOWER_ROLE = "message_ban_lower_role";
 	public static final String MESSAGE_BAN_REASON = "message_ban_reason";
 	public static final String MESSAGE_BAN_NOT_A_NUMBER = "message_ban_not_a_number";
 	public static final String MESSAGE_BAN_MEMBER_NOT_FOUND = "message_ban_member_not_found";
@@ -73,18 +78,21 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_BAN_FALSE_ARGS = "message_ban_false_args";
 
 	public static final String MESSAGE_SOFTBAN = "message_softban";
+	public static final String MESSAGE_SOFTBAN_LOWER_ROLE = "message_softban_lower_role";
 	public static final String MESSAGE_SOFTBAN_REASON = "message_softban_reason";
 	public static final String MESSAGE_SOFTBAN_MEMBER_NOT_FOUND = "message_softban_member_not_found";
 	public static final String MESSAGE_SOFTBAN_USER_CAN_NOT_EXIST = "message_softban_user_can_not_exist";
 	public static final String MESSAGE_SOFTBAN_FALSE_ARGS = "message_softban_false_args";
 
 	public static final String MESSAGE_HARDBAN = "message_hardban";
+	public static final String MESSAGE_HARDBAN_LOWER_ROLE = "message_hardban_lower_role";
 	public static final String MESSAGE_HARDBAN_REASON = "message_hardban_reason";
 	public static final String MESSAGE_HARDBAN_MEMBER_NOT_FOUND = "message_hardban_member_not_found";
 	public static final String MESSAGE_HARDBAN_USER_CAN_NOT_EXIST = "message_hardban_user_can_not_exist";
 	public static final String MESSAGE_HARDBAN_FALSE_ARGS = "message_hardban_false_args";
 
 	public static final String MESSAGE_UNBAN = "message_unban";
+	public static final String MESSAGE_UNBAN_LOWER_ROLE = "message_unban_lower_role";
 	public static final String MESSAGE_UNBAN_NO_MEMBER_FOUND = "message_unban_no_member_found";
 	public static final String MESSAGE_UNBAN_FALSE_ARGS = "message_unban_false_args";
 
@@ -100,5 +108,6 @@ public class TranslationKeys extends TranslationKeysCore {
 
 	public static final String MESSAGE_NOT_ALLOWED_BY_GUILD_OWNER = "message_not_allowed_by_guild_owner";
 
+	public static final String MESSAGE_BOT_NO_INTERACT = "message_bot_no_interact";
 	public static final String MESSAGE_NO_PERMISSION = "message_no_permission";
 }

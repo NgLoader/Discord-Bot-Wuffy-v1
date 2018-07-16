@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
+import de.ngloader.core.lang.I18n;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageHistory;
 
@@ -20,11 +20,11 @@ public class CommandClear extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		var executer = event.getMember(WuffyMember.class);
-		var locale = event.getGuild(WuffyGuild.class).getLocale();
-		var i18n = event.getCore().getI18n();
+		WuffyMember member = event.getMember(WuffyMember.class);
+		I18n i18n = event.getCore().getI18n();
+		String locale = member.getLocale();
 
-		if(executer.hasPermission(event.getChannel().getIdLong(), "command.clear")) {
+		if(member.hasPermission(event.getTextChannel(), "command.clear")) {
 			if(args.length > 0) {
 				if(args[0].matches("[0-9]{1,4}")) {
 					int count = Integer.valueOf(args[0]);
@@ -35,13 +35,13 @@ public class CommandClear extends BotCommand {
 
 						if(args.length > 1) {
 							if(args[1].matches("<@[0-9]{14,20}>")) {
-								Member member = event.getGuild().getMemberById(args[1].substring(2, args[1].length() - 1));
+								Member memberSelected = event.getGuild().getMemberById(args[1].substring(2, args[1].length() - 1));
 		
-								if(member != null) {
+								if(memberSelected != null) {
 									history.retrievePast(count).queue(messages -> {
 										var delete = messages.stream()
 												.filter(msg -> 
-													msg.getAuthor().getIdLong() == member.getUser().getIdLong() &&
+													msg.getAuthor().getIdLong() == memberSelected.getUser().getIdLong() &&
 													msg.getCreationTime().isAfter(OffsetDateTime.now().minusWeeks(2).plusMinutes(2)))
 												.collect(Collectors.toList());
 
@@ -53,7 +53,7 @@ public class CommandClear extends BotCommand {
 
 											this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_CLEAR_CLEARED_USER, locale,
 													"%c", Integer.toString(delete.size()),
-													"%m", member.getEffectiveName()));
+													"%m", memberSelected.getEffectiveName()));
 										} else
 											this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_CLEAR_NO_MESAGES_TO_DELETE, locale, "%m", args[1].substring(2, args[1].length() - 1)));
 									});

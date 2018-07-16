@@ -1,5 +1,6 @@
-package de.ngloader.bot.database.user;
+package de.ngloader.bot.database.user.sql;
 
+import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.sql.SQLStorage;
