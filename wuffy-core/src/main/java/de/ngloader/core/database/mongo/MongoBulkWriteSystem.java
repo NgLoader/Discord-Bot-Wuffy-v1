@@ -21,14 +21,14 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 	protected final SingleResultCallback<BulkWriteResult> printBatchResult = new SingleResultCallback<BulkWriteResult>() {
 
 		public void onResult(BulkWriteResult result, Throwable throwable) {
-			Logger.info("Database User MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
+			Logger.info("Database MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
 					Integer.toString(result.getInsertedCount()),
 					Integer.toString(result.getDeletedCount()),
 					result.isModifiedCountAvailable() ? Integer.toString(result.getModifiedCount()) : "Not Avaivible",
 					Integer.toString(result.getMatchedCount())));
 
 			if(throwable != null) {
-				Logger.fatal("Database User MongoDB", "Failed to bulk write", throwable);
+				Logger.fatal("Database MongoDB", "Failed to bulk write", throwable);
 				throwable.printStackTrace();
 			}
 		};

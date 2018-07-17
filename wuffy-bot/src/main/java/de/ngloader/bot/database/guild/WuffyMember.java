@@ -3,12 +3,12 @@ package de.ngloader.bot.database.guild;
 import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.ImplGuild;
-import de.ngloader.core.database.impl.ImplMemeber;
+import de.ngloader.core.database.impl.ImplMember;
 import de.ngloader.core.database.impl.ImplUser;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Member;
 
-public abstract class WuffyMember extends ImplMemeber {
+public abstract class WuffyMember extends ImplMember {
 
 	public WuffyMember(Core core, ImplUser user, Member member, ImplGuild guild) {
 		super(core, user, member, guild);

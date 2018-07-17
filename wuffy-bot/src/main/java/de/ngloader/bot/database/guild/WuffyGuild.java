@@ -38,6 +38,15 @@ public abstract class WuffyGuild extends ImplGuild {
 
 	public abstract void setMention(boolean mention);
 
+	// Disabled Commands
+	public abstract List<String> getDisabledCommands();
+
+	public abstract void addDisabledCommands(String command);
+
+	public abstract void removeDisabledCommands(String command);
+
+	public abstract void setDisabledCommands(List<String> commands);
+
 	// Blocked
 	public abstract BlockedInfo getBlocked();
 

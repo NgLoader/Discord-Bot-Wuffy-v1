@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import de.ngloader.bot.WuffyBot;
+import de.ngloader.bot.database.guild.WuffyGuild;
+import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.CommandManager;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.logger.Logger;
@@ -49,10 +52,10 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 		BotCommand commandInfo = (BotCommand) this.manager.getRegistry().getCommand(command);
 
 		if(commandInfo != null)
-			if(!commandInfo.isCommandBlocked())
+			if(!commandInfo.isCommandBlocked() || event.getGuild(WuffyGuild.class).getDisabledCommands().contains(command))
 				this.queue.add(new CommandInfo(event, CommandExecutor.CAST_CLASS.cast(commandInfo), args));
 			else
-				event.getChannel().sendMessage("This command is currently disabled.");
+				event.getChannel().sendMessage(event.getCore().getI18n().format(TranslationKeys.MESSAGE_COMMAND_DISABLED, event.getMember(WuffyMember.class).getLocale()));
 	}
 
 	public class CommandInfo {

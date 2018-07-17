@@ -7,12 +7,12 @@ import de.ngloader.bot.database.BlockedInfo;
 public class MongoUserCache {
 
 	public MongoUserCache(Long userdId) {
-		this._userdId = Long.toString(userdId);
+		this._userId = Long.toString(userdId);
 	}
 
 	public ObjectId _id;
 
-	public String _userdId;
+	public String _userId;
 
 	public BlockedInfo blocked;
 

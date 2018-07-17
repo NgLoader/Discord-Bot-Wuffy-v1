@@ -3,7 +3,7 @@ package de.ngloader.core.event;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionUser;
-import de.ngloader.core.database.impl.ImplMemeber;
+import de.ngloader.core.database.impl.ImplMember;
 import de.ngloader.core.database.impl.ImplUser;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -38,12 +38,12 @@ public class WuffyMessageRecivedEvent extends WuffyGenericMessageEvent {
 		return userClass.cast(this.getAuthor());
 	}
 
-	public ImplMemeber getMember() {
+	public ImplMember getMember() {
 		return isFromType(ChannelType.TEXT) && !isWebhookMessage()
 				? this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.message.getGuild(), this.message.getMember()) : null;
 	}
 
-	public <T extends ImplMemeber> T getMember(Class<T> memeberClass) {
+	public <T extends ImplMember> T getMember(Class<T> memeberClass) {
 		return memeberClass.cast(this.getMember());
 	}
 

@@ -19,7 +19,14 @@ import de.ngloader.bot.command.commands.moderator.CommandSoftBan;
 import de.ngloader.bot.command.commands.moderator.CommandUnBan;
 import de.ngloader.bot.command.commands.moderator.CommandUnMute;
 import de.ngloader.bot.command.commands.moderator.CommandVCKick;
+import de.ngloader.bot.command.commands.settings.CommandAutoPrune;
+import de.ngloader.bot.command.commands.settings.CommandAutoRole;
+import de.ngloader.bot.command.commands.settings.CommandLanguage;
 import de.ngloader.bot.command.commands.settings.CommandPrefix;
+import de.ngloader.bot.command.commands.utility.CommandGlobalInfo;
+import de.ngloader.bot.command.commands.utility.CommandGuildInfo;
+import de.ngloader.bot.command.commands.utility.CommandServerInfo;
+import de.ngloader.bot.command.commands.utility.CommandUserInfo;
 import de.ngloader.core.command.CommandRegistry;
 
 public class CommandManager extends de.ngloader.core.command.CommandManager<WuffyBot> {
@@ -50,6 +57,9 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 
 		//Settings
 		this.registry.addCommand(new CommandPrefix());
+		this.registry.addCommand(new CommandLanguage());
+		this.registry.addCommand(new CommandAutoRole());
+		this.registry.addCommand(new CommandAutoPrune());
 
 		//Information
 		this.registry.addCommand(new CommandHelp());
@@ -60,5 +70,11 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandShardInfo());
 		this.registry.addCommand(new CommandInvite());
 		this.registry.addCommand(new CommandPing());
+
+		//Utility
+		this.registry.addCommand(new CommandUserInfo());
+		this.registry.addCommand(new CommandServerInfo());
+		this.registry.addCommand(new CommandGuildInfo());
+		this.registry.addCommand(new CommandGlobalInfo());
 	}
 }

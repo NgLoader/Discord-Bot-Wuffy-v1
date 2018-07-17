@@ -151,7 +151,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void removePrefix(String prefix) {
 		this.cache.prefixes.remove(prefix);
-		this.queueBulk(new Document("$pullAll", new Document("prefixes", prefix)));
+		this.queueBulk(new Document("$pull", new Document("prefixes", prefix)));
 	}
 
 	@Override
@@ -169,6 +169,29 @@ public class MongoGuild extends WuffyGuild {
 	public void setMention(boolean mention) {
 		this.cache.mention = mention;
 		this.queueBulk(new Document("$set", new Document("mention", mention)));
+	}
+
+	@Override
+	public List<String> getDisabledCommands() {
+		return this.cache.disabledCommands;
+	}
+
+	@Override
+	public void addDisabledCommands(String command) {
+		this.cache.disabledCommands.add(command);
+		this.queueBulk(new Document("$pull", new Document("disabledCommands", command)));
+	}
+
+	@Override
+	public void removeDisabledCommands(String command) {
+		this.cache.disabledCommands.remove(command);
+		this.queueBulk(new Document("$addToSet", new Document("disabledCommands", command)));
+	}
+
+	@Override
+	public void setDisabledCommands(List<String> commands) {
+		this.cache.disabledCommands = commands;
+		this.queueBulk(new Document("$set", new Document("disabledCommands", commands)));
 	}
 
 	@Override
@@ -190,7 +213,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void setBan(Long userId, BanInfo banInfo) {
 		this.cache.user.bans.put(Long.toString(userId), banInfo);
-		this.queueBulk(new Document("$addToSet", new Document("user.bans", this.toDocument(banInfo))));
+		this.queueBulk(new Document("$set", new Document(String.format("user.bans.%s", Long.toString(userId)), this.toDocument(banInfo))));
 	}
 
 	@Override
@@ -201,7 +224,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void setMute(Long userId, MuteInfo muteInfo) {
 		this.cache.user.mutes.put(Long.toString(userId), muteInfo);
-		this.queueBulk(new Document("$addToSet", new Document("user.mutes", this.toDocument(muteInfo))));
+		this.queueBulk(new Document("$set", new Document(String.format("user.mutes.%s", Long.toString(userId)), this.toDocument(muteInfo))));
 	}
 
 	@Override
@@ -212,7 +235,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void setWarn(Long userId, WarnInfo warnInfo) {
 		this.cache.user.warns.put(Long.toString(userId), warnInfo);
-		this.queueBulk(new Document("$addToSet", new Document("user.warns", this.toDocument(warnInfo))));
+		this.queueBulk(new Document("$set", new Document(String.format("user.warns.%s", Long.toString(userId)), this.toDocument(warnInfo))));
 	}
 
 	@Override
@@ -229,7 +252,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void removeBlockedHistory(BlockedInfo blockedInfo) {
 		this.cache.history.blocked.remove(blockedInfo);
-		this.queueBulk(new Document("$pullAll", new Document("history.blocked", this.toDocument(blockedInfo))));
+		this.queueBulk(new Document("$pull", new Document("history.blocked", this.toDocument(blockedInfo))));
 	}
 
 	@Override
@@ -252,7 +275,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void removeBanHistory(BanInfo banInfo) {
 		this.cache.history.ban.remove(banInfo);
-		this.queueBulk(new Document("$pullAll", new Document("history.ban", this.toDocument(banInfo))));
+		this.queueBulk(new Document("$pull", new Document("history.ban", this.toDocument(banInfo))));
 	}
 
 	@Override
@@ -275,7 +298,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void removeMuteHistory(MuteInfo muteInfo) {
 		this.cache.history.mute.remove(muteInfo);
-		this.queueBulk(new Document("$pullAll", new Document("history.mute", this.toDocument(muteInfo))));
+		this.queueBulk(new Document("$pull", new Document("history.mute", this.toDocument(muteInfo))));
 	}
 
 	@Override
@@ -298,7 +321,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void removeWarnHistory(WarnInfo warnInfo) {
 		this.cache.history.warn.remove(warnInfo);
-		this.queueBulk(new Document("$pullAll", new Document("history.warn", this.toDocument(warnInfo))));
+		this.queueBulk(new Document("$pull", new Document("history.warn", this.toDocument(warnInfo))));
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
+import de.ngloader.core.util.StringUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 @Command(aliases = { "commands", "cmds", "cmd" })
@@ -36,19 +37,18 @@ public class CommandCommands extends BotCommand {
 						((WuffyBot) event.getCore()).getCommandManager().getRegistry().getCommands().values().stream()
 							.distinct()
 							.filter(command -> command.getClass().getAnnotation(CommandConfig.class).category() == category)
-							.map(command ->
-									prefix +
-									writeFirstUpperCase(command.getClass().getAnnotation(Command.class).aliases()[0]) +
-									(((BotCommand) command).isCommandBlocked() ? String.format(" %s", messageDisabled) : ""))
+							.map(command -> {
+								Command annotation = command.getClass().getAnnotation(Command.class);
+
+								return prefix +
+										StringUtil.writeFirstUpperCase(annotation.aliases()[0]) +
+										((((BotCommand) command).isCommandBlocked() || guild.getDisabledCommands().contains(annotation.aliases()[0])) ? String.format(" %s", messageDisabled) : "");
+							})
 							.collect(Collectors.joining("\n")), true);
 			}
 
 			event.getChannel().sendMessage(embedBuilder.build()).queue();
 		} else
 			this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.commands"));
-	}
-
-	private String writeFirstUpperCase(String message) {
-		return message.substring(0, 1).toUpperCase() + message.substring(1).toLowerCase();
 	}
 }

@@ -6,7 +6,7 @@ public enum CommandCategory {
 	MODERATOR,
 	SETTINGS,
 	INFORMATION,
-	MUSIK,
+	MUSIC,
 	NSFW,
 	UTILITY,
 	OTHER,

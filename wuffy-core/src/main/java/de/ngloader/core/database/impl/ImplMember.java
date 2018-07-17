@@ -17,7 +17,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 
-public class ImplMemeber implements Member {
+public class ImplMember implements Member {
 
 	protected final Core core;
 
@@ -25,7 +25,7 @@ public class ImplMemeber implements Member {
 	protected final ImplUser user;
 	protected final Member member;
 
-	public ImplMemeber(Core core, ImplUser user, Member member, ImplGuild guild) {
+	public ImplMember(Core core, ImplUser user, Member member, ImplGuild guild) {
 		this.core = core;
 		this.user = user;
 		this.member = member;

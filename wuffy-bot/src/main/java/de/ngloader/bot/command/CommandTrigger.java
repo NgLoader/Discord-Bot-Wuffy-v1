@@ -10,6 +10,7 @@ import de.ngloader.core.command.CommandManager;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.logger.Logger;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<WuffyBot> {
@@ -20,6 +21,9 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		if(event.getAuthor().isBot() || event.getAuthor().isFake() || !event.getChannel().canTalk() || event.getChannel().getType() != ChannelType.TEXT)
+			return;
+
 		var message = event.getMessage().getContentRaw();
 		var split = message.split("\\s+");
 		var args = Arrays.copyOfRange(split, 1, split.length);
@@ -29,7 +33,7 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 
 		List<String> prefixes = new ArrayList<String>(guild.getPrefixes());
 
-		if(guild.isMention())
+		if(guild.isMention() || event.getMember().isOwner() || this.manager.getCore().isAdmin(event.getAuthor().getIdLong()))
 			prefixes.add(String.format("<@%s>", Long.toString(event.getGuild().getSelfMember().getUser().getIdLong())));
 
 		for(String prefix : prefixes)
@@ -41,7 +45,7 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 					args = Arrays.copyOfRange(args, 1, args.length);
 				}
 
-				Logger.debug("Command Trigger", String.format("Command: '%s' args: '%s'", command, String.join("', '", args)));
+				Logger.debug("Command Trigger", String.format("Command: '%s' args: '%s'", command, String.join(", ", args)));
 
 				onTrigger(new WuffyMessageRecivedEvent(this.manager.getCore(), event.getJDA(), event.getResponseNumber(), event.getMessage()), command, args);
 				return;

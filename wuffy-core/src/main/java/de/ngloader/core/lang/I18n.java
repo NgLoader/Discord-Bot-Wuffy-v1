@@ -36,7 +36,7 @@ public class I18n {
 		for(int i = 0; (i + 1) < params.length; i++)
 			translation = translation.replace(params[i], params[++i]);
 
-		return translation;
+		return translation.replaceAll("\\n", System.lineSeparator());
 	}
 
 	public ImplLang getLang(String locale) {

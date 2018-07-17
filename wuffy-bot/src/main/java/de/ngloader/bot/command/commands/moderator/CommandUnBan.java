@@ -38,7 +38,7 @@ public class CommandUnBan extends BotCommand {
 							if(info.expire < System.currentTimeMillis())
 								guild.setBan(ban.getUser().getIdLong(), null);
 							else if(!guild.hasHighestRole(member, guild.getMemberById(info.banBy))) {
-								this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNBAN_LOWER_ROLE, locale, "%u", String.format("<@%s>", Long.toString(info.banBy))));
+								this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNBAN_LOWER_ROLE, locale, "%u", String.format("<@%s>", Long.toString(info.banBy))));
 								return;
 							}
 							info.unbanBy = member.getUser().getIdLong();
@@ -50,16 +50,16 @@ public class CommandUnBan extends BotCommand {
 
 						event.getGuild().getController().unban(ban.getUser()).queue();
 
-						this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNBAN, locale, "%u", String.format("<@%s>", Long.toString(ban.getUser().getIdLong()))));
+						this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNBAN, locale, "%u", String.format("<@%s>", Long.toString(ban.getUser().getIdLong()))));
 						return;
 					}
 				}
 
-				this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_UNBAN_NO_MEMBER_FOUND, locale));
+				this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNBAN_NO_MEMBER_FOUND, locale));
 			} else
-				this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_BAN_FALSE_ARGS, locale));
+				this.replay(event, i18n.format(TranslationKeys.MESSAGE_BAN_FALSE_ARGS, locale));
 			//No args
 		else
-			this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.ban"));
+			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.ban"));
 	}
 }

@@ -12,7 +12,10 @@ public class CommandTest extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		event.getChannel().sendMessage("Test").queue();
+		event.getChannel().sendMessage("Loading <a:loading:468438447573696522>").queue();
+//		event.getGuild(WuffyGuild.class).addPermissionMode(EnumPermissionMode.CHANNEL_RANKING, EnumPermissionMode.CHANNEL_ROLE, EnumPermissionMode.CHANNEL_USER, EnumPermissionMode.GLOBAL_RANKING, EnumPermissionMode.CHANNEL_ROLE, EnumPermissionMode.GLOBAL_USER);
+//		event.getGuild(WuffyGuild.class).addPermissionChannel(EnumPermissionType.USER, 343187634388205568L, Long.toString(128293854733402112L), "command.vckick");
+//		event.getGuild(WuffyGuild.class).addPermissionGlobal(EnumPermissionType.USER, Long.toString(128293854733402112L), "command.shards");
 //		System.out.println("hey");
 //		event.getGuild(WuffyGuild.class).addBanHistory(new Document("test", 1234));
 //		event.getGuild(WuffyGuild.class).addBanHistory(new Document("test", 4321));

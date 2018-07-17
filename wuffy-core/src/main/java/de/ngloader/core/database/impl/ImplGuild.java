@@ -100,7 +100,7 @@ public class ImplGuild implements Guild {
 	}
 
 	@Override
-	public ImplMemeber getOwner() {
+	public ImplMember getOwner() {
 		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getOwner());
 	}
 
@@ -120,17 +120,27 @@ public class ImplGuild implements Guild {
 	}
 
 	@Override
-	public ImplMemeber getSelfMember() {
+	public ImplMember getSelfMember() {
 		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getSelfMember());
 	}
 
 	@Override
-	public ImplMemeber getMember(User user) {
+	public ImplMember getMember(User user) {
 		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMember(user));
 	}
 
-	public ImplMemeber getMember(ImplUser user) {
+	public ImplMember getMember(ImplUser user) {
 		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(user.getIdLong()));
+	}
+
+	@Override
+	public ImplMember getMemberById(long userId) {
+		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(userId));
+	}
+
+	@Override
+	public ImplMember getMemberById(String userId) {
+		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(Long.parseLong(userId.replace("<@", "").replace(">", ""))));
 	}
 
 	@Override
