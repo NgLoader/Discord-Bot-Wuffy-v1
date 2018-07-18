@@ -1,0 +1,173 @@
+{
+    "English": {
+        "language": ""
+    },
+    "true": {
+        "message_true": ""
+    },
+    "false": {
+        "message_false": ""
+    },
+    "%p ping": {
+        "message_ping": ""
+    },
+    "message_ping_calculating": "",
+    "only a word": {
+        "message_shardinfo_shards": "",
+        "message_shardinfo_guilds": "",
+        "message_shardinfo_users": "",
+        "message_shardinfo_voices": "",
+        "message_shardinfo_total": "",
+        "message_commands_disabled": "",
+        "message_status_processors": "",
+        "message_status_cpu": "",
+        "message_status_memory": "",
+        "message_stats_version": "",
+        "message_stats_library": "",
+        "message_stats_owner": "",
+        "message_stats_admins": "",
+        "message_stats_guilds": "",
+        "message_stats_users": "",
+        "message_stats_voices": "",
+        "message_userinfo_username": "",
+        "message_userinfo_discriminator": "",
+        "message_userinfo_id": "",
+        "message_userinfo_roles": "",
+        "message_userinfo_game": "",
+        "message_userinfo_game_nothing_playing": "",
+        "message_userinfo_status": "",
+        "message_userinfo_userlocale": ""
+    },
+    "message when the command to execute is disabled": {
+        "message_command_disabled": ""
+    },
+    "%v version": {
+        "message_version": ""
+    },
+    "message_help": "",
+    "message_invite": "",
+    "%m kickedName, %c channel": {
+        "message_vckick_kicked": ""
+    },
+    "%m member": {
+        "message_vckick_lower_role": "",
+        "message_vckick_not_in_voice": "",
+        "message_vckick_member_not_found": "",
+        "message_clear_member_not_found": "",
+        "message_mute_muted": "",
+        "message_kick_kicked": ""
+    },
+    "message_vckick_false_args": "",
+    "%c deleteCount": {
+        "message_clear_cleared": ""
+    },
+    "%c deleteCount, %m member": {
+        "message_clear_cleared_user": ""
+    },
+    "message_clear_not_a_number": "",
+    "message_clear_number_out_of_range": "",
+    "message_clear_no_messages_to_delete": "",
+    "message_clear_false_args": "",
+    "%m targetMember": {
+        "message_mute_lower_role": "",
+        "message_mute_already_muted": "",
+        "message_mute_member_not_found": "",
+        "message_unmute_lower_role": "",
+        "message_unmute_already_unmuted": "",
+        "message_unmute_member_not_found": "",
+        "message_kick_lower_role": "",
+        "message_kick_member_not_found": "",
+        "message_ban": "",
+        "message_ban_lower_role": "",
+        "message_ban_member_not_found": "",
+        "message_softban": "",
+        "message_softban_lower_role": "",
+        "message_softban_member_not_found": "",
+        "message_hardban": "",
+        "message_hardban_lower_role": "",
+        "message_hardban_member_not_found": "",
+        "message_unban_lower_role": "",
+        "message_unban_no_member_found": "",
+        "message_userinfo_member_not_found": "",
+        "message_bot_no_interact": ""
+    },
+    "message_mute_false_args": "",
+    "%u unmutedUser": {
+        "message_unmute_unmuted": ""
+    },
+    "message_unmute_false_args": "",
+    "%m targetMember, %r reason": {
+        "message_kick_kicked_reason": "",
+        "message_ban_reason": "",
+        "message_softban_reason": "",
+        "message_hardban_reason": ""
+    },
+    "message_kick_false_args": "",
+    "message_ban_false_args": "",
+    "message_softban_false_args": "",
+    "message_hardban_false_args": "",
+    "%u unbannedUser": {
+        "message_unban": ""
+    },
+    "message_unban_false_args": "",
+    "%l list": {
+        "message_prefix_list": "",
+        "message_language_list": ""
+    },
+    "%p prefix": {
+        "message_prefix_removed": "",
+        "message_prefix_added": ""
+    },
+    "message_prefix_already_exist": "",
+    "message_prefix_list_empty": "",
+    "message_prefix_max_length": "",
+    "message_prefix_max_count": "",
+    "message_prefix_min_count": "",
+    "message_prefix_false_args": "",
+    "(used guild. example: \"Use guild lang\")": {
+        "message_userinfo_userlocale_not_selected": "",
+        "message_language_user_use_guild": ""
+    },
+    "example: dd.MM.yyyy or MM.dd.yyyy ...": {
+        "message_userinfo_date_format": ""
+    },
+    "message_userinfo_false_args": "",
+    "message_mention_enable": "",
+    "message_mention_disable": "",
+    "%l language": {
+        "message_language_changed_user": "",
+        "message_language_changed_guild": "",
+        "message_language_info_guild": "",
+        "message_language_info_user": ""
+    },
+    "%u userLang, %g guildLang": {
+        "message_language_info": ""
+    },
+    "message_language_not_exist": "",
+    "message_language_false_args": "",
+    "%e (is delete executer message enabled), %b (is delete bot message enabled), %l (list of all setted delays)": {
+        "message_message_info": ""
+    },
+    "message_message_executer_enable": "",
+    "message_message_executer_disable": "",
+    "message_message_bot_enable": "",
+    "message_message_bot_disable": "",
+    "message_message_already_enabled": "",
+    "message_message_already_disabled": "",
+    "%l list of setted delays": {
+        "message_message_delay_list": ""
+    },
+    "%t messageType": {
+        "message_message_delay_removed": "",
+        "message_message_delay_added": ""
+    },
+    "message_message_delay_not_a_number": "",
+    "message_message_delay_already_removed": "",
+    "message_message_delay_already_set": "",
+    "message_message_delay_message_type_not_found": "",
+    "message_message_false_args": "",
+    "message_not_allowed_by_guild_owner": "",
+    "%p permission": {
+        "message_no_permission": ""
+    }
+}
