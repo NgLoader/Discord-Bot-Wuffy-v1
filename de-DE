@@ -1,0 +1,306 @@
+[
+    {
+        "term": "language",
+        "definition": "Deutsch",
+        "context": "English",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_true",
+        "definition": null,
+        "context": "true",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_false",
+        "definition": null,
+        "context": "false",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_ping",
+        "definition": null,
+        "context": "%p ping",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_ping_calculating",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_shardinfo_shards",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_shardinfo_guilds",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_shardinfo_users",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_shardinfo_voices",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_shardinfo_total",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_commands_disabled",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_command_disabled",
+        "definition": null,
+        "context": "message when the command to execute is disabled",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_version",
+        "definition": null,
+        "context": "%v version",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_status_processors",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_status_cpu",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_status_memory",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_version",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_library",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_owner",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_admins",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_guilds",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_users",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_stats_voices",
+        "definition": null,
+        "context": "only a word",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_help",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_invite",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_vckick_kicked",
+        "definition": null,
+        "context": "%m kickedName, %c channel",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_vckick_lower_role",
+        "definition": null,
+        "context": "%m member",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_vckick_not_in_voice",
+        "definition": null,
+        "context": "%m member",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_vckick_member_not_found",
+        "definition": null,
+        "context": "%m member",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_vckick_false_args",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_cleared",
+        "definition": null,
+        "context": "%c deleteCount",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_cleared_user",
+        "definition": null,
+        "context": "%c deleteCount, %m member",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_member_not_found",
+        "definition": null,
+        "context": "%m member",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_not_a_number",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_number_out_of_range",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_no_messages_to_delete",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_clear_false_args",
+        "definition": null,
+        "context": "",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    },
+    {
+        "term": "message_mute_muted",
+        "definition": null,
+        "context": "%m member",
+        "term_plural": "",
+        "reference": "",
+        "comment": ""
+    }
+]
