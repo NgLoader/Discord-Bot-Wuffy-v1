@@ -1,5 +1,15 @@
 {
     "English": {
         "language": "Deutsch"
-    }
+    },
+    "true": {
+        "message_true": "Ja"
+    },
+    "false": {
+        "message_false": "Nein"
+    },
+    "%p ping": {
+        "message_ping": "Ping: %p"
+    },
+    "message_ping_calculating": "Pong calculating"
 }
