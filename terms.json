@@ -1,0 +1,1456 @@
+{
+  "terms": [
+    {
+      "term": "message_userinfo_userlocale_not_selected",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:40:41+0000",
+      "updated": "",
+      "reference": "(used guild. example: \"Use guild lang\")",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_userlocale",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:40:14+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_not_exist",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:44:10+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:44:22+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_list",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:44:00+0000",
+      "updated": "",
+      "reference": "%l list",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_user_use_guild",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:43:49+0000",
+      "updated": "",
+      "reference": "(used guild. example: \"Use guild lang\")",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_info_user",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:43:26+0000",
+      "updated": "",
+      "reference": "%l language",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_info",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:43:11+0000",
+      "updated": "",
+      "reference": "%u userLang, %g guildLang",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_info_guild",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:43:18+0000",
+      "updated": "",
+      "reference": "%l language",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unban_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:36:21+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unban_no_member_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:36:14+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_date_format",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:40:59+0000",
+      "updated": "",
+      "reference": "example: dd.MM.yyyy or MM.dd.yyyy ...",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_removed",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:47:20+0000",
+      "updated": "",
+      "reference": "%t messageType",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_list",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:58+0000",
+      "updated": "",
+      "reference": "%l list of setted delays",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_already_disabled",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:42+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_already_enabled",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:39+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_bot_disable",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:32+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_added",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:47:33+0000",
+      "updated": "",
+      "reference": "%t messageType",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_not_a_number",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:47:46+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_already_removed",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:47:52+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_already_set",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:47:56+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_delay_message_type_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:48:14+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:48:18+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_not_allowed_by_guild_owner",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:48:28+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_bot_no_interact",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:48:53+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_no_permission",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:49:02+0000",
+      "updated": "",
+      "reference": "%p permission",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_executer_disable",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:23+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_executer_enable",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:20+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_bot_enable",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:46:27+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_message_info",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:45:12+0000",
+      "updated": "",
+      "reference": "%e (is delete executer message enabled), %b (is delete bot message enabled), %l (list of all setted delays)",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:41:27+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:41:35+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mention_enable",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:41:43+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mention_disable",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:41:47+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_changed_user",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:42:10+0000",
+      "updated": "",
+      "reference": "%l language",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_language_changed_guild",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:42:29+0000",
+      "updated": "",
+      "reference": "%l language",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unban_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:36:06+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unban",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:35:55+0000",
+      "updated": "",
+      "reference": "%u unbannedUser",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ban_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:32:52+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ban_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:33:04+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_removed",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:37:59+0000",
+      "updated": "",
+      "reference": "%p prefix",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_list",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:37:37+0000",
+      "updated": "",
+      "reference": "%l list",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mute_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:26:36+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mute_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:26:47+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unmute_unmuted",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:27:26+0000",
+      "updated": "",
+      "reference": "%u unmutedUser",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_status",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:39:25+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_game_nothing_playing",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:39:18+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_game",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:39:11+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_roles",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:39:06+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_id",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:59+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_discriminator",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:54+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_userinfo_username",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:48+0000",
+      "updated": "",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:41+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_min_count",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:35+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_max_count",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:31+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_max_length",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:27+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_list_empty",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:23+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_already_exist",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:18+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_prefix_added",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:38:14+0000",
+      "updated": "",
+      "reference": "%p prefix",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mute_already_muted",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:25:54+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mute_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:25:44+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_softban_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:33:48+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_softban_reason",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:33:54+0000",
+      "updated": "",
+      "reference": "%m targetMember, %r reason",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_softban_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:34:01+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_softban_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:34:06+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_hardban",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:34:57+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_hardban_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:35:07+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_softban",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:33:38+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ban_reason",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:31:58+0000",
+      "updated": "",
+      "reference": "%m targetMember, %r reason",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ban_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:31:43+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ban",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:31:24+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_kick_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:31:08+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_kick_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:31:00+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_kick_kicked_reason",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:30:37+0000",
+      "updated": "",
+      "reference": "%m targetMember, %r reason",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_kick_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:30:04+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_kick_kicked",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:29:45+0000",
+      "updated": "",
+      "reference": "%m member",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unmute_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:29:29+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unmute_already_unmuted",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:29:09+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unmute_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:28:58+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_mute_muted",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:13:31+0000",
+      "updated": "",
+      "reference": "%m member",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:13:05+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_no_messages_to_delete",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:12:59+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_number_out_of_range",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:12:04+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_not_a_number",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:11:52+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:11:34+0000",
+      "updated": "",
+      "reference": "%m member",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_cleared_user",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:11:00+0000",
+      "updated": "2018-07-18T16:12:26+0000",
+      "reference": "%c deleteCount, %m member",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_clear_cleared",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:10:40+0000",
+      "updated": "2018-07-18T16:12:05+0000",
+      "reference": "%c deleteCount",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_hardban_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:35:36+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_vckick_false_args",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:10:10+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_vckick_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:09:57+0000",
+      "updated": "2018-07-18T16:10:57+0000",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_vckick_not_in_voice",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:09:38+0000",
+      "updated": "2018-07-18T16:10:58+0000",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_vckick_lower_role",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:09:31+0000",
+      "updated": "2018-07-18T16:10:59+0000",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_vckick_kicked",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:09:15+0000",
+      "updated": "2018-07-18T16:10:36+0000",
+      "reference": "%m kickedName, %c channel",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_invite",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:08:22+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_help",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:08:04+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_voices",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:50+0000",
+      "updated": "2018-07-18T16:10:20+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_users",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:45+0000",
+      "updated": "2018-07-18T16:10:23+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_guilds",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:37+0000",
+      "updated": "2018-07-18T16:10:17+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_admins",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:31+0000",
+      "updated": "2018-07-18T16:10:07+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_owner",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:26+0000",
+      "updated": "2018-07-18T16:10:06+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_library",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:21+0000",
+      "updated": "2018-07-18T16:10:05+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_stats_version",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:07:15+0000",
+      "updated": "2018-07-18T16:10:04+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_status_memory",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:06:45+0000",
+      "updated": "2018-07-18T16:10:04+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_status_cpu",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:06:35+0000",
+      "updated": "2018-07-18T16:10:01+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_status_processors",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:06:27+0000",
+      "updated": "2018-07-18T16:10:00+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_version",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:06:14+0000",
+      "updated": "2018-07-18T16:09:42+0000",
+      "reference": "%v version",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_command_disabled",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:05:55+0000",
+      "updated": "2018-07-18T16:09:27+0000",
+      "reference": "message when the command to execute is disabled",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_commands_disabled",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:05:32+0000",
+      "updated": "2018-07-18T16:08:34+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_shardinfo_total",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:04:15+0000",
+      "updated": "2018-07-18T16:08:23+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_shardinfo_voices",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:04:09+0000",
+      "updated": "2018-07-18T16:08:21+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_shardinfo_users",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:03:58+0000",
+      "updated": "2018-07-18T16:08:20+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_shardinfo_guilds",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:03:51+0000",
+      "updated": "2018-07-18T16:08:19+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_shardinfo_shards",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:03:43+0000",
+      "updated": "2018-07-18T16:08:18+0000",
+      "reference": "only a word",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ping_calculating",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:03:20+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_ping",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:02:28+0000",
+      "updated": "2018-07-18T16:07:56+0000",
+      "reference": "%p ping",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_false",
+      "context": "false",
+      "plural": "",
+      "created": "2018-07-18T15:00:10+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_true",
+      "context": "true",
+      "plural": "",
+      "created": "2018-07-18T15:00:04+0000",
+      "updated": "",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_unmute_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:29:20+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "language",
+      "context": "English",
+      "plural": "",
+      "created": "2018-07-18T14:59:11+0000",
+      "updated": "2018-07-18T16:02:09+0000",
+      "reference": "",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_hardban_reason",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:35:14+0000",
+      "updated": "",
+      "reference": "%m targetMember, %r reason",
+      "tags": [
+        
+      ],
+      "comment": ""
+    },
+    {
+      "term": "message_hardban_member_not_found",
+      "context": "",
+      "plural": "",
+      "created": "2018-07-18T15:35:26+0000",
+      "updated": "",
+      "reference": "%m targetMember",
+      "tags": [
+        
+      ],
+      "comment": ""
+    }
+  ]
+}
