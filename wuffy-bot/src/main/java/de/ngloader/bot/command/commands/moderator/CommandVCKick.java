@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.moderator;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -40,21 +41,21 @@ public class CommandVCKick extends BotCommand {
 
 								channel.delete().queue();
 
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_VCKICK_KICKED, locale, "%m", memberSelected.getEffectiveName(), "%c", before.getName()));
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_VCKICK_KICKED, locale, "%m", memberSelected.getEffectiveName(), "%c", before.getName()));
 							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
+								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
 						} else
-							this.replay(event, i18n.format(TranslationKeys.MESSAGE_VCKICK_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
+							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
 					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_VCKICK_NOT_IN_VOICE, locale, "%m", memberSelected.getEffectiveName()));
+						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NOT_IN_VOICE_TARGET, locale, "%m", memberSelected.getEffectiveName()));
 					//Member not in voice
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_VCKICK_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 				//Member not found
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_VCKICK_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_VCKICK_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.vckick"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.vckick"));
 	}
 }

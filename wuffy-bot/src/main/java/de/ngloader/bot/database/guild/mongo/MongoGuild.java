@@ -25,9 +25,12 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.UpdateOneModel;
 
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
+import de.ngloader.bot.database.NotificationInfo;
+import de.ngloader.bot.database.NotificationType;
 import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.mongo.MongoGuildCache.EnumEditOperator;
@@ -36,7 +39,8 @@ import net.dv8tion.jda.core.entities.Guild;
 
 public class MongoGuild extends WuffyGuild {
 
-	public static final Map<Object, Object> EMPTY_MAP = new HashMap<>();
+	public static final Map<Object, Object> EMPTY_MAP = new HashMap<Object, Object>();
+	public static final Map<String, NotificationInfo> EMPTY_MAP_NOTIFICATION = new HashMap<String, NotificationInfo>();
 
 	private final Gson gson = new GsonBuilder()
 	.registerTypeAdapter(ObjectId.class, new JsonDeserializer<ObjectId>() {
@@ -161,7 +165,7 @@ public class MongoGuild extends WuffyGuild {
 	}
 
 	@Override
-	public boolean isMention() {
+	public Boolean isMention() {
 		return this.cache.mention;
 	}
 
@@ -206,35 +210,13 @@ public class MongoGuild extends WuffyGuild {
 	}
 
 	@Override
-	public BanInfo getBan(Long userId) {
-		return this.cache.user.bans.getOrDefault(Long.toString(userId), null);
-	}
-
-	@Override
-	public void setBan(Long userId, BanInfo banInfo) {
-		this.cache.user.bans.put(Long.toString(userId), banInfo);
-		this.queueBulk(new Document("$set", new Document(String.format("user.bans.%s", Long.toString(userId)), this.toDocument(banInfo))));
-	}
-
-	@Override
-	public MuteInfo getMute(Long userId) {
-		return this.cache.user.mutes.getOrDefault(Long.toString(userId), null);
-	}
-
-	@Override
-	public void setMute(Long userId, MuteInfo muteInfo) {
-		this.cache.user.mutes.put(Long.toString(userId), muteInfo);
-		this.queueBulk(new Document("$set", new Document(String.format("user.mutes.%s", Long.toString(userId)), this.toDocument(muteInfo))));
-	}
-
-	@Override
 	public WarnInfo getWarn(Long userId) {
-		return this.cache.user.warns.getOrDefault(Long.toString(userId), null);
+		return this.cache.userWarns.getOrDefault(Long.toString(userId), null);
 	}
 
 	@Override
 	public void setWarn(Long userId, WarnInfo warnInfo) {
-		this.cache.user.warns.put(Long.toString(userId), warnInfo);
+		this.cache.userWarns.put(Long.toString(userId), warnInfo);
 		this.queueBulk(new Document("$set", new Document(String.format("user.warns.%s", Long.toString(userId)), this.toDocument(warnInfo))));
 	}
 
@@ -548,5 +530,131 @@ public class MongoGuild extends WuffyGuild {
 
 		if(!update.isEmpty())
 			this.queueBulk(new Document("$pullAll", update));
+	}
+
+	@Override
+	public Boolean isAutoPrune() {
+		return this.cache.autoprune.enabled;
+	}
+
+	@Override
+	public void setAutoPrune(Boolean autoPrune) {
+		this.cache.autoprune.enabled = autoPrune;
+
+		this.queueBulk(new Document("$set", new Document("autoprune.enabled", autoPrune)));
+	}
+
+	@Override
+	public Integer getAutoPruneDeleteDays() {
+		return this.cache.autoprune.days;
+	}
+
+	@Override
+	public void setAutoPruneDeleteDays(Integer days) {
+		this.queueBulk(new Document("$set", new Document("autoprune.days", days)));
+	}
+
+	@Override
+	public Boolean isMessageDeleteExecuter() {
+		return this.cache.message.deleteExecuter;
+	}
+
+	@Override
+	public void setMessageDeleteExecuter(Boolean delete) {
+		this.cache.message.deleteExecuter = delete;
+
+		this.queueBulk(new Document("$set", new Document("message.deleteExecuter", delete)));
+	}
+
+	@Override
+	public Boolean isMessageDeleteBot() {
+		return this.cache.message.deleteBot;
+	}
+
+	@Override
+	public void setMessageDeleteBot(Boolean delete) {
+		this.cache.message.deleteBot = delete;
+
+		this.queueBulk(new Document("$set", new Document("message.deleteBot", delete)));
+	}
+
+	@Override
+	public Boolean isMessageDeleteDelay(MessageType type) {
+		return this.cache.message.deleteBot && this.cache.message.delays.containsKey(type);
+	}
+
+	@Override
+	public Integer getMessageDeleteDelay(MessageType type) {
+		return this.cache.message.delays.getOrDefault(type, 10);
+	}
+
+	@Override
+	public Map<MessageType, Integer> getMessageDeleteDelays() {
+		return this.cache.message.delays;
+	}
+
+	@Override
+	public void setMessageDeleteDelay(MessageType type, Integer delay) {
+		this.cache.message.delays.put(type, delay);
+
+		this.queueBulk(new Document("$set", new Document(String.format("message.delays.%s", type.name()), delay)));
+	}
+
+	@Override
+	public void removeMessageDeleteDelay(MessageType type) {
+		this.cache.message.delays.remove(type);
+
+		this.queueBulk(new Document("$unset", new Document(String.format("message.delays.%s", type.name()), "")));
+	}
+
+	@Override
+	public String getMessageColorCode(MessageType type) {
+		return this.cache.message.colors.get(type);
+	}
+
+	@Override
+	public Map<MessageType, String> getMessageColorCodes() {
+		return this.cache.message.colors;
+	}
+
+	@Override
+	public void setMessageColorCode(MessageType type, String colorCode) {
+		this.cache.message.colors.put(type, colorCode);
+
+		this.queueBulk(new Document("$set", new Document(String.format("message.colors.%s", type.name()), colorCode)));
+	}
+
+	@Override
+	public Map<String, NotificationInfo> getNotifications(NotificationType type) {
+		return this.cache.notification.getOrDefault(type, new HashMap<String, NotificationInfo>());
+	}
+
+	@Override
+	public NotificationInfo getNotification(NotificationType type, String key) {
+		return this.cache.notification.getOrDefault(type, EMPTY_MAP_NOTIFICATION).getOrDefault(key, null);
+	}
+
+	@Override
+	public void addNotification(NotificationType type, String key, NotificationInfo notificationInfo) {
+		if(!this.cache.notification.containsKey(type))
+			this.cache.notification.put(type, new HashMap<String, NotificationInfo>());
+		this.cache.notification.get(type).put(key, notificationInfo);
+
+		this.queueBulk(new Document("$set", new Document(String.format("notification.%s", key), this.toDocument(notificationInfo))));
+	}
+
+	@Override
+	public void removeNotification(NotificationType type, String key) {
+		if(this.cache.notification.containsKey(type))
+			this.cache.notification.get(type).remove(key);
+
+		this.queueBulk(new Document("$unset", new Document(String.format("notification.%s", type.name()), "")));
+	}
+
+	@Override
+	public void setNotification(NotificationType type, Map<String, NotificationInfo> notificationInfos) {
+		this.cache.notification.put(type, notificationInfos);
+
+		this.queueBulk(new Document("$set", new Document("notification", notificationInfos.entrySet().stream().collect(Collectors.toMap(key -> key, value -> this.toDocument(value))))));
 	}
 }

@@ -43,6 +43,11 @@
         "locale": {
           "enabled": false,
           "directory": "./save/"
+        },
+        "poeditor": {
+          "enabled": false,
+          "api_token": "TOKEN",
+          "project_id": ""
         }
         "extensions": {
           "user": "mongo",

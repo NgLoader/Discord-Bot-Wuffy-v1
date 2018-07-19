@@ -5,6 +5,7 @@ import java.util.List;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -29,37 +30,39 @@ public class CommandPrefix extends BotCommand {
 				if(args[0].equalsIgnoreCase("list")) {
 
 					if(!prefixes.isEmpty()) {
-						event.getChannel().sendMessage(i18n.format(TranslationKeys.MESSAGE_PREFIX_LIST, locale,
-								"%l", "\n**-**    ``" + String.join("``\n**-**    ``", guild.getPrefixes()) + "``\n")).queue();
+						new ReplayBuilder(event, MessageType.LIST, i18n.format(
+								TranslationKeys.MESSAGE_PREFIX_LIST,
+								locale,
+								"%l", "\n**-**    ``" + String.join("``\n**-**    ``", guild.getPrefixes()) + "``\n"));
 					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_LIST_EMPTY, locale));
+						this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_PREFIX_LIST_EMPTY, locale));
 				} else if(args.length > 1) {
 
 					if(args[0].equalsIgnoreCase("add")) {
 						if(prefixes.size() < 10) {
 							if(prefixes.stream().noneMatch(prefix -> prefix.equalsIgnoreCase(args[1]))) {
 								guild.addPrefix(args[1].toLowerCase());
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_ADDED, locale, "%p", args[1].toLowerCase()));
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_PREFIX_ADDED, locale, "%p", args[1].toLowerCase()));
 							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_ALREADY_EXIST, locale));
+								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_PREFIX_ALREADY_EXIST, locale));
 						} else
-							this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_MAX_COUNT, locale));
+							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_PREFIX_MAX_COUNT, locale));
 					} else if(args[0].equalsIgnoreCase("remove")) {
 						if(prefixes.size() > 1) {
 							if(args[1].length() < 11) {
 								guild.removePrefix(args[1].toLowerCase());
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_REMOVED, locale, "%p", args[1].toLowerCase()));
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_PREFIX_REMOVED, locale, "%p", args[1].toLowerCase()));
 							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_MAX_LENGTH, locale));
+								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_PREFIX_MAX_LENGTH, locale));
 						} else
-							this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_MIN_COUNT, locale));
+							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_PREFIX_MIN_COUNT, locale));
 					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_FALSE_ARGS, locale));
+						this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_FALSE_ARGS, locale));
+					this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_PREFIX_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
 		} else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.prefix"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.prefix"));
 	}
 }

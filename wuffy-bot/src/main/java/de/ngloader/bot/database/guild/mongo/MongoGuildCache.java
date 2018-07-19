@@ -8,9 +8,12 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
+import de.ngloader.bot.database.NotificationInfo;
+import de.ngloader.bot.database.NotificationType;
 import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumPermissionMode;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumPermissionType;
@@ -39,15 +42,26 @@ public class MongoGuildCache {
 
 	public List<String> disabledCommands = new ArrayList<String>();
 
-	public MongoGuildUserCache user = new MongoGuildUserCache();
+	public MongoGuildMessageCache message = new MongoGuildMessageCache();
 	public MongoGuildHistoryCache history = new MongoGuildHistoryCache();
 	public MongoGuildRankingCache roleRanking = new MongoGuildRankingCache();
+	public MongoGuildAutoPruneCache autoprune = new MongoGuildAutoPruneCache();
 	public MongoGuildPermissionCache permission = new MongoGuildPermissionCache();
 
-	class MongoGuildUserCache {
-		public Map<String, BanInfo> bans = new HashMap<String, BanInfo>();
-		public Map<String, MuteInfo> mutes = new HashMap<String, MuteInfo>();
-		public Map<String, WarnInfo> warns = new HashMap<String, WarnInfo>();
+	public Map<String, WarnInfo> userWarns = new HashMap<String, WarnInfo>();
+	public Map<NotificationType, Map<String, NotificationInfo>> notification = new HashMap<NotificationType, Map<String, NotificationInfo>>();
+
+	class MongoGuildMessageCache {
+		public Boolean deleteExecuter = true;
+		public Boolean deleteBot = false;
+
+		public Map<MessageType, Integer> delays = new HashMap<MessageType, Integer>();
+		public Map<MessageType, String> colors = new HashMap<MessageType, String>();
+	}
+
+	class MongoGuildAutoPruneCache {
+		public Boolean enabled = false;
+		public Integer days = 0;
 	}
 
 	class MongoGuildHistoryCache {

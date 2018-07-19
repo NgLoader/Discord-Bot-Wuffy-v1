@@ -3,8 +3,7 @@ package de.ngloader.bot.command.commands.moderator;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.database.BanInfo;
-import de.ngloader.bot.database.guild.WuffyGuild;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
@@ -19,7 +18,7 @@ public class CommandUnBan extends BotCommand {
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
 		WuffyMember member = event.getMember(WuffyMember.class);
-		WuffyGuild guild = event.getGuild(WuffyGuild.class);
+//		WuffyGuild guild = event.getGuild(WuffyGuild.class);
 		I18n i18n = event.getCore().getI18n();
 		String locale = member.getLocale();
 
@@ -32,34 +31,20 @@ public class CommandUnBan extends BotCommand {
 				for(Ban ban : event.getGuild().getBanList().complete()) {
 					if((userId != null && userId == ban.getUser().getIdLong()) || ban.getUser().getName().equalsIgnoreCase(args[0])) {
 
-						BanInfo info = guild.getBan(ban.getUser().getIdLong());
-
-						if(info != null) {
-							if(info.expire < System.currentTimeMillis())
-								guild.setBan(ban.getUser().getIdLong(), null);
-							else if(!guild.hasHighestRole(member, guild.getMemberById(info.banBy))) {
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNBAN_LOWER_ROLE, locale, "%u", String.format("<@%s>", Long.toString(info.banBy))));
-								return;
-							}
-							info.unbanBy = member.getUser().getIdLong();
-						}
-
 						//TODO change in history member was unbanned
-
-						guild.setBan(ban.getUser().getIdLong(), null);
 
 						event.getGuild().getController().unban(ban.getUser()).queue();
 
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNBAN, locale, "%u", String.format("<@%s>", Long.toString(ban.getUser().getIdLong()))));
+						this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_UNBAN, locale, "%u", String.format("<@%s>", Long.toString(ban.getUser().getIdLong()))));
 						return;
 					}
 				}
 
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNBAN_NO_MEMBER_FOUND, locale));
+				this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale));
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_BAN_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_UNBAN_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.ban"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.ban"));
 	}
 }

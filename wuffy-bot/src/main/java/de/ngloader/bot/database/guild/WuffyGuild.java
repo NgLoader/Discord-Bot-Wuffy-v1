@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
+import de.ngloader.bot.database.NotificationInfo;
+import de.ngloader.bot.database.NotificationType;
 import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.ImplGuild;
@@ -34,7 +37,7 @@ public abstract class WuffyGuild extends ImplGuild {
 	public abstract void setPrefixes(List<String> prefixes);
 
 	// Mention
-	public abstract boolean isMention();
+	public abstract Boolean isMention();
 
 	public abstract void setMention(boolean mention);
 
@@ -51,16 +54,6 @@ public abstract class WuffyGuild extends ImplGuild {
 	public abstract BlockedInfo getBlocked();
 
 	public abstract void setBlocked(BlockedInfo blockedInfo);
-
-	// Ban
-	public abstract BanInfo getBan(Long userId);
-
-	public abstract void setBan(Long userId, BanInfo banInfo);
-
-	// Mute
-	public abstract MuteInfo getMute(Long userId);
-
-	public abstract void setMute(Long userId, MuteInfo muteInfo);
 
 	// Warn
 	public abstract WarnInfo getWarn(Long userId);
@@ -154,6 +147,51 @@ public abstract class WuffyGuild extends ImplGuild {
 	public abstract void removePermissionGlobal(EnumPermissionType type, String id, String... permissions);
 
 	public abstract void removePermissionGlobal(EnumPermissionType type, List<String> ids, String... permissions);
+
+	//AutoPrune
+	public abstract Boolean isAutoPrune();
+
+	public abstract void setAutoPrune(Boolean autoPrune);
+
+	public abstract Integer getAutoPruneDeleteDays();
+
+	public abstract void setAutoPruneDeleteDays(Integer days);
+
+	//Delete Messages
+	public abstract Boolean isMessageDeleteExecuter();
+
+	public abstract void setMessageDeleteExecuter(Boolean delete);
+
+	public abstract Boolean isMessageDeleteBot();
+
+	public abstract void setMessageDeleteBot(Boolean delete);
+
+	public abstract Boolean isMessageDeleteDelay(MessageType type);
+
+	public abstract Integer getMessageDeleteDelay(MessageType type);
+
+	public abstract Map<MessageType, Integer> getMessageDeleteDelays();
+
+	public abstract void setMessageDeleteDelay(MessageType type, Integer delay);
+
+	public abstract void removeMessageDeleteDelay(MessageType type);
+
+	public abstract String getMessageColorCode(MessageType type);
+
+	public abstract Map<MessageType, String> getMessageColorCodes();
+
+	public abstract void setMessageColorCode(MessageType type, String colorCode);
+
+	//Notifications
+	public abstract Map<String, NotificationInfo> getNotifications(NotificationType type);
+
+	public abstract NotificationInfo getNotification(NotificationType type, String key);
+
+	public abstract void addNotification(NotificationType type, String key, NotificationInfo notificationInfo);
+
+	public abstract void removeNotification(NotificationType type, String key);
+
+	public abstract void setNotification(NotificationType type, Map<String, NotificationInfo> notificationInfos);
 
 	public WuffyGuild(Core core, Guild guild) {
 		super(core, guild);

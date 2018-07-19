@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.information;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
@@ -17,8 +18,8 @@ public class CommandHelp extends BotCommand {
 		WuffyMember member = event.getMember(WuffyMember.class);
 
 		if(member.hasPermission(event.getTextChannel(), "command.help"))
-			event.getChannel().sendMessage(event.getCore().getI18n().format(TranslationKeys.MESSAGE_HELP, event.getMember(WuffyMember.class).getLocale())).queue();
+			this.replay(event, MessageType.INFO, event.getCore().getI18n().format(TranslationKeys.MESSAGE_HELP, event.getMember(WuffyMember.class).getLocale()));
 		else
-			this.replay(event.getChannel(), event.getCore().getI18n().format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", "command.help"));
+			this.replay(event, MessageType.ERROR, event.getCore().getI18n().format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", "command.help"));
 	}
 }

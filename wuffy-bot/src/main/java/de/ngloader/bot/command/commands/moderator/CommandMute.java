@@ -3,7 +3,7 @@ package de.ngloader.bot.command.commands.moderator;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.database.MuteInfo;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -29,26 +29,26 @@ public class CommandMute extends BotCommand {
 				Member memberSelected = DiscordUtil.searchMember(event.getCore(), event.getGuild(), args[0]);
 
 				if(memberSelected != null) {
-					if(!memberSelected.isOwner()) {
+					if(guild.getSelfMember().canInteract(memberSelected)) {
 						if(guild.hasHighestRole(member, memberSelected))
 							if(!memberSelected.getVoiceState().isGuildMuted()) {
-								guild.setMute(memberSelected.getUser().getIdLong(), new MuteInfo(member.getUser().getIdLong(), memberSelected.getUser().getIdLong(), System.currentTimeMillis()));
+								//TODO add to mute history
 
 								event.getGuild().getController().setMute(memberSelected, true).queue();
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_MUTE_MUTED, locale, "%m", memberSelected.getEffectiveName()));
+								this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MUTE_MUTED, locale, "%m", memberSelected.getEffectiveName()));
 							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_MUTE_ALREADY_MUTED, locale, "%m", memberSelected.getEffectiveName()));
+								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MUTE_ALREADY_MUTED, locale, "%m", memberSelected.getEffectiveName()));
 						else
-							this.replay(event, i18n.format(TranslationKeys.MESSAGE_MUTE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
+							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
 					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_NOT_ALLOWED_BY_GUILD_OWNER, locale));
+						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale));
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_MUTE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 				//Member not found
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_MUTE_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MUTE_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.mute"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.mute"));
 	}
 }

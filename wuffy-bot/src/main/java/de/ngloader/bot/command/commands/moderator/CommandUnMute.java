@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.moderator;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -30,23 +31,26 @@ public class CommandUnMute extends BotCommand {
 				Member memberSelected = DiscordUtil.searchMember(event.getCore(), event.getGuild(), args[0]);
 
 				if(memberSelected != null) {
-					if(!memberSelected.isOwner()) {
+					if(!guild.getSelfMember().canInteract(memberSelected)) {
 						if(guild.hasHighestRole(member, memberSelected))
 							if(memberSelected.getVoiceState().isGuildMuted()) {
 								event.getGuild().getController().setMute(memberSelected, false).queue();
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNMUTE_UNMUTED, locale, "%m", memberSelected.getEffectiveName()));
+
+								//TODO change mute history to unmuted
+
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_UNMUTE_UNMUTED, locale, "%m", memberSelected.getEffectiveName()));
 							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNMUTE_ALREADY_UNMUTED, locale, "%m", memberSelected.getEffectiveName()));
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNMUTE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
+								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_UNMUTE_ALREADY_UNMUTED, locale, "%m", memberSelected.getEffectiveName()));
+						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
 					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_NOT_ALLOWED_BY_GUILD_OWNER, locale));
+						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNMUTE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 				//Member not found
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_UNMUTE_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_UNMUTE_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.unmute"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.unmute"));
 	}
 }

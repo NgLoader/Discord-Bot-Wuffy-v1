@@ -5,6 +5,7 @@ import de.ngloader.bot.database.guild.mongo.MongoExtensionGuild;
 import de.ngloader.bot.database.guild.sql.SQLExtensionGuild;
 import de.ngloader.bot.database.lang.LocaleExtensionLang;
 import de.ngloader.bot.database.lang.MongoExtensionLang;
+import de.ngloader.bot.database.lang.POEditorExtensionLang;
 import de.ngloader.bot.database.lang.SQLExtensionLang;
 import de.ngloader.bot.database.user.locale.LocaleExtensionUser;
 import de.ngloader.bot.database.user.mongo.MongoExtensionUser;
@@ -17,6 +18,7 @@ import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.database.locale.LocaleStorage;
 import de.ngloader.core.database.mongo.MongoStorage;
+import de.ngloader.core.database.poeditor.POEditorStorage;
 import de.ngloader.core.database.sql.SQLStorage;
 import net.dv8tion.jda.core.AccountType;
 
@@ -27,9 +29,13 @@ public class WuffyBot extends Core {
 	public WuffyBot(BotConfig config) {
 		super(config, AccountType.BOT, JDAAdapter.class);
 
+		POEditorStorage poeditorStorage = this.storageService.getStorage(POEditorStorage.class);
 		LocaleStorage localeStorage = this.storageService.getStorage(LocaleStorage.class);
 		MongoStorage mongoStorage = this.storageService.getStorage(MongoStorage.class);
 		SQLStorage sqlStorage = this.storageService.getStorage(SQLStorage.class);
+
+		if(poeditorStorage != null)
+			poeditorStorage.registerProvider(IExtensionLang.class, new POEditorExtensionLang());
 
 		if(localeStorage != null) {
 			localeStorage.registerProvider(IExtensionGuild.class, new LocaleExtensionGuild());

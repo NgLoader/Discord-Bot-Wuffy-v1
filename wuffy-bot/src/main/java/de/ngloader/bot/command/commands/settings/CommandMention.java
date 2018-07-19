@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.settings;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -27,10 +28,10 @@ public class CommandMention extends BotCommand {
 			guild.setMention(mention);
 
 			if(mention)
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_MENTION_ENABLE, locale));
+				this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_MENTION_ENABLE, locale));
 			else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_MENTION_DISABLE, locale));
+				this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_MENTION_DISABLE, locale));
 		} else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.mention"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.mention"));
 	}
 }

@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.information;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
@@ -20,8 +21,8 @@ public class CommandVersion extends BotCommand {
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
 		if(member.hasPermission(event.getTextChannel(), "command.version"))
-			event.getChannel().sendMessage(i18n.format(TranslationKeys.MESSAGE_VERSION, locale, "%v", event.getCore().getConfig().instanceVersion)).queue();
+			this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_VERSION, locale, "%v", event.getCore().getConfig().instanceVersion));
 		else
-			this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.version"));
+			this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.version"));
 	}
 }

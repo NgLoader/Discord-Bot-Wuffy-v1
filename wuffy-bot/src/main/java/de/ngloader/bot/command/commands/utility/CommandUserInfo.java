@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -32,9 +33,7 @@ public class CommandUserInfo extends BotCommand {
 				if(memberSelected != null) {
 					event.getMessage().delete().queue();
 
-					event.getChannel().sendMessage(new EmbedBuilder()
-							.setColor(memberSelected.getColorRaw())
-
+					new ReplayBuilder(event, MessageType.INFO, new EmbedBuilder()
 							.setTitle(memberSelected.getUser().getName(), memberSelected.getUser().getEffectiveAvatarUrl())
 							.setThumbnail(memberSelected.getUser().getEffectiveAvatarUrl())
 
@@ -50,21 +49,21 @@ public class CommandUserInfo extends BotCommand {
 									i18n.format(TranslationKeys.MESSAGE_USERINFO_GAME_NOTHING_PLAYING, locale), true)
 							.addField(
 									i18n.format(TranslationKeys.MESSAGE_USERINFO_STATUS, locale),
-									i18n.format("message_userinfo_status_" + memberSelected.getOnlineStatus().name().toLowerCase(), locale), true)
+									i18n.format("message_online_status_" + memberSelected.getOnlineStatus().name().toLowerCase(), locale), true)
 
 							.setFooter(
 									memberSelected.getUser().getCreationTime().format(new DateTimeFormatterBuilder()
-											.appendPattern(i18n.format(TranslationKeys.MESSAGE_USERINFO_DATE_FORMAT, locale))
+											.appendPattern(i18n.format(TranslationKeys.MESSAGE_DATE_FORMAT, locale))
 											.toFormatter()),
 									memberSelected.getUser().getEffectiveAvatarUrl())
 							.build()).queue();
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_USERINFO_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+					this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 				//Member not found
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_USERINFO_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_USERINFO_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.userinfo"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.userinfo"));
 	}
 }

@@ -6,8 +6,7 @@ import java.util.stream.Collectors;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.database.BanInfo;
-import de.ngloader.bot.database.BanInfo.BanType;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
@@ -33,44 +32,36 @@ public class CommandHardBan extends BotCommand {
 				Member memberSelected = DiscordUtil.searchMember(event.getCore(), event.getGuild(), args[0]);
 
 				if(memberSelected != null) {
-					if(!memberSelected.isOwner()) {
-						if(guild.hasHighestRole(member, memberSelected))
-							if(guild.getSelfMember().canInteract(memberSelected)) {
-								var reason = args.length > 1 ? Arrays.asList(Arrays.copyOfRange(args, 1, args.length)).stream().collect(Collectors.joining(" ")) : "";
+					if(guild.hasHighestRole(member, memberSelected))
+						if(guild.getSelfMember().canInteract(memberSelected)) {
+							var reason = args.length > 1 ? Arrays.asList(Arrays.copyOfRange(args, 1, args.length)).stream().collect(Collectors.joining(" ")) : "";
 
-								event.getMessage().delete().queue();
+							event.getMessage().delete().queue();
 
-								guild.setBan(memberSelected.getUser().getIdLong(), new BanInfo(
-										BanType.HARD,
-										memberSelected.getUser().getIdLong(),
-										member.getUser().getIdLong(),
-										System.currentTimeMillis(),
-										System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 14),
-										reason));
+							//TODO add to ban history
 
-								if(reason.isEmpty()) {
-									event.getGuild().getController().ban(memberSelected, 14).queue();
-									this.replay(event, i18n.format(TranslationKeys.MESSAGE_HARDBAN, locale, "%m"));
-								} else {
-									event.getGuild().getController().ban(memberSelected, 14, reason).queue();
-									this.replay(event, i18n.format(TranslationKeys.MESSAGE_HARDBAN_REASON, locale,
-											"%m", memberSelected.getEffectiveName(),
-											"%d", Integer.toString(14),
-											"%r", reason));
-								}
-							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
-						else
-							this.replay(event, i18n.format(TranslationKeys.MESSAGE_HARDBAN_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
-					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_NOT_ALLOWED_BY_GUILD_OWNER, locale));
+							if(reason.isEmpty()) {
+								event.getGuild().getController().ban(memberSelected, 14).queue();
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_HARDBAN, locale,
+										"%m", memberSelected.getEffectiveName()));
+							} else {
+								event.getGuild().getController().ban(memberSelected, 14, reason).queue();
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_HARDBAN_REASON, locale,
+										"%m", memberSelected.getEffectiveName(),
+										"%d", Integer.toString(14),
+										"%r", reason));
+							}
+						} else
+							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
+					else
+						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_HARDBAN_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 				//Member not found
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_HARDBAN_FALSE_ARGS, locale));
+				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_HARDBAN_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.hardban"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.hardban"));
 	}
 }

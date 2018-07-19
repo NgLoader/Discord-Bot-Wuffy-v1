@@ -34,6 +34,8 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 		};
 	};
 
+	protected final Throwable throwableResult = new Throwable("[Database MongoBD] Failed to bulk write");
+
 	protected Thread bulkThread;
 
 	protected MongoCollection<Document> bulkCollection;
@@ -46,7 +48,8 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 			this.writers.remove(write);
 		});
 
-		printBatchResult.onResult(this.bulkCollection.bulkWrite(writers), null);
+		if(!writers.isEmpty())
+			printBatchResult.onResult(this.bulkCollection.bulkWrite(writers), this.throwableResult);
 	}
 
 	public void enableBulkWrite(MongoCollection<Document> bulkCollection, String name) {

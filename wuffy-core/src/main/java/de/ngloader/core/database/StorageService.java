@@ -8,6 +8,7 @@ import java.util.Objects;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.locale.LocaleStorage;
 import de.ngloader.core.database.mongo.MongoStorage;
+import de.ngloader.core.database.poeditor.POEditorStorage;
 import de.ngloader.core.database.sql.SQLStorage;
 import de.ngloader.core.logger.Logger;
 
@@ -37,6 +38,9 @@ public final class StorageService {
 
 		if(this.config.locale.enabled)
 			this.registerStorage(LocaleStorage.class, "locale", new LocaleStorage(this.core, this.config.locale));
+
+		if(this.config.poeditor.enabled)
+			this.registerStorage(POEditorStorage.class, "poeditor", new POEditorStorage(this.core, this.config.poeditor));
 	}
 
 	public void enable() {

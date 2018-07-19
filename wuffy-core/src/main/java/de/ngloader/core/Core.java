@@ -129,6 +129,7 @@ public abstract class Core extends TickingTask {
 
 			onEnable();
 		} catch(Exception e) {
+			e.printStackTrace();
 			Logger.warn("Core", "Failed to login");
 			stop();
 		}

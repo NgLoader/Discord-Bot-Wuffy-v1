@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
@@ -58,14 +59,14 @@ public class CommandClear extends BotCommand {
 										else
 											event.getTextChannel().deleteMessages(delete).queue();
 
-										this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_CLEARED_USER, locale,
+										this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_CLEAR_CLEARED_USER, locale,
 												"%c", Integer.toString(delete.size()),
 												"%m", memberSelected.getEffectiveName()));
 									} else
-										this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_NO_MESAGES_TO_DELETE, locale, "%m", args[1]));
+										this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_CLEAR_NO_MESAGE_TO_DELETE, locale));
 								});
 							} else
-								this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_MEMBER_NOT_FOUND, locale, "%m", args[1]));
+								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[1]));
 							//Member can not found
 							} else {
 								history.retrievePast(count).queue(messages -> {
@@ -81,22 +82,22 @@ public class CommandClear extends BotCommand {
 										else
 											event.getTextChannel().deleteMessages(delete).queue();
 
-										this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_CLEARED, locale, "%c", Integer.toString(delete.size())));
+										this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_CLEAR_CLEARED, locale, "%c", Integer.toString(delete.size())));
 									} else
-										this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_NO_MESAGES_TO_DELETE, locale));
+										this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_CLEAR_NO_MESAGE_TO_DELETE, locale));
 								});
 							}
 					} else
-						this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_NUMBER_OUT_OF_RANGE, locale));
+						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NUMBER_OUT_OF_RANGE, locale));
 					//Clear number out of range
 				} else
-					this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_NOT_A_NUMBER, locale));
+					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NOT_A_NUMBER, locale));
 				//Not a number
 			} else
-				this.replay(event, i18n.format(TranslationKeys.MESSAGE_CLEAR_FALSE_ARGS, locale));
+				this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_CLEAR_SYNTAX, locale));
 			//False args
 		} else
-			this.replay(event, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.clear"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.clear"));
 		//No permission
 	}
 }

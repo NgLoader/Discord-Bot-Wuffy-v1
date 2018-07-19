@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.information;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.lang.TranslationKeys;
 import de.ngloader.core.command.Command;
@@ -22,9 +23,9 @@ public class CommandPing extends BotCommand {
 		if(member.hasPermission(event.getTextChannel(), "command.ping")) {
 			Long start = System.currentTimeMillis();
 
-			event.getChannel().sendMessage(i18n.format(TranslationKeys.MESSAGE_PING_CALCULATING, locale)).complete()
-				.editMessage(i18n.format(TranslationKeys.MESSAGE_PING, locale, "%p", Long.toString(System.currentTimeMillis() - start))).queue();
+			event.getChannel().sendMessage(this.buildMessage(MessageType.LOADING, i18n.format(TranslationKeys.MESSAGE_PING_CALCULATING, locale)).build()).complete()
+				.editMessage(this.buildMessage(MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_PING, locale, "%p", Long.toString(System.currentTimeMillis() - start))).build()).queue();
 		} else
-			this.replay(event.getChannel(), i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.ping"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.ping"));
 	}
 }
