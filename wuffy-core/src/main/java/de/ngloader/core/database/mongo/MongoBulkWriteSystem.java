@@ -2,7 +2,8 @@ package de.ngloader.core.database.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.bson.Document;
 
@@ -16,9 +17,9 @@ import de.ngloader.core.logger.Logger;
 
 public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage> {
 
-	protected final List<WriteModel<Document>> writers = new CopyOnWriteArrayList<WriteModel<Document>>();
+	private final List<WriteModel<Document>> writers = new ArrayList<WriteModel<Document>>();
 
-	protected final SingleResultCallback<BulkWriteResult> printBatchResult = new SingleResultCallback<BulkWriteResult>() {
+	private final SingleResultCallback<BulkWriteResult> printBatchResult = new SingleResultCallback<BulkWriteResult>() {
 
 		public void onResult(BulkWriteResult result, Throwable throwable) {
 			Logger.info("Database MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
@@ -34,40 +35,34 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 		};
 	};
 
-	protected final Throwable throwableResult = new Throwable("[Database MongoBD] Failed to bulk write");
+	private final Throwable throwableResult = new Throwable("[Database MongoBD] Failed to bulk write");
+
+	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
 	protected Thread bulkThread;
 
 	protected MongoCollection<Document> bulkCollection;
 
-	protected void writeBulkQueue() {
-		final List<WriteModel<Document>> writers = new ArrayList<WriteModel<Document>>();
-
-		this.writers.forEach(write -> {
-			writers.add(write);
-			this.writers.remove(write);
-		});
-
-		if(!writers.isEmpty())
-			printBatchResult.onResult(this.bulkCollection.bulkWrite(writers), this.throwableResult);
-	}
+	protected boolean running;
 
 	public void enableBulkWrite(MongoCollection<Document> bulkCollection, String name) {
 		if(bulkThread == null) {
-			this.bulkThread = new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					while(true)
-						try {
-							Thread.sleep(1000 * 60 * 5);
+			this.running = true;
 
-							if(!writers.isEmpty())
-								writeBulkQueue();
-						} catch (InterruptedException e) {
-//							e.printStackTrace();
-						}
+			this.bulkThread = new Thread(() -> {
+				while(MongoBulkWriteSystem.this.running) {
+					try {
+						Thread.sleep(1000 * 5);
+
+						if(!writers.isEmpty())
+							writeBulkQueue();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						this.running = false;
+					}
 				}
+
+				this.bulkThread = null;
 			}, String.format("Wuffy Discord Bot - Core (%s) - Database MongoDB BulkWrite (%s)", this.core.getConfig().instanceName, name));
 			this.bulkThread.setDaemon(true);
 		}
@@ -78,16 +73,25 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 	}
 
 	public void disableBulkWrite() {
-		if(this.bulkThread != null && this.bulkThread.isAlive())
-			this.bulkThread.interrupt();
+		this.running = false;
 
 		this.writeBulkQueue();
 	}
 
-	public void queueBulkModel(WriteModel<Document> writeModule) {
-		this.writers.add(writeModule);
+	protected void writeBulkQueue() {
+		this.readWriteLock.readLock().lock();
 
-		if(this.writers.size() > 10000) //max 10 groups mean -> mongodb create groups, 1000 operations are one group
-			this.writeBulkQueue();
+		List<WriteModel<Document>> writersCopy = this.writers.subList(0, this.writers.size());
+		this.writers.clear();
+
+		this.readWriteLock.readLock().unlock();
+
+		printBatchResult.onResult(this.bulkCollection.bulkWrite(writersCopy), this.throwableResult);
+	}
+
+	public void queueBulkModel(WriteModel<Document> writeModule) {
+		this.readWriteLock.writeLock().lock();
+		this.writers.add(writeModule);
+		this.readWriteLock.writeLock().unlock();
 	}
 }

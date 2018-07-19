@@ -12,7 +12,8 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.PermissionKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
@@ -49,7 +50,7 @@ public class CommandMessage extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = member.getLocale();
 
-		if(member.hasPermission(event.getTextChannel(), "settings.message")) {
+		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_MESSAGE)) {
 			if(args.length > 0) {
 				switch (args[0]) {
 				case "info":
@@ -57,11 +58,14 @@ public class CommandMessage extends BotCommand {
 							"%e", i18n.format(String.format("message_%s", Boolean.toString(guild.isMessageDeleteExecuter()), locale), locale),
 							"%b", i18n.format(String.format("message_%s", Boolean.toString(guild.isMessageDeleteBot()), locale), locale),
 							"%d", guild.getMessageDeleteDelays().entrySet().stream()
-								.map(entry -> String.format("**%s** - ``%s``", entry.getKey().name(), Integer.toString(entry.getValue())))
+								.map(entry -> String.format("**%s** - ``%ss.``", StringUtil.writeFirstUpperCase(entry.getKey().name()), Integer.toString(entry.getValue())))
 								.collect(Collectors.joining("\n")),
-							"%c", guild.getMessageColorCodes().entrySet().stream()
-								.map(entry -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(entry.getKey().name()), entry.getValue()))
-								.collect(Collectors.joining("\n"))))
+							"%c", Arrays.asList(MessageType.values()).stream()
+							.map(type -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(type.name()),
+									guild.getMessageColorCode(type) != null ?
+										guild.getMessageColorCode(type) :
+										this.convertColorToHex(type.color)))
+							.collect(Collectors.joining("\n"))))
 					.queue();
 					break;
 
@@ -119,10 +123,19 @@ public class CommandMessage extends BotCommand {
 							break;
 
 						case "info":
+//							new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_INFO, locale,
+//								"%l", guild.getMessageColorCodes().entrySet().stream()
+//								.map(entry -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(entry.getKey().name()), entry.getValue()))
+//								.collect(Collectors.joining("\n"))))
+//							.queue();
 							new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_INFO, locale,
-									"%l", guild.getMessageColorCodes().entrySet().stream()
-									.map(entry -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(entry.getKey().name()), entry.getValue()))
-									.collect(Collectors.joining("\n"))));
+									"%l", Arrays.asList(MessageType.values()).stream()
+								.map(type -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(type.name()),
+										guild.getMessageColorCode(type) != null ?
+											guild.getMessageColorCode(type) :
+											this.convertColorToHex(type.color)))
+								.collect(Collectors.joining("\n"))))
+							.queue();
 							break;
 
 						case "set":
@@ -309,7 +322,7 @@ public class CommandMessage extends BotCommand {
 			} else
 				new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale)).queue();
 		} else
-			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "settings.message")).queue();
+			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_MESSAGE.key)).queue();
 	}
 
 	private String convertColorToHex(Color color) {

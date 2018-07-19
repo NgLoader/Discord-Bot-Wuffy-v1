@@ -9,7 +9,8 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.PermissionKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.database.impl.ImplLang;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
@@ -60,7 +61,7 @@ public class CommandLanguage extends BotCommand {
 
 			case "g":
 			case "guild":
-				if(member.hasPermission(event.getTextChannel(), "language.guild"))
+				if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_LANGUAGE_GUILD))
 					if(args.length > 1) {
 						Locale locale = LocaleUtil.getLocaleByTag(args[1]);
 	
@@ -73,7 +74,7 @@ public class CommandLanguage extends BotCommand {
 					} else
 						this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_INFO_GUILD, member.getLocale(), "%l", guild.getGuildLocale()));
 				else
-					this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", "language.guild"));
+					this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", PermissionKeys.COMMAND_LANGUAGE_GUILD.key));
 				break;
 
 			case "l":

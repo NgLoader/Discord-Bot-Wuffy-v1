@@ -1,12 +1,9 @@
 package de.ngloader.bot.command.commands;
 
-import java.awt.Color;
-
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.core.command.Command;
-import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 
@@ -17,8 +14,18 @@ public class CommandTest extends BotCommand {
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
 //		event.getChannel().sendMessage("Loading <a:loading:468438447573696522>").queue();
-		event.getCore().getI18n().loadLangs(event.getCore().getStorageService().getExtension(IExtensionLang.class));
-		event.getChannel().sendMessage(new EmbedBuilder().setDescription("<a:checkmark:459068723408535552> Successful executed test.").setColor(Color.RED).build()).queue();;
+		new ReplayBuilder(event, MessageType.INFO, new EmbedBuilder()
+				.setImage("https://static-cdn.jtvnw.net/jtv_user_pictures/ccd1bfdd-16e9-4697-9ac9-0927d5cbfeda-profile_image-300x300.jpg")
+				.setTitle("H0lly", "https://www.twitch.tv/h0llylp")
+				.addField("Game", "Enter the Gungeon", true)
+				.addField("Viewers", "947", true)
+				.setDescription("[(ETG Update) Runtime Presents Enter the Gungeon: Advanced Gungeons](https://www.twitch.tv/h0llylp)")
+				.setThumbnail("https://static-cdn.jtvnw.net/jtv_user_pictures/ccd1bfdd-16e9-4697-9ac9-0927d5cbfeda-profile_image-300x300.jpg")
+				.setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_h0llylp-320x180.jpg")
+				.build())
+		.queue();
+//		event.getCore().getI18n().loadLangs(event.getCore().getStorageService().getExtension(IExtensionLang.class));
+//		event.getChannel().sendMessage(new EmbedBuilder().setDescription("<a:checkmark:459068723408535552> Successful executed test.").setColor(Color.RED).build()).queue();
 //		event.getGuild(WuffyGuild.class).addPermissionMode(EnumPermissionMode.CHANNEL_RANKING, EnumPermissionMode.CHANNEL_ROLE, EnumPermissionMode.CHANNEL_USER, EnumPermissionMode.GLOBAL_RANKING, EnumPermissionMode.CHANNEL_ROLE, EnumPermissionMode.GLOBAL_USER);
 //		event.getGuild(WuffyGuild.class).addPermissionChannel(EnumPermissionType.USER, 343187634388205568L, Long.toString(128293854733402112L), "command.vckick");
 //		event.getGuild(WuffyGuild.class).addPermissionGlobal(EnumPermissionType.USER, Long.toString(128293854733402112L), "command.shards");

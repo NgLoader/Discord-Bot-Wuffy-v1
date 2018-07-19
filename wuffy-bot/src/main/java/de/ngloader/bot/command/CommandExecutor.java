@@ -6,7 +6,7 @@ import java.util.Queue;
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.CommandManager;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.logger.Logger;

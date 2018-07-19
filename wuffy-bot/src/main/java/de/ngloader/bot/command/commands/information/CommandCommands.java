@@ -9,7 +9,7 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;

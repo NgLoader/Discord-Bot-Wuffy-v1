@@ -6,7 +6,8 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.jda.JDAAdapter;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.PermissionKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
@@ -22,7 +23,7 @@ public class CommandShardInfo extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
-		if(member.hasPermission(event.getTextChannel(), "command.shardinfo")) {
+		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_SHARDINFO)) {
 			var tableBuilder = new TableMessageBuilder();
 
 			var totalGuilds = 0;
@@ -67,6 +68,6 @@ public class CommandShardInfo extends BotCommand {
 			event.getChannel().sendMessage(String.format("```prolog\n%s\n```", tableBuilder.build())).queue();
 //			this.replay(event, MessageType.LIST, String.format("\n%s\n", tableBuilder.build()));
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.shardinfo"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_SHARDINFO.key));
 	}
 }

@@ -6,7 +6,8 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.PermissionKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
@@ -26,7 +27,7 @@ public class CommandUnMute extends BotCommand {
 
 		event.getMessage().delete().queue();
 
-		if(member.hasPermission(event.getTextChannel(), "command.unmute"))
+		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_UNMUTE))
 			if(args.length > 0) {
 				Member memberSelected = DiscordUtil.searchMember(event.getCore(), event.getGuild(), args[0]);
 
@@ -51,6 +52,6 @@ public class CommandUnMute extends BotCommand {
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_UNMUTE_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.unmute"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_UNMUTE.key));
 	}
 }

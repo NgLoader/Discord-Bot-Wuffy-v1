@@ -6,7 +6,8 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
-import de.ngloader.bot.lang.TranslationKeys;
+import de.ngloader.bot.keys.PermissionKeys;
+import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
@@ -24,7 +25,7 @@ public class CommandMute extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = member.getLocale();
 
-		if(member.hasPermission(event.getTextChannel(), "command.mute"))
+		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_MUTE))
 			if(args.length > 0) {
 				Member memberSelected = DiscordUtil.searchMember(event.getCore(), event.getGuild(), args[0]);
 
@@ -49,6 +50,6 @@ public class CommandMute extends BotCommand {
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MUTE_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.mute"));
+			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_MUTE.key));
 	}
 }

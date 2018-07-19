@@ -22,6 +22,7 @@ import de.ngloader.bot.command.commands.moderator.CommandVCKick;
 import de.ngloader.bot.command.commands.settings.CommandAutoPrune;
 import de.ngloader.bot.command.commands.settings.CommandAutoRole;
 import de.ngloader.bot.command.commands.settings.CommandLanguage;
+import de.ngloader.bot.command.commands.settings.CommandMention;
 import de.ngloader.bot.command.commands.settings.CommandMessage;
 import de.ngloader.bot.command.commands.settings.CommandPermission;
 import de.ngloader.bot.command.commands.settings.CommandPrefix;
@@ -64,6 +65,7 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandAutoPrune());
 		this.registry.addCommand(new CommandPermission());
 		this.registry.addCommand(new CommandMessage());
+		this.registry.addCommand(new CommandMention());
 
 		//Information
 		this.registry.addCommand(new CommandHelp());

@@ -1,4 +1,4 @@
-package de.ngloader.bot.lang;
+package de.ngloader.bot.keys;
 
 import de.ngloader.core.lang.TranslationKeysCore;
 
@@ -93,6 +93,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_PREFIX_REMOVED = "message_prefix_removed";
 	public static final String MESSAGE_PREFIX_ADDED = "message_prefix_added";
 	public static final String MESSAGE_PREFIX_ALREADY_EXIST = "message_prefix_already_exist";
+	public static final String MESSAGE_PREFIX_NOT_EXIST = "message_prefix_not_exist";
 	public static final String MESSAGE_PREFIX_LIST_EMPTY = "message_prefix_list_empty";
 	public static final String MESSAGE_PREFIX_MAX_LENGTH = "message_prefix_max_length";
 	public static final String MESSAGE_PREFIX_MAX_COUNT = "message_prefix_max_count";
