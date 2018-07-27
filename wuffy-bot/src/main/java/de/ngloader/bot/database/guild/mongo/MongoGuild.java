@@ -25,7 +25,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.UpdateOneModel;
 
-import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
@@ -35,6 +34,7 @@ import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.mongo.MongoGuildCache.EnumEditOperator;
 import de.ngloader.core.Core;
+import de.ngloader.core.command.MessageType;
 import net.dv8tion.jda.core.entities.Guild;
 
 public class MongoGuild extends WuffyGuild {
@@ -66,6 +66,22 @@ public class MongoGuild extends WuffyGuild {
 		@Override
 		public JsonElement serialize(EnumRoleRankingMode enumObject, Type type, JsonSerializationContext  context) throws JsonParseException {
 			return new JsonPrimitive(enumObject.name());
+		}
+	}).registerTypeAdapter(NotificationType.class, new JsonSerializer<NotificationType>() {
+
+		@Override
+		public JsonElement serialize(NotificationType enumObject, Type type, JsonSerializationContext  context) throws JsonParseException {
+			return new JsonPrimitive(enumObject.name());
+		}
+	}).registerTypeAdapter(NotificationType.class, new JsonDeserializer<NotificationType>() {
+
+		@Override
+		public NotificationType deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
+			for(NotificationType mode : NotificationType.values())
+				if(mode.name().equals(json.getAsString()))
+					return mode;
+
+			return null;
 		}
 	}).registerTypeAdapter(EnumPermissionType.class, new JsonDeserializer<EnumPermissionType>() {
 
@@ -124,6 +140,10 @@ public class MongoGuild extends WuffyGuild {
 
 	protected void queueBulk(Document update) {
 		this.extension.queueBulkModel(new UpdateOneModel<Document>(this.filter, update));
+	}
+
+	protected void queueBulk(Document filter, Document update) {
+		this.extension.queueBulkModel(new UpdateOneModel<Document>(filter, update));
 	}
 
 	protected Document toDocument(Object object) {
@@ -625,36 +645,69 @@ public class MongoGuild extends WuffyGuild {
 	}
 
 	@Override
-	public Map<String, NotificationInfo> getNotifications(NotificationType type) {
-		return this.cache.notification.getOrDefault(type, new HashMap<String, NotificationInfo>());
+	public List<NotificationInfo> getNotifications(NotificationType type) {
+		return this.cache.notification.get(type);
 	}
 
 	@Override
 	public NotificationInfo getNotification(NotificationType type, String key) {
-		return this.cache.notification.getOrDefault(type, EMPTY_MAP_NOTIFICATION).getOrDefault(key, null);
+		for(NotificationInfo notificationInfo : this.cache.notification.get(type))
+			if(notificationInfo.name.equalsIgnoreCase(key)) {
+				return notificationInfo;
+			}
+		return null;
 	}
 
 	@Override
-	public void addNotification(NotificationType type, String key, NotificationInfo notificationInfo) {
+	public void addNotification(NotificationType type, NotificationInfo notificationInfo) {
 		if(!this.cache.notification.containsKey(type))
-			this.cache.notification.put(type, new HashMap<String, NotificationInfo>());
-		this.cache.notification.get(type).put(key, notificationInfo);
+			this.cache.notification.put(type, new ArrayList<NotificationInfo>());
+		this.cache.notification.get(type).add(notificationInfo);
 
-		this.queueBulk(new Document("$set", new Document(String.format("notification.%s", key), this.toDocument(notificationInfo))));
+		this.queueBulk(new Document("$addToSet", new Document(String.format("notification.%s", type.name()), this.toDocument(notificationInfo))));
+	}
+
+	@Override
+	public void updateNotification(NotificationType type, String key, NotificationInfo info) {
+		this.removeNotification(type, key);
+		this.addNotification(type, info);
 	}
 
 	@Override
 	public void removeNotification(NotificationType type, String key) {
-		if(this.cache.notification.containsKey(type))
-			this.cache.notification.get(type).remove(key);
+		NotificationInfo notification = getNotification(type, key);
 
-		this.queueBulk(new Document("$unset", new Document(String.format("notification.%s", type.name()), "")));
+		if(this.cache.notification.containsKey(type))
+			this.cache.notification.get(type).remove(notification);
+
+		this.queueBulk(new Document("$pullAll", new Document(String.format("notification.%s", type.name()), this.toDocument(notification))));
 	}
 
 	@Override
-	public void setNotification(NotificationType type, Map<String, NotificationInfo> notificationInfos) {
+	public void setNotificationMessage(NotificationType type, String key, String message) {
+		NotificationInfo info = this.getNotification(type, key);
+
+		if(info != null) {
+			if(this.cache.notification.containsKey(type))
+				this.cache.notification.get(type).remove(info);
+			else
+				this.cache.notification.put(type, new ArrayList<NotificationInfo>());
+
+			info.message = message;
+
+			this.cache.notification.get(type).add(info);
+		}
+
+		System.out.println("TEST4");
+		this.queueBulk(
+				new Document("_guildId", Long.toString(this.getIdLong())).append(String.format("notification.%s.name", type.name()), key),
+				new Document("$addToSet", new Document(String.format("notification.%s", type.name()), new Document("message", message))));
+	}
+
+	@Override
+	public void setNotification(NotificationType type, List<NotificationInfo> notificationInfos) {
 		this.cache.notification.put(type, notificationInfos);
 
-		this.queueBulk(new Document("$set", new Document("notification", notificationInfos.entrySet().stream().collect(Collectors.toMap(key -> key, value -> this.toDocument(value))))));
+		this.queueBulk(new Document("$set", new Document("notification", notificationInfos.stream().collect(Collectors.toMap(key -> key, value -> this.toDocument(value))))));
 	}
 }

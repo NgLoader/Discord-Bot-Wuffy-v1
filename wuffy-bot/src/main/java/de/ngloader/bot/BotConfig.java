@@ -8,5 +8,8 @@ public class BotConfig extends CoreConfig {
 
 	public String mentionId;
 
+	public String twitchId;
+	public String twithchAppSecret;
+
 	public ShardConfig sharding;
 }

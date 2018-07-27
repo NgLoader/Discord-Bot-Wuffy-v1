@@ -124,6 +124,22 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_LANGUAGE_NOT_EXIST = "message_language_not_exist";
 	public static final String MESSAGE_LANGUAGE_SYNTAX = "message_language_syntax";
 
+	public static final String MESSAGE_TWITCH_NOT_EXIST = "message_twitch_not_exist";
+	public static final String MESSAGE_TWITCH_ALREADY_EXIST = "message_twitch_already_exist";
+	public static final String MESSAGE_TWITCH_REMOVED = "message_twitch_removed";
+	public static final String MESSAGE_TWITCH_ADDED = "message_twitch_added";
+	public static final String MESSAGE_TWITCH_ADDED_SYNTAX = "message_twitch_added_syntax";
+	public static final String MESSAGE_TWITCH_LIST = "message_twitch_list";
+	public static final String MESSAGE_TWITCH_MAX_COUNT = "message_twitch_max_count";
+	public static final String MESSAGE_TWITCH_MESSAGE_COPY = "message_twitch_message_copy";
+	public static final String MESSAGE_TWITCH_MESSAGE_RESET = "message_twitch_message_reset";
+	public static final String MESSAGE_TWITCH_MESSAGE_SET_AVATAR = "message_twitch_message_set_avatar";
+	public static final String MESSAGE_TWITCH_MESSAGE_SET_USERNAME = "message_twitch_message_set_username";
+	public static final String MESSAGE_TWITCH_MESSAGE_SET_CONTENT = "message_twitch_message_set_content";
+	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE = "message_twitch_message_remove";
+	public static final String MESSAGE_TWITCH_NOT_URL = "message_twitch_not_url";
+	public static final String MESSAGE_TWITCH_SYNTAX = "message_twitch_syntax";
+
 	public static final String MESSAGE_MESSAGE_INFO = "message_message_info"; //%e (is delete executer), %b (is delete bot), %l (list of delays)
 	public static final String MESSAGE_MESSAGE_EXECUTER_ENABLE = "message_message_executer_enable";
 	public static final String MESSAGE_MESSAGE_EXECUTER_DISABLE = "message_message_executer_disable";

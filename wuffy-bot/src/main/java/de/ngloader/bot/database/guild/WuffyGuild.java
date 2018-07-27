@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
@@ -13,6 +12,7 @@ import de.ngloader.bot.database.NotificationInfo;
 import de.ngloader.bot.database.NotificationType;
 import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.core.Core;
+import de.ngloader.core.command.MessageType;
 import de.ngloader.core.database.impl.ImplGuild;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Guild;
@@ -183,15 +183,19 @@ public abstract class WuffyGuild extends ImplGuild {
 	public abstract void setMessageColorCode(MessageType type, String colorCode);
 
 	//Notifications
-	public abstract Map<String, NotificationInfo> getNotifications(NotificationType type);
+	public abstract List<NotificationInfo> getNotifications(NotificationType type);
 
 	public abstract NotificationInfo getNotification(NotificationType type, String key);
 
-	public abstract void addNotification(NotificationType type, String key, NotificationInfo notificationInfo);
+	public abstract void addNotification(NotificationType type, NotificationInfo notificationInfo);
+
+	public abstract void updateNotification(NotificationType type, String key, NotificationInfo info);
 
 	public abstract void removeNotification(NotificationType type, String key);
 
-	public abstract void setNotification(NotificationType type, Map<String, NotificationInfo> notificationInfos);
+	public abstract void setNotificationMessage(NotificationType type, String key, String message);
+
+	public abstract void setNotification(NotificationType type, List<NotificationInfo> notificationInfos);
 
 	public WuffyGuild(Core core, Guild guild) {
 		super(core, guild);

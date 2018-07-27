@@ -26,6 +26,7 @@ import de.ngloader.bot.command.commands.settings.CommandMention;
 import de.ngloader.bot.command.commands.settings.CommandMessage;
 import de.ngloader.bot.command.commands.settings.CommandPermission;
 import de.ngloader.bot.command.commands.settings.CommandPrefix;
+import de.ngloader.bot.command.commands.settings.CommandTwitch;
 import de.ngloader.bot.command.commands.utility.CommandGlobalInfo;
 import de.ngloader.bot.command.commands.utility.CommandGuildInfo;
 import de.ngloader.bot.command.commands.utility.CommandServerInfo;
@@ -66,6 +67,7 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandPermission());
 		this.registry.addCommand(new CommandMessage());
 		this.registry.addCommand(new CommandMention());
+		this.registry.addCommand(new CommandTwitch());
 
 		//Information
 		this.registry.addCommand(new CommandHelp());

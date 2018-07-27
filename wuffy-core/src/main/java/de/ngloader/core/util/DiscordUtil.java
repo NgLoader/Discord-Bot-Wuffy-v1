@@ -11,10 +11,10 @@ public class DiscordUtil {
 
 	public static Member searchMember(Core core, ImplGuild guild, String input) {
 		if(input.matches("<@[0-9]{14,20}>"))
-			return guild.getMemberById(input);
+			return guild.getMemberById(Long.valueOf(input.substring(2, input.length() - 1)));
 
 		if(input.matches("[0-9]{14,20}"))
-			return guild.getMemberById(input);
+			return guild.getMemberById(Long.valueOf(input.substring(2, input.length() - 1)));
 
 		List<Member> found = guild.getMembersByNickname(input, true);
 

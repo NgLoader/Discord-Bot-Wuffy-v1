@@ -9,5 +9,4 @@ public class POEditorElementTerm {
 	public String updated;
 	public POEditorElementTranslation translation;
 	public String reference;
-	public String comment;
 }

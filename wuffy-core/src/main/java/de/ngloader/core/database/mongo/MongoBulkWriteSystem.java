@@ -22,20 +22,17 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 	private final SingleResultCallback<BulkWriteResult> printBatchResult = new SingleResultCallback<BulkWriteResult>() {
 
 		public void onResult(BulkWriteResult result, Throwable throwable) {
-			Logger.info("Database MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
-					Integer.toString(result.getInsertedCount()),
-					Integer.toString(result.getDeletedCount()),
-					result.isModifiedCountAvailable() ? Integer.toString(result.getModifiedCount()) : "Not Avaivible",
-					Integer.toString(result.getMatchedCount())));
-
 			if(throwable != null) {
-				Logger.fatal("Database MongoDB", "Failed to bulk write", throwable);
 				throwable.printStackTrace();
-			}
+				Logger.fatal("Database MongoDB", "Failed to bulk write", throwable);
+			} else
+				Logger.info("Database MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
+						Integer.toString(result.getInsertedCount()),
+						Integer.toString(result.getDeletedCount()),
+						result.isModifiedCountAvailable() ? Integer.toString(result.getModifiedCount()) : "Not Avaivible",
+						Integer.toString(result.getMatchedCount())));
 		};
 	};
-
-	private final Throwable throwableResult = new Throwable("[Database MongoBD] Failed to bulk write");
 
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
@@ -81,12 +78,24 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 	protected void writeBulkQueue() {
 		this.readWriteLock.readLock().lock();
 
-		List<WriteModel<Document>> writersCopy = this.writers.subList(0, this.writers.size());
+		List<WriteModel<Document>> writersCopy = new ArrayList<WriteModel<Document>>(this.writers);
 		this.writers.clear();
 
 		this.readWriteLock.readLock().unlock();
 
-		printBatchResult.onResult(this.bulkCollection.bulkWrite(writersCopy), this.throwableResult);
+		if(writersCopy.isEmpty())
+			return;
+
+		BulkWriteResult result = null;
+		Throwable throwable = null;
+
+		try {
+			result = this.bulkCollection.bulkWrite(writersCopy);
+		} catch(Exception e) {
+			throwable = e;
+		}
+
+		printBatchResult.onResult(result, throwable);
 	}
 
 	public void queueBulkModel(WriteModel<Document> writeModule) {

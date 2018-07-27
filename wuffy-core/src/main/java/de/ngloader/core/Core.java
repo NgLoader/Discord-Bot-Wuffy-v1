@@ -80,7 +80,7 @@ public abstract class Core extends TickingTask {
 			
 			@Override
 			public void run() {
-				stop();
+				Core.this.stop();
 			}
 		}, String.format("Wuffy Discord Bot - Core ShutdownHook (%s)", this.config.instanceName));
 

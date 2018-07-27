@@ -8,6 +8,7 @@ public enum PermissionKeys {
 	COMMAND_STATS("command.stats"),
 	COMMAND_STATUS("command.status"),
 	COMMAND_VERSION("command.version"),
+	COMMAND_TWTICH("command.twitch"),
 
 	COMMAND_BAN("command.ban"),
 	COMMAND_CLEAR("command.clear"),

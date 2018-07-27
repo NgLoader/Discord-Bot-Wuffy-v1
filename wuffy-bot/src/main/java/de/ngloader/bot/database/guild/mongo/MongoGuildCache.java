@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
-import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
@@ -18,6 +17,7 @@ import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumPermissionMode;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumPermissionType;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumRoleRankingMode;
+import de.ngloader.core.command.MessageType;
 
 public class MongoGuildCache {
 
@@ -49,7 +49,7 @@ public class MongoGuildCache {
 	public MongoGuildPermissionCache permission = new MongoGuildPermissionCache();
 
 	public Map<String, WarnInfo> userWarns = new HashMap<String, WarnInfo>();
-	public Map<NotificationType, Map<String, NotificationInfo>> notification = new HashMap<NotificationType, Map<String, NotificationInfo>>();
+	public Map<NotificationType, List<NotificationInfo>> notification = new HashMap<NotificationType, List<NotificationInfo>>();
 
 	class MongoGuildMessageCache {
 		public Boolean deleteExecuter = true;

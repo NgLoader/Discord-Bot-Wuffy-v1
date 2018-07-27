@@ -1,4 +1,4 @@
-package de.ngloader.bot.command.commands;
+package de.ngloader.core.command;
 
 import java.awt.Color;
 

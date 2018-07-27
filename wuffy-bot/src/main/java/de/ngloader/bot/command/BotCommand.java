@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.core.command.ICommand;
+import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyGenericMessageEvent;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import net.dv8tion.jda.core.EmbedBuilder;

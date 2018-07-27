@@ -3,10 +3,10 @@ package de.ngloader.bot.command.commands.information;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
+import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 
 @Command(aliases = { "invite" })
