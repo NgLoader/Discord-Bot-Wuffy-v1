@@ -33,8 +33,7 @@
 		<module>wuffy-client</module>
 		<module>wuffy-core</module>
 		<module>wuffy-bootstrap</module>
-    <module>wuffy-notification</module>
-    <module>wuffy-notificatio</module>
+    	<module>wuffy-notification</module>
 	</modules>
 
 	<developers>
