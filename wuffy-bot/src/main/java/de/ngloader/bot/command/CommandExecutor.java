@@ -7,9 +7,13 @@ import de.ngloader.bot.WuffyBot;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.keys.TranslationKeys;
+import de.ngloader.bot.util.ReplayBuilder;
 import de.ngloader.core.command.CommandManager;
+import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.logger.Logger;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.utils.PermissionUtil;
 
 public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<WuffyBot, BotCommand> {
 
@@ -42,7 +46,16 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 
 		event.getChannel().sendTyping().queue();
 
-		command.execute(event, args);
+		if(PermissionUtil.checkPermission(event.getGuild().getSelfMember(), Permission.ADMINISTRATOR))
+			command.execute(event, args);
+		else if(event.getTextChannel().canTalk())
+			new ReplayBuilder(event, MessageType.ERROR, event.getCore().getI18n().format(TranslationKeys.MESSAGE_BOT_NO_ADMIN_PERMISSION,
+					event.getMember(WuffyMember.class).getLocale()))
+			.queue();
+		else
+			event.getAuthor().openPrivateChannel().complete().sendMessage(
+					event.getCore().getI18n().format(TranslationKeys.MESSAGE_BOT_NO_ADMIN_PERMISSION, event.getMember(WuffyMember.class).getLocale()))
+			.queue();
 
 		Logger.debug("CommandExecutor", String.format("Command (%s) was executed in %sms", command.getClass().getSimpleName(), Long.toString(System.currentTimeMillis() - time)));
 	}

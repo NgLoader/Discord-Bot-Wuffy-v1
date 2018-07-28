@@ -23,6 +23,7 @@ public class TranslationKeys extends TranslationKeysCore {
 
 	public static final String MESSAGE_BOT_NO_INTERACT = "message_bot_no_interact";
 	public static final String MESSAGE_NO_PERMISSION = "message_no_permission";
+	public static final String MESSAGE_BOT_NO_ADMIN_PERMISSION = "message_bot_no_admin_permission";
 
 	//Commands
 	public static final String MESSAGE_PING = "message_ping";
