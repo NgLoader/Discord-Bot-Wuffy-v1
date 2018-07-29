@@ -132,12 +132,21 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_TWITCH_ADDED_SYNTAX = "message_twitch_added_syntax";
 	public static final String MESSAGE_TWITCH_LIST = "message_twitch_list";
 	public static final String MESSAGE_TWITCH_MAX_COUNT = "message_twitch_max_count";
+	public static final String MESSAGE_TWITCH_MESSAGE_PRINT = "message_twitch_message_print";
+	public static final String MESSAGE_TWITCH_MESSAGE_PRINT_EMBED = "message_twitch_message_print_embed";
 	public static final String MESSAGE_TWITCH_MESSAGE_COPY = "message_twitch_message_copy";
 	public static final String MESSAGE_TWITCH_MESSAGE_RESET = "message_twitch_message_reset";
+	public static final String MESSAGE_TWITCH_MESSAGE_REPLACEMENTS = "message_twitch_message_replacements";
 	public static final String MESSAGE_TWITCH_MESSAGE_SET_AVATAR = "message_twitch_message_set_avatar";
 	public static final String MESSAGE_TWITCH_MESSAGE_SET_USERNAME = "message_twitch_message_set_username";
 	public static final String MESSAGE_TWITCH_MESSAGE_SET_CONTENT = "message_twitch_message_set_content";
-	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE = "message_twitch_message_remove";
+	public static final String MESSAGE_TWITCH_MESSAGE_SET_CONTENT_NO_ARGS = "message_twitch_message_set_content_no_args";
+	public static final String MESSAGE_TWITCH_MESSAGE_SET_EMBED = "message_twitch_message_set_embed";
+	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE_AVATAR = "message_twitch_message_remove_avatar";
+	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE_USERNAME = "message_twitch_message_remove_username";
+	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE_CONTENT = "message_twitch_message_remove_content";
+	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE_EMBED = "message_twitch_message_remove_embed";
+	public static final String MESSAGE_TWITCH_MESSAGE_REMOVE_CONTENT_OR_EMBED = "message_twitch_message_remove_content_or_embed";
 	public static final String MESSAGE_TWITCH_NOT_URL = "message_twitch_not_url";
 	public static final String MESSAGE_TWITCH_SYNTAX = "message_twitch_syntax";
 

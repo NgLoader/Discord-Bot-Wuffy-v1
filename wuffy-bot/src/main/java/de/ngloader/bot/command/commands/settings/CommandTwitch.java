@@ -1,6 +1,8 @@
 package de.ngloader.bot.command.commands.settings;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,22 +22,25 @@ import de.ngloader.core.command.Command;
 import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
-import de.ngloader.core.util.GsonUtil;
+import de.ngloader.core.util.WebhookUtil;
 import net.dv8tion.jda.core.entities.Webhook;
 
 @Command(aliases = { "tw", "twitch", "twitchtv" })
 @CommandConfig(category = CommandCategory.SETTINGS)
 public class CommandTwitch extends BotCommand {
 
-	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\": \"Twitch\",\"avatar_url\": \"%urlpi\",\"content\": \"@here %n ist jetzt live auf Twitch\",\"embeds\": [{\"title\": \"%t\",\"url\": \"%urll\",\"color\": 1671309,\"timestamp\": \"%sa\",\"footer\": {\"icon_url\": \"%urlpi\",\"text\": \"%n\"},\"thumbnail\": {\"url\": \"%urlpi\"},\"image\": {\"url\": \"%urlt\"},\"author\": {\"name\": \"%n\",\"url\": \"%urll\",\"icon_url\": \"%urlpi\"},\"fields\": [{\"name\": \"Zuschauer\",\"value\": \"%vc\"}]}]}";
+	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\":\"Twitch\",\"avatar_url\":\"https://wuffy.eu/pictures/example_avatar_300x300.png\",\"content\":\"@here **%n** ist jetzt live auf Twitch\",\"embeds\":[{\"title\":\"%t\",\"url\":\"%urll\",\"color\":6570405,\"timestamp\":\"%sa\",\"thumbnail\":{\"url\":\"%urlg300x300\"},\"image\":{\"url\":\"%urlt580x900\"},\"author\":{\"name\":\"%n\",\"url\":\"%urll\",\"icon_url\":\"%urlpi\"},\"footer\":{\"icon_url\":\"%urlpi\",\"text\":\"%n\"},\"fields\":[{\"name\":\"Game\",\"value\":\"%g\",\"inline\":true},{\"name\":\"Viewers\",\"value\":\"1\",\"inline\":true}]}]}";
 
 	/*
 	 * ~twitch list
 	 * ~twitch add <Name>
 	 * ~twitch remove <Name>
-	 * ~twitch embed <Name> print
-	 * ~twitch embed <Name> copy <FromName>
-	 * ~twitch embed <Name> edit <message, username, avatar_url, embed> ...
+	 * ~twitch message <Name> print
+	 * ~twitch message <Name> reset
+	 * ~twitch message <Name> replacements
+	 * ~twitch message <Name> copy <FromName>
+	 * ~twitch message <Name> set <message, username, avatar_url, embed> ...
+	 * ~twitch message <Name> remove <message, username, avatar_url, embed> ...
 	 */
 
 	@Override
@@ -67,13 +72,13 @@ public class CommandTwitch extends BotCommand {
 									Webhook webhook = null;
 
 									for(Webhook wh : webhooks)
-										if(wh.getName().startsWith("Wuffy Webhook - ")) {
+										if(wh.getName().equals("Wuffy Webhook")) {
 											webhook = wh;
 											break;
 										}
 
 									if(webhook == null)
-										webhook = event.getTextChannel().createWebhook("Wuffy Webhook - " + event.getTextChannel().getName()).complete();
+										webhook = event.getTextChannel().createWebhook("Wuffy Webhook").complete();
 
 									guild.addNotification(NotificationType.TWITCH, new NotificationInfo(name.toLowerCase(), webhook.getUrl(), CommandTwitch.DEFAULT_EMBED_MESSAGE));
 
@@ -115,12 +120,46 @@ public class CommandTwitch extends BotCommand {
 
 							switch(args[2].toLowerCase()) {
 							case "print":
-								new ReplayBuilder(event, MessageType.INFO).addDescription(GsonUtil.GSON_PRETTY_PRINTING.toJson(document)).queue();
+								List<Webhook> webhooks = event.getTextChannel().getWebhooks().complete();
+								Webhook webhook = null;
+								boolean deleteWebhook = false;
+
+								for(Webhook wh : webhooks)
+									if(wh.getName().startsWith("Wuffy Webhook")) {
+										webhook = wh;
+										break;
+									}
+
+								if(webhook == null) {
+									webhook = event.getTextChannel().createWebhook("Wuffy Webhook - PRINT").complete();
+									deleteWebhook = true;
+								}
+
+								WebhookUtil.send(webhook.getUrl(), document.toJson()
+										.replace("%vc", Integer.toString(0))
+										.replace("%n", notificationInfo.name)
+										.replace("%urll", String.format("https://twitch.tv/%s", notificationInfo.name))
+										.replace("%t", "Hier könnte ihr title stehen")
+										.replace("%urlt300x300", "https://wuffy.eu/pictures/example_thumbnail_300x300.png")
+										.replace("%urlt580x900", "https://wuffy.eu/pictures/example_thumbnail_320x180.png")
+										.replace("%urlpi", "https://wuffy.eu/pictures/example_profile_image_320x900.png")
+										.replace("%urloi", "https://wuffy.eu/pictures/example_offline_image_320x900.png")
+										.replace("%sa", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(System.currentTimeMillis() - 7200000)))
+										.replace("%g", "Grade mit Wuffy")
+										.replace("%urlg300x300", "https://wuffy.eu/pictures/example_box_art_url_300x300.png")
+										.replace("%urlg580x900", "https://wuffy.eu/pictures/example_box_art_url_320x180.png"));
+
+								if(deleteWebhook)
+									webhook.delete().queue();
 								break;
 
 							case "reset":
 								guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, CommandTwitch.DEFAULT_EMBED_MESSAGE);
-								new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_RESET, locale)).queue();
+								new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_RESET, locale)).queue();
+								break;
+
+							case "replacements":
+								new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_REPLACEMENTS, locale)).queue();
 								break;
 
 							case "c":
@@ -147,11 +186,11 @@ public class CommandTwitch extends BotCommand {
 									case "un":
 									case "usern":
 									case "username":
-										if(value.matches("^(#)?[a-zA-Z0-9][\\w]{2,24}$")) {
+										if(value.matches("^[a-zA-Z0-9][\\w]{3,24}$")) {
 											document.put("username", value);
 											guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
 
-											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_USERNAME, locale)).queue();
+											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_USERNAME, locale)).queue();
 										} else
 											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_TWITCH_NOT_URL, locale)).queue();
 										break;
@@ -162,17 +201,20 @@ public class CommandTwitch extends BotCommand {
 											document.put("avatar_url", value);
 											guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
 
-											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_AVATAR, locale)).queue();
+											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_AVATAR, locale)).queue();
 										} else
 											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_TWITCH_NOT_URL, locale)).queue();
 										break;
 
 									case "c":
 									case "content":
-										document.put("content", String.join(" ", Arrays.copyOfRange(args, 4, args.length)));
-										guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+										if(args.length > 4) {
+											document.put("content", String.join(" ", Arrays.copyOfRange(args, 4, args.length)));
+											guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
 
-										new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_CONTENT, locale)).queue();
+											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_CONTENT, locale)).queue();
+										} else
+											new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_TWITCH_MESSAGE_SET_CONTENT_NO_ARGS, locale)).queue();
 										break;
 
 									case "e":

@@ -49,7 +49,7 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 		if(PermissionUtil.checkPermission(event.getGuild().getSelfMember(), Permission.ADMINISTRATOR))
 			command.execute(event, args);
 		else if(event.getTextChannel().canTalk())
-			new ReplayBuilder(event, MessageType.ERROR, event.getCore().getI18n().format(TranslationKeys.MESSAGE_BOT_NO_ADMIN_PERMISSION,
+			event.getTextChannel().sendMessage(event.getCore().getI18n().format(TranslationKeys.MESSAGE_BOT_NO_ADMIN_PERMISSION,
 					event.getMember(WuffyMember.class).getLocale()))
 			.queue();
 		else

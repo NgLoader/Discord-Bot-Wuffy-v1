@@ -2,7 +2,7 @@ package de.ngloader.notification;
 
 public abstract class TickingTask implements Runnable {
 
-	private static final long MS_PER_TICK = 4000L;
+	private static final long MS_PER_TICK = 6000L;
 
 	protected boolean running = true;
 

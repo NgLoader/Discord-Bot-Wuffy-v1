@@ -13,6 +13,7 @@ import com.mongodb.client.model.WriteModel;
 
 import de.ngloader.core.twitch.TwitchAPI;
 import de.ngloader.core.twitch.response.TwitchResponse;
+import de.ngloader.core.twitch.response.TwitchResponseGame;
 import de.ngloader.core.twitch.response.TwitchResponseStream;
 import de.ngloader.core.twitch.response.TwitchResponseUser;
 import de.ngloader.core.util.GsonUtil;
@@ -22,7 +23,7 @@ import de.ngloader.notification.Wuffy;
 
 public class TwitchAnnouncement extends TickingTask {
 
-	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\": \"Twitch\",\"avatar_url\": \"%urlpi\",\"content\": \"%n ist jetzt live auf Twitch\",\"embeds\": [{\"title\": \"%t\",\"url\": \"%urll\",\"color\": 1671309,\"timestamp\": \"%sa\",\"footer\": {\"icon_url\": \"%urlpi\",\"text\": \"%n\"},\"thumbnail\": {\"url\": \"%urlpi\"},\"image\": {\"url\": \"%urlt\"},\"author\": {\"name\": \"%n\",\"url\": \"%urll\",\"icon_url\": \"%urlpi\"},\"fields\": [{\"name\": \"Zuschauer\",\"value\": \"%vc\"}]}]}";
+	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\":\"Twitch\",\"avatar_url\":\"https://wuffy.eu/pictures/example_avatar_300x300.png\",\"content\":\"@here **%n** ist jetzt live auf Twitch\",\"embeds\":[{\"title\":\"%t\",\"url\":\"%urll\",\"color\":6570405,\"timestamp\":\"%sa\",\"thumbnail\":{\"url\":\"%urlg300x300\"},\"image\":{\"url\":\"%urlt580x900\"},\"author\":{\"name\":\"%n\",\"url\":\"%urll\",\"icon_url\":\"%urlpi\"},\"footer\":{\"icon_url\":\"%urlpi\",\"text\":\"%n\"},\"fields\":[{\"name\":\"Game\",\"value\":\"%g\",\"inline\":true},{\"name\":\"Viewers\",\"value\":\"1\",\"inline\":true}]}]}";
 
 	private Map<String, List<Message>> queueNames = new HashMap<String, List<Message>>();
 
@@ -56,10 +57,17 @@ public class TwitchAnnouncement extends TickingTask {
 
 			TwitchResponse<TwitchResponseStream> streams = this.twitchAPI.getStreamHandler().getStreamByUserId(users.keySet().stream().collect(Collectors.toList()));
 
+			Map<String, TwitchResponseGame> games = this.twitchAPI.getGameHandler().getById(streams.data.stream()
+					.filter(data -> data != null && data.game_id != null && data.type != null && data.type.equals("live"))
+					.map(data -> data.game_id)
+					.distinct()
+					.collect(Collectors.toList())).data.stream()
+						.collect(Collectors.toMap(key -> key.id, value -> value));
+
 			List<WriteModel<Document>> writeModels = new ArrayList<WriteModel<Document>>();
 
 			for(TwitchResponseStream stream : streams.data) {
-				if(!stream.type.equals("live"))
+				if(stream == null || stream.type == null || !stream.type.equals("live"))
 					continue;
 
 				TwitchResponseUser user = users.get(stream.user_id);
@@ -79,10 +87,14 @@ public class TwitchAnnouncement extends TickingTask {
 							.replace("%n", user.display_name)
 							.replace("%urll", String.format("https://www.twitch.tv/%s", user.display_name))
 							.replace("%t", stream.title)
-							.replace("%urlt", stream.thumbnail_url.replace("{width}", "320").replace("{height}", "180"))
+							.replace("%urlt300x300", stream.thumbnail_url.replace("{width}", "300").replace("{height}", "300"))
+							.replace("%urlt580x900", stream.thumbnail_url.replace("{width}", "320").replace("{height}", "180"))
 							.replace("%urlpi", user.profile_image_url)
 							.replace("%urloi", user.offline_image_url)
-							.replace("%sa", stream.started_at));
+							.replace("%sa", stream.started_at)
+							.replace("%g", games.get(stream.game_id).name)
+							.replace("%urlg300x300", games.get(stream.game_id).box_art_url.replace("{width}", "300").replace("{height}", "300"))
+							.replace("%urlg580x900", games.get(stream.game_id).box_art_url.replace("{width}", "320").replace("{height}", "180")));
 				}
 			}
 
@@ -93,6 +105,7 @@ public class TwitchAnnouncement extends TickingTask {
 				this.running = false;
 		} catch(Exception e) {
 			e.printStackTrace();
+			this.running = false;
 		}
 	}
 

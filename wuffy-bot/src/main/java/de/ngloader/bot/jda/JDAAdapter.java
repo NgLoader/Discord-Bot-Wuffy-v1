@@ -10,6 +10,7 @@ import de.ngloader.core.Core;
 import de.ngloader.core.jda.IJDAAdapter;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.bot.sharding.ShardManager;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.hooks.EventListener;
 
 public class JDAAdapter implements IJDAAdapter {
@@ -41,6 +42,11 @@ public class JDAAdapter implements IJDAAdapter {
 				builder
 					.setShardsTotal(shardingConfig.total)
 					.setShards(shardingConfig.shardIds);
+
+			builder.setStatus(config.status);
+			builder.setGame(config.game.url != null && !config.game.url.isEmpty() ?
+					Game.of(config.game.gameType, config.game.name, config.game.url) :
+					Game.of(config.game.gameType, config.game.name));
 
 			this.shardManager = builder.build();
 		} catch (LoginException | IllegalArgumentException e) {

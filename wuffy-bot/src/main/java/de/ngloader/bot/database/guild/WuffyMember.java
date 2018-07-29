@@ -30,7 +30,7 @@ public abstract class WuffyMember extends ImplMember {
 	public String getLocale() {
 		var userLocale = this.getUser().getUserLocale();
 
-		return userLocale != null ? userLocale : this.getGuild().getGuildLocale();
+		return userLocale != null && !userLocale.isEmpty() ? userLocale : this.getGuild().getGuildLocale();
 	}
 
 	public boolean hasPermission(Channel channel, PermissionKeys... permissions) {

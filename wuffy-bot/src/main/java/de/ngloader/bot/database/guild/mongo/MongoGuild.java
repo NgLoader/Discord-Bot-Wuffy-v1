@@ -680,7 +680,7 @@ public class MongoGuild extends WuffyGuild {
 		if(this.cache.notification.containsKey(type))
 			this.cache.notification.get(type).remove(notification);
 
-		this.queueBulk(new Document("$pullAll", new Document(String.format("notification.%s", type.name()), this.toDocument(notification))));
+		this.queueBulk(new Document("$pull", new Document(String.format("notification.%s", type.name()), this.toDocument(notification))));
 	}
 
 	@Override
@@ -698,10 +698,9 @@ public class MongoGuild extends WuffyGuild {
 			this.cache.notification.get(type).add(info);
 		}
 
-		System.out.println("TEST4");
 		this.queueBulk(
 				new Document("_guildId", Long.toString(this.getIdLong())).append(String.format("notification.%s.name", type.name()), key),
-				new Document("$addToSet", new Document(String.format("notification.%s", type.name()), new Document("message", message))));
+				new Document("$set", new Document(String.format("notification.%s.$.message", type.name()), message)));
 	}
 
 	@Override

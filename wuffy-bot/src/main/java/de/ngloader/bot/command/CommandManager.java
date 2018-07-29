@@ -1,7 +1,6 @@
 package de.ngloader.bot.command;
 
 import de.ngloader.bot.WuffyBot;
-import de.ngloader.bot.command.commands.CommandTest;
 import de.ngloader.bot.command.commands.information.CommandCommands;
 import de.ngloader.bot.command.commands.information.CommandHelp;
 import de.ngloader.bot.command.commands.information.CommandInvite;
@@ -19,17 +18,12 @@ import de.ngloader.bot.command.commands.moderator.CommandSoftBan;
 import de.ngloader.bot.command.commands.moderator.CommandUnBan;
 import de.ngloader.bot.command.commands.moderator.CommandUnMute;
 import de.ngloader.bot.command.commands.moderator.CommandVCKick;
-import de.ngloader.bot.command.commands.settings.CommandAutoPrune;
-import de.ngloader.bot.command.commands.settings.CommandAutoRole;
 import de.ngloader.bot.command.commands.settings.CommandLanguage;
 import de.ngloader.bot.command.commands.settings.CommandMention;
 import de.ngloader.bot.command.commands.settings.CommandMessage;
 import de.ngloader.bot.command.commands.settings.CommandPermission;
 import de.ngloader.bot.command.commands.settings.CommandPrefix;
 import de.ngloader.bot.command.commands.settings.CommandTwitch;
-import de.ngloader.bot.command.commands.utility.CommandGlobalInfo;
-import de.ngloader.bot.command.commands.utility.CommandGuildInfo;
-import de.ngloader.bot.command.commands.utility.CommandServerInfo;
 import de.ngloader.bot.command.commands.utility.CommandUserInfo;
 import de.ngloader.core.command.CommandRegistry;
 
@@ -46,7 +40,7 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry = new CommandRegistry();
 
 		//TODO Add commands
-		this.registry.addCommand(new CommandTest());
+//		this.registry.addCommand(new CommandTest());
 
 		//Moderator
 		this.registry.addCommand(new CommandVCKick());
@@ -62,8 +56,8 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		//Settings
 		this.registry.addCommand(new CommandPrefix());
 		this.registry.addCommand(new CommandLanguage());
-		this.registry.addCommand(new CommandAutoRole());
-		this.registry.addCommand(new CommandAutoPrune());
+//		this.registry.addCommand(new CommandAutoRole());
+//		this.registry.addCommand(new CommandAutoPrune());
 		this.registry.addCommand(new CommandPermission());
 		this.registry.addCommand(new CommandMessage());
 		this.registry.addCommand(new CommandMention());
@@ -81,8 +75,8 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 
 		//Utility
 		this.registry.addCommand(new CommandUserInfo());
-		this.registry.addCommand(new CommandServerInfo());
-		this.registry.addCommand(new CommandGuildInfo());
-		this.registry.addCommand(new CommandGlobalInfo());
+//		this.registry.addCommand(new CommandServerInfo());
+//		this.registry.addCommand(new CommandGuildInfo());
+//		this.registry.addCommand(new CommandGlobalInfo());
 	}
 }

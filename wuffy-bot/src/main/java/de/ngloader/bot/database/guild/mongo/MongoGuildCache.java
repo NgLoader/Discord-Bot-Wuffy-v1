@@ -24,6 +24,17 @@ public class MongoGuildCache {
 	private static final List<String> DEFAULT_PREFIX_LIST = Arrays.asList("~");
 	private static final List<EnumPermissionMode> DEFAULT_PERMISSION_MODE_LIST = Arrays.asList(EnumPermissionMode.GLOBAL_USER, EnumPermissionMode.GLOBAL_ROLE);
 	private static final EnumRoleRankingMode DEFAULT_RANKING_MODE = EnumRoleRankingMode.DISCORD;
+	private static final Map<MessageType, Integer> DEFAULT_AUTO_PRUNE_DELAYS = new HashMap<MessageType, Integer>();
+
+	static {
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SUCCESS, 5);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.INFO, 240);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LIST, 240);
+//		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LOADING, 240); Disabled (loading not removing)
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.WARN, 5);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SYNTAX, 40);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.ERROR, 20);
+	}
 
 	public MongoGuildCache(Long guildId) {
 		this._guildId = Long.toString(guildId);
@@ -53,9 +64,9 @@ public class MongoGuildCache {
 
 	class MongoGuildMessageCache {
 		public Boolean deleteExecuter = true;
-		public Boolean deleteBot = false;
+		public Boolean deleteBot = true;
 
-		public Map<MessageType, Integer> delays = new HashMap<MessageType, Integer>();
+		public Map<MessageType, Integer> delays = new HashMap<MessageType, Integer>(MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS);
 		public Map<MessageType, String> colors = new HashMap<MessageType, String>();
 	}
 
