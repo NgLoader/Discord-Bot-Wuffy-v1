@@ -141,17 +141,17 @@ public class ImplMember implements Member {
 
 	@Override
 	public boolean canInteract(Member member) {
-		return this.member.canInteract(member);
+		return de.ngloader.core.util.PermissionUtil.canInteract(this.member, member);
 	}
 
 	@Override
 	public boolean canInteract(Role role) {
-		return this.member.canInteract(role);
+		return de.ngloader.core.util.PermissionUtil.canInteract(this.member, role);
 	}
 
 	@Override
 	public boolean canInteract(Emote emote) {
-		return this.member.canInteract(emote);
+		return de.ngloader.core.util.PermissionUtil.canInteract(this.member, emote);
 	}
 
 	@Override
