@@ -97,7 +97,7 @@ public class CommandNotification extends BotCommand {
 						if(args.length > 2) {
 							String name = args[2];
 
-							if(NotificationType.TWITCH == notificationType ? name.matches("^(#)?[a-zA-Z0-9]{4,25}$") : name.matches("[a-z,A-Z,0-9,\\-,_,',.]{6,20}")) {
+							if(NotificationType.TWITCH == notificationType ? name.matches("^(?!_)\\w{3,15}$") : name.matches("[a-z,A-Z,0-9,\\-,_,',.]{6,20}")) {
 								if(guild.getNotifications(notificationType).size() < 10) {
 									if(guild.getNotification(notificationType, name.toLowerCase()) == null) {
 										if(notificationType == NotificationType.TWITCH) {

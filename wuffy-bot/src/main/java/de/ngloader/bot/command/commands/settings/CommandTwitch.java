@@ -72,7 +72,7 @@ public class CommandTwitch extends BotCommand {
 					if(args.length > 1) {
 						String name = args[1];
 
-						if(name.matches("^(#)?[a-zA-Z0-9]{4,25}$")) {
+						if(name.matches("^(?!_)\\w{3,15}$")) {
 							if(guild.getNotifications(NotificationType.TWITCH).size() < 10) {
 								if(guild.getNotification(NotificationType.TWITCH, name.toLowerCase()) == null) {
 									List<Webhook> webhooks = event.getTextChannel().getWebhooks().complete();
