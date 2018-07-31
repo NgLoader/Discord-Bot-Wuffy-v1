@@ -124,11 +124,6 @@ public class CommandMessage extends BotCommand {
 							break;
 
 						case "info":
-//							new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_INFO, locale,
-//								"%l", guild.getMessageColorCodes().entrySet().stream()
-//								.map(entry -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(entry.getKey().name()), entry.getValue()))
-//								.collect(Collectors.joining("\n"))))
-//							.queue();
 							new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_INFO, locale,
 									"%l", Arrays.asList(MessageType.values()).stream()
 								.map(type -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(type.name()),
@@ -313,7 +308,8 @@ public class CommandMessage extends BotCommand {
 							new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale)).queue();
 							break;
 						}
-					}
+					} else
+						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale)).queue();
 					break;
 
 				default:
