@@ -118,7 +118,8 @@ public class CommandNotification extends BotCommand {
 															TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_TWITCH : TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_YOUTUBE, locale)));
 
 											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ADDED, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)))
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale),
+													"%n", name))
 											.queue();
 										} else {
 											String channelId = null;
@@ -163,15 +164,18 @@ public class CommandNotification extends BotCommand {
 										}
 									} else
 										new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ALREADY_EXIST, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)))
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale),
+												"%n", name))
 										.queue();
 								} else
 									new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MAX_COUNT, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)))
+											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale),
+											"%n", name))
 									.queue();
 							} else
 								new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ADDED_SYNTAX, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)))
+										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale),
+										"%n", name))
 								.queue();
 						} else
 							new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
