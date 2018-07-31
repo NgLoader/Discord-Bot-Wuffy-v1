@@ -24,6 +24,7 @@ import de.ngloader.bot.command.commands.settings.CommandMessage;
 import de.ngloader.bot.command.commands.settings.CommandNotification;
 import de.ngloader.bot.command.commands.settings.CommandPermission;
 import de.ngloader.bot.command.commands.settings.CommandPrefix;
+import de.ngloader.bot.command.commands.settings.CommandRename;
 import de.ngloader.bot.command.commands.settings.CommandTwitch;
 import de.ngloader.bot.command.commands.settings.CommandYoutube;
 import de.ngloader.bot.command.commands.utility.CommandUserInfo;
@@ -54,6 +55,7 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandSoftBan());
 		this.registry.addCommand(new CommandHardBan());
 		this.registry.addCommand(new CommandUnBan());
+		this.registry.addCommand(new CommandRename());
 
 		//Settings
 		this.registry.addCommand(new CommandPrefix());

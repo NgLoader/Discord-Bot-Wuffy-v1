@@ -16,6 +16,7 @@ import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.utils.PermissionUtil;
 
 public class ImplMember implements Member {
 
@@ -33,7 +34,11 @@ public class ImplMember implements Member {
 	}
 
 	public Core getCore() {
-		return core;
+		return this.core;
+	}
+
+	public Member getRealMember() {
+		return this.member;
 	}
 
 	@Override
@@ -141,17 +146,19 @@ public class ImplMember implements Member {
 
 	@Override
 	public boolean canInteract(Member member) {
-		return de.ngloader.core.util.PermissionUtil.canInteract(this.member, member);
+		if(member instanceof ImplMember)
+			return PermissionUtil.canInteract(this.member, ((ImplMember) member).getRealMember()); //TODO push a fix to JDA (PermissionUtil check guildId and not guild class)
+		return PermissionUtil.canInteract(this.member, member);
 	}
 
 	@Override
 	public boolean canInteract(Role role) {
-		return de.ngloader.core.util.PermissionUtil.canInteract(this.member, role);
+		return PermissionUtil.canInteract(this.member, role);
 	}
 
 	@Override
 	public boolean canInteract(Emote emote) {
-		return de.ngloader.core.util.PermissionUtil.canInteract(this.member, emote);
+		return PermissionUtil.canInteract(this.member, emote);
 	}
 
 	@Override

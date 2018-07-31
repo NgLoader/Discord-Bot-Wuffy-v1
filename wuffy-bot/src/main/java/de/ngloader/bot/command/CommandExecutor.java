@@ -13,8 +13,8 @@ import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
 import de.ngloader.core.logger.Logger;
-import de.ngloader.core.util.PermissionUtil;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.utils.PermissionUtil;
 
 public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<WuffyBot, BotCommand> {
 
@@ -47,7 +47,7 @@ public class CommandExecutor extends de.ngloader.core.command.CommandExecutor<Wu
 		try {
 			event.getChannel().sendTyping().queue();
 
-			if(PermissionUtil.checkPermission(event.getGuild().getSelfMember(), Permission.ADMINISTRATOR))
+			if(PermissionUtil.checkPermission(event.getGuild().getSelfMember().getRealMember(), Permission.ADMINISTRATOR))
 				command.execute(event, args);
 			else if(event.getTextChannel().canTalk())
 				event.getTextChannel().sendMessage(event.getCore().getI18n().format(TranslationKeys.MESSAGE_BOT_NO_ADMIN_PERMISSION,

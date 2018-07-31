@@ -13,6 +13,7 @@ import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Invite;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -37,6 +38,14 @@ public class ImplGuild implements Guild {
 	public ImplGuild(Core core, Guild guild) {
 		this.core = core;
 		this.guild = guild;
+	}
+
+	public Core getCore() {
+		return this.core;
+	}
+
+	public Guild getRealGuild() {
+		return this.guild;
 	}
 
 	@Override
@@ -141,6 +150,11 @@ public class ImplGuild implements Guild {
 	@Override
 	public ImplMember getMemberById(String userId) {
 		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(Long.parseLong(userId.replace("<@", "").replace(">", ""))));
+	}
+
+	@Override
+	public List<Member> getMembers() {
+		return this.guild.getMembers();
 	}
 
 	@Override

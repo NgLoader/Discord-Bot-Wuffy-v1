@@ -214,4 +214,9 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_MESSAGE_COLOR_LIST = "message_message_color_list";
 	public static final String MESSAGE_MESSAGE_COLOR_INFO = "message_message_color_info";
 	public static final String MESSAGE_MESSAGE_SYNTAX = "message_message_syntax";
+
+	public static final String MESSAGE_RENAME = "message_rename"; //%on oldName %nn newName %rn realName
+	public static final String MESSAGE_RENAME_SPEICAL_CHARACTER = "message_rename_special_character"; //%t target %n name
+	public static final String MESSAGE_RENAME_NOT_FOUND = "message_rename_not_found"; //%t target
+	public static final String MESSAGE_RENAME_SYNTAX = "message_rename_syntax";
 }

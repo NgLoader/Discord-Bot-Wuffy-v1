@@ -29,6 +29,7 @@ public enum PermissionKeys {
 	COMMAND_MESSAGE("command.message"),
 	COMMAND_PERMISSION("command.permission"),
 	COMMAND_PREFIX("command.prefix"),
+	COMMAND_RENAME("command.rename"),
 
 	COMMAND_USERINFO("command.userinfo");
 
