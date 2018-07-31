@@ -27,11 +27,11 @@ public class CommandStats extends BotCommand {
 		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_STATS)) {
 			this.replay(event, MessageType.INFO, this.buildMessage(MessageType.INFO)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_VERSION, locale), event.getCore().getConfig().instanceVersion, true)
-					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_LIBRARY, locale), "JDA", false)
+					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_LIBRARY, locale), "JDA", true)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_OWNER, locale), "Nils#0001", true)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_ADMINS, locale), event.getCore().getConfig().admins.isEmpty() ? "-" : event.getCore().getConfig().admins.stream()
 							.map(id -> String.format("<@%s>", id))
-							.collect(Collectors.joining("\n")), false)
+							.collect(Collectors.joining("\n")), true)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_GUILDS, locale), Integer.toString(event.getCore().getJdaAdapter(JDAAdapter.class).getShardManager().getGuilds().size()), true)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_USERS, locale), Integer.toString(event.getCore().getJdaAdapter(JDAAdapter.class).getShardManager().getUsers().size()), true)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_VOICES, locale), "Unkown", true));

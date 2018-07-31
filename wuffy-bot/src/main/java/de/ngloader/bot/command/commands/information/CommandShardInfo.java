@@ -1,8 +1,11 @@
 package de.ngloader.bot.command.commands.information;
 
+import java.util.concurrent.TimeUnit;
+
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.jda.JDAAdapter;
 import de.ngloader.bot.keys.PermissionKeys;
@@ -12,6 +15,7 @@ import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
 import de.ngloader.core.util.TableMessageBuilder;
+import net.dv8tion.jda.core.requests.restaction.MessageAction;
 
 @Command(aliases = { "shardInfo", "sInfo", "shardI", "clusterinfo", "shards" })
 @CommandConfig(category = CommandCategory.INFORMATION)
@@ -24,7 +28,8 @@ public class CommandShardInfo extends BotCommand {
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
 		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_SHARDINFO)) {
-			event.getMessage().delete().queue();
+			if(event.getGuild(WuffyGuild.class).isMessageDeleteExecuter())
+				event.getMessage().delete().queue();
 
 			var tableBuilder = new TableMessageBuilder();
 
@@ -67,8 +72,12 @@ public class CommandShardInfo extends BotCommand {
 				.addField("", Integer.toString(totalUsers), ", ")
 				.addField("", Integer.toString(totalVoice), "");
 
-			event.getChannel().sendMessage(String.format("```prolog\n%s\n```", tableBuilder.build())).queue();
-//			this.replay(event, MessageType.LIST, String.format("\n%s\n", tableBuilder.build()));
+			MessageAction action = event.getChannel().sendMessage(String.format("```prolog\n%s\n```", tableBuilder.build()));
+
+			if(event.getGuild(WuffyGuild.class).isMessageDeleteBot() && event.getGuild(WuffyGuild.class).isMessageDeleteDelay(MessageType.LIST))
+				action.queue(success -> success.delete().queueAfter(event.getGuild(WuffyGuild.class).getMessageDeleteDelay(MessageType.LIST), TimeUnit.SECONDS));
+			else
+				action.queue();
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_SHARDINFO.key));
 	}

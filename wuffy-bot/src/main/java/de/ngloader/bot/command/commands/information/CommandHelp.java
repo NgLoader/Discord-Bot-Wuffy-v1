@@ -3,6 +3,7 @@ package de.ngloader.bot.command.commands.information;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.core.command.Command;
@@ -15,7 +16,8 @@ public class CommandHelp extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		event.getMessage().delete().queue();
+		if(event.getGuild(WuffyGuild.class).isMessageDeleteExecuter())
+			event.getMessage().delete().queue();
 
 		event.getAuthor().openPrivateChannel().complete().sendMessage(
 				this.buildMessage(MessageType.INFO, event.getCore().getI18n().format(TranslationKeys.MESSAGE_HELP, event.getMember(WuffyMember.class).getLocale())).build()).queue();
