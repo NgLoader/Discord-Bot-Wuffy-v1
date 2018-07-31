@@ -33,6 +33,7 @@ public class MongoGuildCache {
 //		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LOADING, 240); Disabled (loading not removing)
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.WARN, 5);
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SYNTAX, 40);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PERMISSION, 8);
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.ERROR, 20);
 	}
 

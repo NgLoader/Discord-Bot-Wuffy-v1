@@ -68,6 +68,6 @@ public class CommandPrefix extends BotCommand {
 			} else
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_PREFIX.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_PREFIX.key));
 	}
 }

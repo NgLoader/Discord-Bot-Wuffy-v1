@@ -51,7 +51,7 @@ public class CommandLanguage extends BotCommand {
 
 							this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_CHANGED_USER, member.getLocale(), "%l", locale.toLanguageTag()));
 						} else
-							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_NOT_EXIST, member.getLocale()));
+							this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_NOT_EXIST, member.getLocale()));
 					}
 				} else 
 					this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_INFO_USER, member.getLocale(),
@@ -70,11 +70,11 @@ public class CommandLanguage extends BotCommand {
 	
 							this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_CHANGED_GUILD, member.getLocale(), "%l", locale.toLanguageTag()));
 						} else
-							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_NOT_EXIST, member.getLocale()));
+							this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_NOT_EXIST, member.getLocale()));
 					} else
 						this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_INFO_GUILD, member.getLocale(), "%l", guild.getGuildLocale()));
 				else
-					this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", PermissionKeys.COMMAND_LANGUAGE_GUILD.key));
+					this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", PermissionKeys.COMMAND_LANGUAGE_GUILD.key));
 				break;
 
 			case "l":

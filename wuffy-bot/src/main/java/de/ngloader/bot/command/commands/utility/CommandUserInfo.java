@@ -66,6 +66,6 @@ public class CommandUserInfo extends BotCommand {
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_USERINFO_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_USERINFO.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_USERINFO.key));
 	}
 }

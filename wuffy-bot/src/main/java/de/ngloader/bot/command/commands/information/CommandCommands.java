@@ -50,6 +50,6 @@ public class CommandCommands extends BotCommand {
 
 			builder.queue();
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.commands"));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.commands"));
 	}
 }

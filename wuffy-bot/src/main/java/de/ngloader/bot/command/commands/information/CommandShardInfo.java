@@ -68,6 +68,6 @@ public class CommandShardInfo extends BotCommand {
 			event.getChannel().sendMessage(String.format("```prolog\n%s\n```", tableBuilder.build())).queue();
 //			this.replay(event, MessageType.LIST, String.format("\n%s\n", tableBuilder.build()));
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_SHARDINFO.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_SHARDINFO.key));
 	}
 }

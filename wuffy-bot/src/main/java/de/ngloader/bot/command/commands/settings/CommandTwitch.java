@@ -825,7 +825,7 @@ public class CommandTwitch extends BotCommand {
 						"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
 				.queue();
 		} else
-			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_NOTIFICATION_TWITCH.key,
+			new ReplayBuilder(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_NOTIFICATION_TWITCH.key,
 					"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
 			.queue();
 	}

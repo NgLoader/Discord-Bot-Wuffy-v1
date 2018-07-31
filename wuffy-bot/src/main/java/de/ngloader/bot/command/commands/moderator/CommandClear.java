@@ -67,7 +67,7 @@ public class CommandClear extends BotCommand {
 										this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_CLEAR_NO_MESAGE_TO_DELETE, locale));
 								});
 							} else
-								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[1]));
+								this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[1]));
 							//Member can not found
 							} else {
 								history.retrievePast(count).queue(messages -> {
@@ -89,16 +89,16 @@ public class CommandClear extends BotCommand {
 								});
 							}
 					} else
-						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NUMBER_OUT_OF_RANGE, locale));
+						this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NUMBER_OUT_OF_RANGE, locale));
 					//Clear number out of range
 				} else
-					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NOT_A_NUMBER, locale));
+					this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOT_A_NUMBER, locale));
 				//Not a number
 			} else
-				this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_CLEAR_SYNTAX, locale));
+				this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_CLEAR_SYNTAX, locale));
 			//False args
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_CLEAR.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_CLEAR.key));
 		//No permission
 	}
 }

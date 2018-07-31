@@ -36,6 +36,6 @@ public class CommandStats extends BotCommand {
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_USERS, locale), Integer.toString(event.getCore().getJdaAdapter(JDAAdapter.class).getShardManager().getUsers().size()), true)
 					.addField(i18n.format(TranslationKeys.MESSAGE_STATS_VOICES, locale), "Unkown", true));
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_STATS.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_STATS.key));
 	}
 }

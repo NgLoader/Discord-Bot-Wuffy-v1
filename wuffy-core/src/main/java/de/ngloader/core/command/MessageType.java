@@ -9,6 +9,7 @@ public enum MessageType {
 	INFO(new Color(141, 216, 19)),
 	LIST(new Color(15, 255, 195)),
 	WARN(new Color(255, 231, 14)),
+	PERMISSION(new Color(255, 231, 14)),
 	SYNTAX(new Color(211, 79, 16)),
 	ERROR(new Color(255, 0, 0));
 

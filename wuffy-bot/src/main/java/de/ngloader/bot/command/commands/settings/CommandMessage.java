@@ -323,7 +323,7 @@ public class CommandMessage extends BotCommand {
 			} else
 				new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale)).queue();
 		} else
-			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_MESSAGE.key)).queue();
+			new ReplayBuilder(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_MESSAGE.key)).queue();
 	}
 
 	private String convertColorToHex(Color color) {

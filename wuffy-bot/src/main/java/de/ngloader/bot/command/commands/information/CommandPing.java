@@ -27,6 +27,6 @@ public class CommandPing extends BotCommand {
 			event.getChannel().sendMessage(this.buildMessage(MessageType.LOADING, i18n.format(TranslationKeys.MESSAGE_PING_CALCULATING, locale)).build()).complete()
 				.editMessage(this.buildMessage(MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_PING, locale, "%p", Long.toString(System.currentTimeMillis() - start))).build()).queue();
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_PING.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_PING.key));
 	}
 }

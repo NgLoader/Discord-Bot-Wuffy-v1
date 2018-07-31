@@ -33,7 +33,7 @@ public class CommandStatus extends BotCommand {
 									+ "MB``/**" + toMegabyte(Runtime.getRuntime().totalMemory()) + "MB**",
 							true));
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p",PermissionKeys.COMMAND_STATUS.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p",PermissionKeys.COMMAND_STATUS.key));
 	}
 
 	private Integer toMegabyte(double bytes) {

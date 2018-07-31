@@ -916,7 +916,7 @@ public class CommandNotification extends BotCommand {
 						"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN, locale)))
 				.queue(); 
 		} else
-			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_NOTIFICATION.key,
+			new ReplayBuilder(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_NOTIFICATION.key,
 					"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN, locale)))
 			.queue();
 	}

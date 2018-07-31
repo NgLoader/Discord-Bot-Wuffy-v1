@@ -44,19 +44,19 @@ public class CommandVCKick extends BotCommand {
 
 								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_VCKICK_KICKED, locale, "%m", memberSelected.getEffectiveName(), "%c", before.getName()));
 							} else
-								this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
+								this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_BOT_NO_INTERACT, locale, "%m", memberSelected.getEffectiveName()));
 						} else
-							this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
+							this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_LOWER_ROLE, locale, "%m", memberSelected.getEffectiveName()));
 					} else
-						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NOT_IN_VOICE_TARGET, locale, "%m", memberSelected.getEffectiveName()));
+						this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOT_IN_VOICE_TARGET, locale, "%m", memberSelected.getEffectiveName()));
 					//Member not in voice
 				} else
-					this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+					this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 				//Member not found
 			} else
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_VCKICK_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_VCKICK.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_VCKICK.key));
 	}
 }

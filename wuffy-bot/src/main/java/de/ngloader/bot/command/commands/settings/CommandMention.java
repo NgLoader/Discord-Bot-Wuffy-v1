@@ -33,6 +33,6 @@ public class CommandMention extends BotCommand {
 			else
 				this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_MENTION_DISABLE, locale));
 		} else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_MENTION.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_MENTION.key));
 	}
 }

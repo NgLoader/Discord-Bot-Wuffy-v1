@@ -41,11 +41,11 @@ public class CommandUnBan extends BotCommand {
 					}
 				}
 
-				this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
+				this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 			} else
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_UNBAN_SYNTAX, locale));
 			//No args
 		else
-			this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_UNBAN.key));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_UNBAN.key));
 	}
 }
