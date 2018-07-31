@@ -15,7 +15,8 @@ public class CommandHelp extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-//		this.replay(event, MessageType.INFO, event.getCore().getI18n().format(TranslationKeys.MESSAGE_HELP, event.getMember(WuffyMember.class).getLocale()));
+		event.getMessage().delete().queue();
+
 		event.getAuthor().openPrivateChannel().complete().sendMessage(
 				this.buildMessage(MessageType.INFO, event.getCore().getI18n().format(TranslationKeys.MESSAGE_HELP, event.getMember(WuffyMember.class).getLocale())).build()).queue();
 	}

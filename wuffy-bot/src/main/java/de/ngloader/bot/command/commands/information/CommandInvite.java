@@ -15,7 +15,8 @@ public class CommandInvite extends BotCommand {
 
 	@Override
 	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-//		event.getChannel().sendMessage(event.getCore().getI18n().format(TranslationKeys.MESSAGE_INVITE, event.getMember(WuffyMember.class).getLocale())).queue();
+		event.getMessage().delete().queue();
+
 		event.getAuthor().openPrivateChannel().complete().sendMessage(
 				this.buildMessage(MessageType.INFO, event.getCore().getI18n().format(TranslationKeys.MESSAGE_INVITE, event.getMember(WuffyMember.class).getLocale())).build()).queue();
 	}

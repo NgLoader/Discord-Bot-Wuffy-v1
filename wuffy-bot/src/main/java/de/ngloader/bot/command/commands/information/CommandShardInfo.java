@@ -24,6 +24,8 @@ public class CommandShardInfo extends BotCommand {
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
 		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_SHARDINFO)) {
+			event.getMessage().delete().queue();
+
 			var tableBuilder = new TableMessageBuilder();
 
 			var totalGuilds = 0;
