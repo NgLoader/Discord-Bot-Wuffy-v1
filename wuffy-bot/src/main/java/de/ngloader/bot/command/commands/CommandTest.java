@@ -5,9 +5,6 @@ import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.util.WebhookMessageBuilder;
-import de.ngloader.core.util.WebhookUtil;
-import net.dv8tion.jda.core.EmbedBuilder;
 
 @Command(aliases = { "test" })
 @CommandConfig(category = CommandCategory.OTHER)

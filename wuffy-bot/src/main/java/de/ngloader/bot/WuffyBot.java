@@ -20,11 +20,14 @@ import de.ngloader.core.database.locale.LocaleStorage;
 import de.ngloader.core.database.mongo.MongoStorage;
 import de.ngloader.core.database.poeditor.POEditorStorage;
 import de.ngloader.core.database.sql.SQLStorage;
+import de.ngloader.core.youtube.YoutubeAPI;
 import net.dv8tion.jda.core.AccountType;
 
 public class WuffyBot extends Core {
 
 	private CommandManager<WuffyBot> commandManager;
+
+	private YoutubeAPI youtube;
 
 	public WuffyBot(BotConfig config) {
 		super(config, AccountType.BOT, JDAAdapter.class);
@@ -53,6 +56,8 @@ public class WuffyBot extends Core {
 			sqlStorage.registerProvider(IExtensionLang.class, new SQLExtensionLang());
 		}
 
+		this.youtube = new YoutubeAPI(this.getConfig(BotConfig.class).youtubeToken);
+
 		this.commandManager = new de.ngloader.bot.command.CommandManager(this);
 	}
 
@@ -66,6 +71,10 @@ public class WuffyBot extends Core {
 
 	public CommandManager<WuffyBot> getCommandManager() {
 		return this.commandManager;
+	}
+
+	public YoutubeAPI getYoutube() {
+		return this.youtube;
 	}
 
 	public BotConfig getConfig() {

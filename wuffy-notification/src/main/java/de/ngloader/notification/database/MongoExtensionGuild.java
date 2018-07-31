@@ -23,7 +23,7 @@ public class MongoExtensionGuild {
 	private final SingleResultCallback<BulkWriteResult> printBatchResult = new SingleResultCallback<BulkWriteResult>() {
 
 		public void onResult(BulkWriteResult result, Throwable throwable) {
-			Logger.info("Database MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
+			Logger.debug("Database MongoDB", String.format("Inserted: %s, Deleted: %s, Modified: %s, Matched: %s",
 					Integer.toString(result.getInsertedCount()),
 					Integer.toString(result.getDeletedCount()),
 					result.isModifiedCountAvailable() ? Integer.toString(result.getModifiedCount()) : "Not Avaivible",

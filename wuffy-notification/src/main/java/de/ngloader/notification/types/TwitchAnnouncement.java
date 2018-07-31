@@ -1,4 +1,4 @@
-package de.ngloader.notification.twitch;
+package de.ngloader.notification.types;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +23,13 @@ import de.ngloader.notification.Wuffy;
 
 public class TwitchAnnouncement extends TickingTask {
 
-	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\":\"Twitch\",\"avatar_url\":\"https://wuffy.eu/pictures/example_avatar_300x300.png\",\"content\":\"@here **%n** ist jetzt live auf Twitch\",\"embeds\":[{\"title\":\"%t\",\"url\":\"%urll\",\"color\":6570405,\"timestamp\":\"%sa\",\"thumbnail\":{\"url\":\"%urlg300x300\"},\"image\":{\"url\":\"%urlt580x900\"},\"author\":{\"name\":\"%n\",\"url\":\"%urll\",\"icon_url\":\"%urlpi\"},\"footer\":{\"icon_url\":\"%urlpi\",\"text\":\"%n\"},\"fields\":[{\"name\":\"Game\",\"value\":\"%g\",\"inline\":true},{\"name\":\"Viewers\",\"value\":\"1\",\"inline\":true}]}]}";
+	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\":\"Twitch\",\"avatar_url\":\"https://wuffy.eu/pictures/example_avatar_300x300.png\",\"content\":\"@here **%n** ist jetzt live auf Twitch\",\"embeds\":[{\"title\":\"%t\",\"url\":\"%urll\",\"color\":6570405,\"timestamp\":\"%sa\",\"thumbnail\":{\"url\":\"%urlg300x300\"},\"image\":{\"url\":\"%urlt580x900\"},\"author\":{\"name\":\"%n\",\"url\":\"%urll\",\"icon_url\":\"%urlpi\"},\"footer\":{\"icon_url\":\"%urlpi\",\"text\":\"%n\"},\"fields\":[{\"name\":\"Game\",\"value\":\"%g\",\"inline\":true},{\"name\":\"Viewers\",\"value\":\"%vc\",\"inline\":true}]}]}";
 
 	private Map<String, List<Message>> queueNames = new HashMap<String, List<Message>>();
 
 	private final TwitchAPI twitchAPI;
+
+	private int ticks;
 
 	public TwitchAnnouncement(TwitchAPI twitchAPI) {
 		this.twitchAPI = twitchAPI;
@@ -36,6 +38,12 @@ public class TwitchAnnouncement extends TickingTask {
 	@Override
 	protected void update() {
 		try {
+			ticks++;
+			if(ticks > 6)
+				ticks = 0;
+			else
+				return;
+
 			List<String> fetchNames = new ArrayList<String>();
 
 			for(String name : this.queueNames.keySet())
@@ -53,9 +61,9 @@ public class TwitchAnnouncement extends TickingTask {
 				return;
 			}
 
-			Map<String, TwitchResponseUser> users = this.twitchAPI.getUserHandler().getUserByName(fetchNames).data.stream().collect(Collectors.toMap(key -> key.id, value -> value));
+			Map<String, TwitchResponseUser> users = this.twitchAPI.getUserHandler().getByName(fetchNames).data.stream().collect(Collectors.toMap(key -> key.id, value -> value));
 
-			TwitchResponse<TwitchResponseStream> streams = this.twitchAPI.getStreamHandler().getStreamByUserId(users.keySet().stream().collect(Collectors.toList()));
+			TwitchResponse<TwitchResponseStream> streams = this.twitchAPI.getStreamHandler().getById(users.keySet().stream().collect(Collectors.toList()));
 
 			Map<String, TwitchResponseGame> games = this.twitchAPI.getGameHandler().getById(streams.data.stream()
 					.filter(data -> data != null && data.game_id != null && data.type != null && data.type.equals("live"))

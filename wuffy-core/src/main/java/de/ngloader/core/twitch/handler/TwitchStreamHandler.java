@@ -13,11 +13,11 @@ public class TwitchStreamHandler extends TwitchHandler {
 		super(twitchAPI, httpClient, clientId);
 	}
 
-	public TwitchResponse<TwitchResponseStream> getStreamByUserId(String userId) {
+	public TwitchResponse<TwitchResponseStream> getById(String userId) {
 		return this.request(TwitchResponseStream.class, String.format("%sstreams?user_id=%s", TwitchAPI.TWITCH_REQUEST_URL, userId));
 	}
 
-	public TwitchResponse<TwitchResponseStream> getStreamByUserId(List<String> userIds) {
+	public TwitchResponse<TwitchResponseStream> getById(List<String> userIds) {
 		return this.request(TwitchResponseStream.class, String.format("%sstreams?user_id=%s", TwitchAPI.TWITCH_REQUEST_URL, String.join("&user_id=", userIds)));
 	}
 }

@@ -35,7 +35,7 @@ public class TwitchHandler {
 		return null;
 	}
 
-	public TwitchAPI getTwitchAPI() {
-		return twitchAPI;
+	public TwitchAPI getAPI() {
+		return this.twitchAPI;
 	}
 }

@@ -12,8 +12,10 @@ import de.ngloader.core.config.ConfigService;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.logger.LoggerManager;
 import de.ngloader.core.twitch.TwitchAPI;
+import de.ngloader.core.youtube.YoutubeAPI;
 import de.ngloader.notification.database.MongoExtensionGuild;
-import de.ngloader.notification.twitch.TwitchAnnouncement;
+import de.ngloader.notification.types.TwitchAnnouncement;
+import de.ngloader.notification.types.YoutubeAnnouncement;
 
 public class Wuffy extends TickingTask {
 
@@ -58,6 +60,7 @@ public class Wuffy extends TickingTask {
 	private final MongoCollection<Document> guildCollection;
 
 	private TwitchAnnouncement twitchAnnouncement;
+	private YoutubeAnnouncement youtubeAnnouncement;
 
 	private final Block<Document> block = new Block<Document>() {
 
@@ -70,22 +73,28 @@ public class Wuffy extends TickingTask {
 				if(!tList.isEmpty())
 					Wuffy.this.twitchAnnouncement.add(document.getString("_guildId"), tList);
 
-				//Youtube
-//				List<Document> ytList = document.get("YOUTUBE", Wuffy.this.EMPTY_LIST);
-				//TODO implement youtube
+//				Youtube
+				List<Document> ytList = notification.get("YOUTUBE", Wuffy.this.EMPTY_LIST);
+				if(!ytList.isEmpty())
+					Wuffy.this.youtubeAnnouncement.add(document.getString("_guildId"), ytList);
 			}
 		}
 	};
 
 	public Wuffy() {
+		Logger.info("Bootstrap", "Starting wuffy notification.");
+
 		this.config = ConfigService.getConfig(AnnouncementConfig.class);
 
 		this.twitchAnnouncement = new TwitchAnnouncement(new TwitchAPI(this.config.twitch.token));
+		this.youtubeAnnouncement = new YoutubeAnnouncement(new YoutubeAPI(this.config.youtube.token));
 
 		this.extensionGuild = new MongoExtensionGuild(config.database.mongo);
 		this.extensionGuild.connect();
 
 		this.guildCollection = this.extensionGuild.getCollection("guild");
+
+		Logger.info("Bootstrap", "Wuffy notification successful started.");
 
 		new Thread(() -> {
 			while(true) {
@@ -94,7 +103,10 @@ public class Wuffy extends TickingTask {
 
 					this.guildCollection.find().forEach(this.block);
 
-					this.twitchAnnouncement.run();
+					if(this.config.twitch.enabled)
+						this.twitchAnnouncement.run();
+					if(this.config.youtube.enabled)
+						this.youtubeAnnouncement.run();
 				} catch(Exception e) {
 					e.printStackTrace();
 				}

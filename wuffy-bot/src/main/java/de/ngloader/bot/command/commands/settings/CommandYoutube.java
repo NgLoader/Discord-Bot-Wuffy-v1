@@ -7,11 +7,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
 
+import de.ngloader.bot.WuffyBot;
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
@@ -28,25 +30,26 @@ import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
 import de.ngloader.core.util.GsonUtil;
 import de.ngloader.core.util.WebhookUtil;
+import de.ngloader.core.youtube.YoutubePart;
 import net.dv8tion.jda.core.entities.Webhook;
 
-@Command(aliases = { "twitch", "tw", "twitchtv" })
+@Command(aliases = { "youtube", "yt", "yout", "ytube" })
 @CommandConfig(category = CommandCategory.SETTINGS)
-public class CommandTwitch extends BotCommand {
+public class CommandYoutube extends BotCommand {
 
 	private static final Document DEFAULT_EMBED_DOCUMENT = new Document("title", "DEFAULT");
     public final static Pattern URL_PATTERN = Pattern.compile("\\s*(https?|attachment)://.+\\..{2,}\\s*", Pattern.CASE_INSENSITIVE);
 
 	/*
-	 * ~twitch list
-	 * ~twitch add <Name>
-	 * ~twitch remove <Name>
-	 * ~twitch message <Name> print
-	 * ~twitch message <Name> reset
-	 * ~twitch message <Name> replacements
-	 * ~twitch message <Name> copy <FromName>
-	 * ~twitch message <Name> set <message, username, avatar_url, embed> ...
-	 * ~twitch message <Name> remove <message, username, avatar_url, embed> ...
+	 * ~youtube list
+	 * ~youtube add <Name>
+	 * ~youtube remove <Name>
+	 * ~youtube message <Name> print
+	 * ~youtube message <Name> reset
+	 * ~youtube message <Name> replacements
+	 * ~youtube message <Name> copy <FromName>
+	 * ~youtube message <Name> set <message, username, avatar_url, embed> ...
+	 * ~youtube message <Name> remove <message, username, avatar_url, embed> ...
 	 */
 
 	@Override
@@ -56,14 +59,16 @@ public class CommandTwitch extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = member.getLocale();
 
-		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_NOTIFICATION_TWITCH)) {
+		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_NOTIFICATION_YOUTUBE)) {
 			if(args.length > 0) {
 				switch(args[0].toLowerCase()) {
 				case "l":
 				case "list":
 					new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_LIST, locale,
-							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
-							"%l", "\n**-**    ``" + guild.getNotifications(NotificationType.TWITCH).stream().map(notification -> notification.name).collect(Collectors.joining("``\n**-**    ``")) + "``\n"))
+							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
+							"%l", "\n**-**    ``" + guild.getNotifications(NotificationType.YOUTUBE).stream()
+								.map(notification -> String.format("%s (`%s`)", notification.name, notification.channelId))
+								.collect(Collectors.joining("``\n**-**    ``")) + "``\n"))
 					.queue();
 					break;
 
@@ -72,42 +77,65 @@ public class CommandTwitch extends BotCommand {
 					if(args.length > 1) {
 						String name = args[1];
 
-						if(name.matches("^(#)?[a-zA-Z0-9]{4,25}$")) {
-							if(guild.getNotifications(NotificationType.TWITCH).size() < 10) {
-								if(guild.getNotification(NotificationType.TWITCH, name.toLowerCase()) == null) {
-									List<Webhook> webhooks = event.getTextChannel().getWebhooks().complete();
-									Webhook webhook = null;
+						if(name.matches("[a-z,A-Z,0-9,\\-,_,',.]{6,20}")) {
+							if(guild.getNotifications(NotificationType.YOUTUBE).size() < 10) {
+								if(guild.getNotification(NotificationType.YOUTUBE, name.toLowerCase()) == null) {
+									String channelId = null;
 
-									for(Webhook wh : webhooks)
-										if(wh.getName().equals("Wuffy Webhook")) {
-											webhook = wh;
-											break;
-										}
+									if(args.length > 2) {
+										Matcher matcher = Pattern.compile("UC[a-zA-Z0-9-_]{22}").matcher(args[2]);
 
-									if(webhook == null)
-										webhook = event.getTextChannel().createWebhook("Wuffy Webhook").complete();
+										if(matcher.find())
+											channelId = matcher.group();
+									}
 
-									guild.addNotification(NotificationType.TWITCH, new NotificationInfo(name.toLowerCase(), webhook.getUrl(),
-											i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_TWITCH, locale)));
+									List<String> found = channelId != null ? null : event.getCore(WuffyBot.class).getYoutube().getChannelHandler().getByUsername(name, YoutubePart.ID).getItems().stream()
+											.map(item -> item.getId())
+											.collect(Collectors.toList());
 
-									new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ADDED, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
-									.queue();
+									if(channelId != null || (found != null && !found.isEmpty())) {
+										List<Webhook> webhooks = event.getTextChannel().getWebhooks().complete();
+										Webhook webhook = null;
+
+										for(Webhook wh : webhooks)
+											if(wh.getName().equals("Wuffy Webhook")) {
+												webhook = wh;
+												break;
+											}
+
+										if(webhook == null)
+											webhook = event.getTextChannel().createWebhook("Wuffy Webhook").complete();
+
+										guild.addNotification(NotificationType.YOUTUBE, new NotificationInfo(name.toLowerCase(), webhook.getUrl(),
+												i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_YOUTUBE, locale), channelId != null ? channelId : found.get(0)));
+
+										new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ADDED, locale,
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
+												"%n", name))
+										.queue();
+									} else
+										new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_CHANNEL_NOT_FOUND, locale,
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
+												"%n", name))
+										.queue();
 								} else
 									new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ALREADY_EXIST, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
+											"%n", name))
 									.queue();
 							} else
 								new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MAX_COUNT, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
+										"%n", name))
 								.queue();
 						} else
 							new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_ADDED_SYNTAX, locale,
-									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
+									"%n", name))
 							.queue();
 					} else
-						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 						.queue();
 					break;
 
@@ -117,20 +145,20 @@ public class CommandTwitch extends BotCommand {
 					if(args.length > 1) {
 						String name = args[1];
 
-						if(guild.getNotification(NotificationType.TWITCH, name.toLowerCase()) != null) {
-							guild.removeNotification(NotificationType.TWITCH, name);
+						if(guild.getNotification(NotificationType.YOUTUBE, name.toLowerCase()) != null) {
+							guild.removeNotification(NotificationType.YOUTUBE, name);
 
 							new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_REMOVED, locale,
-									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 									"%n", name))
 							.queue();
 						} else
 							new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
-									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 							.queue();
 					} else
-						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 						.queue();
 					break;
 
@@ -138,12 +166,12 @@ public class CommandTwitch extends BotCommand {
 				case "msg":
 				case "message":
 					if(args.length > 2) {
-						NotificationInfo notificationInfo = guild.getNotification(NotificationType.TWITCH, args[1]);
+						NotificationInfo notificationInfo = guild.getNotification(NotificationType.YOUTUBE, args[1]);
 
 						if(notificationInfo != null) {
 							Document document = Document.parse(notificationInfo.message != null && !notificationInfo.message.isEmpty() ?
 									notificationInfo.message :
-									i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_TWITCH, locale));
+									i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_YOUTUBE, locale));
 
 							switch(args[2].toLowerCase()) {
 							case "print":
@@ -165,18 +193,17 @@ public class CommandTwitch extends BotCommand {
 									}
 
 									String response = WebhookUtil.send(webhook.getUrl(), document.toJson()
-											.replace("%vc", Integer.toString(0))
-											.replace("%n", notificationInfo.name)
-											.replace("%urll", String.format("https://twitch.tv/%s", notificationInfo.name))
-											.replace("%t", "Title")
-											.replace("%urlt300x300", "https://wuffy.eu/pictures/example_thumbnail_300x300.png")
-											.replace("%urlt580x900", "https://wuffy.eu/pictures/example_thumbnail_320x180.png")
-											.replace("%urlpi", "https://wuffy.eu/pictures/example_profile_image_320x900.png")
-											.replace("%urloi", "https://wuffy.eu/pictures/example_offline_image_320x900.png")
-											.replace("%sa", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(System.currentTimeMillis() - 7200000))) // - 2h
-											.replace("%g", "IRL")
-											.replace("%urlg300x300", "https://wuffy.eu/pictures/example_box_art_url_300x300.png")
-											.replace("%urlg580x900", "https://wuffy.eu/pictures/example_box_art_url_320x180.png"));
+											.replace("%ct", notificationInfo.name)
+											.replace("%ti", "Title")
+											.replace("%pa", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(System.currentTimeMillis() - 7200000)))
+											.replace("%d", "Description")
+											.replace("%u", String.format("https://www.youtube.com/watch?v=%s", notificationInfo.channelId))
+											.replace("%td300x300", "https://wuffy.eu/pictures/example_box_art_url_300x300.png")
+											.replace("%tm300x300", "https://wuffy.eu/pictures/example_box_art_url_300x300.png")
+											.replace("%th300x300", "https://wuffy.eu/pictures/example_box_art_url_300x300.png")
+											.replace("%td580x900", "https://wuffy.eu/pictures/example_box_art_url_320x180.png")
+											.replace("%tm580x900", "https://wuffy.eu/pictures/example_box_art_url_320x180.png")
+											.replace("%th580x900", "https://wuffy.eu/pictures/example_box_art_url_320x180.png"));
 
 									if(!response.isEmpty())
 										new ReplayBuilder(event, MessageType.ERROR, "Response: " + response);
@@ -187,9 +214,9 @@ public class CommandTwitch extends BotCommand {
 								break;
 
 							case "reset":
-								guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_TWITCH, locale));
+								guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_YOUTUBE, locale));
 								new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_RESET, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 								.queue();
 								break;
 
@@ -197,28 +224,28 @@ public class CommandTwitch extends BotCommand {
 							case "replace":
 							case "replacement":
 							case "replacements":
-								new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_REPLACEMENTS_TWITCH, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+								new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_REPLACEMENTS_YOUTUBE, locale,
+										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 								.queue();
 								break;
 
 							case "c":
 							case "copy":
 								if(args.length > 3) {
-									NotificationInfo notificationInfoFrom = guild.getNotification(NotificationType.TWITCH, args[3]);
+									NotificationInfo notificationInfoFrom = guild.getNotification(NotificationType.YOUTUBE, args[3]);
 									if(notificationInfoFrom != null) {
 										new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_COPY, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 												"%f", notificationInfoFrom.name, //FROM
 												"%t", notificationInfo.name)) //TO
 										.queue();
 									} else
 										new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 										.queue();
 								} else
-									new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+									new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 									.queue();
 								break;
 
@@ -234,15 +261,15 @@ public class CommandTwitch extends BotCommand {
 									case "username":
 										if(value.matches("^[a-zA-Z0-9][\\w]{3,24}$")) {
 											document.put("username", value);
-											guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+											guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.toJson());
 
 											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_USERNAME, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 													"%n", value))
 											.queue();
 										} else
 											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_URL, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 											.queue();
 										break;
 
@@ -250,15 +277,15 @@ public class CommandTwitch extends BotCommand {
 									case "avatar":
 										if(value.length() < 100) {
 											document.put("avatar_url", value);
-											guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+											guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.toJson());
 
 											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_AVATAR, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 													"%u", value))
 											.queue();
 										} else
 											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 											.queue();
 										break;
 
@@ -267,18 +294,18 @@ public class CommandTwitch extends BotCommand {
 										if(args.length > 4) {
 											if(String.join(" ", Arrays.copyOfRange(args, 4, args.length)).length() < 100) {
 												document.put("content", String.join(" ", Arrays.copyOfRange(args, 4, args.length)));
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_CONTENT, locale,
 														"%c", String.join(" ", Arrays.copyOfRange(args, 4, args.length))))
 												.queue();
 											} else
 												new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 										} else
 											new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_CONTENT_NO_ARGS, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 											.queue();
 										break;
 
@@ -286,21 +313,21 @@ public class CommandTwitch extends BotCommand {
 									case "embed":
 										if(args.length > 4) {
 											value = args[5];
-											Document embed = document.get("embeds", Arrays.asList(CommandTwitch.DEFAULT_EMBED_DOCUMENT)).get(0);
+											Document embed = document.get("embeds", Arrays.asList(CommandYoutube.DEFAULT_EMBED_DOCUMENT)).get(0);
 
 											switch (args[4].toLowerCase()) {
 											case "title":
 												if(String.join(" ", Arrays.copyOfRange(args, 5, args.length)).length() < 100) {
 													embed.put("title", String.join(" ", Arrays.copyOfRange(args, 5, args.length)));
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%t", String.join(" ", Arrays.copyOfRange(args, 5, args.length))))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -308,29 +335,29 @@ public class CommandTwitch extends BotCommand {
 											case "description":
 												if(String.join(" ", Arrays.copyOfRange(args, 5, args.length)).length() < 100) {
 													embed.put("description", String.join(" ", Arrays.copyOfRange(args, 5, args.length)));
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_DESCRIPTION, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%d", String.join(" ", Arrays.copyOfRange(args, 5, args.length))))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
 											case "url":
 												if(value.length() < 100) {
 													embed.put("url", value);
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_URL, locale,
 															"%u", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -363,10 +390,10 @@ public class CommandTwitch extends BotCommand {
 													try {
 														if(color != null && Color.decode(color) != null) {
 															embed.put("color", Integer.parseInt(this.convertColorToHex(Color.decode(color)).substring(1), 16));
-															guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+															guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 															new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_COLOR, locale,
-																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 																	"%c", color))
 															.queue();
 															break;
@@ -374,11 +401,11 @@ public class CommandTwitch extends BotCommand {
 													} catch(NumberFormatException ex) {
 													}
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_COLOR_NOT_FOUND, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -389,15 +416,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("footer", new Document("icon_url", value));
 													else
 														embed.get("footer", new Document()).put("icon_url", value);
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%u", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -407,15 +434,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("footer", new Document("text", String.join(" ", Arrays.copyOfRange(args, 5, args.length))));
 													else
 														embed.get("footer", new Document()).put("text", String.join(" ", Arrays.copyOfRange(args, 5, args.length)));
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%t", String.join(" ", Arrays.copyOfRange(args, 5, args.length))))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -425,15 +452,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("thumbnail", new Document("url", value));
 													else
 														embed.get("thumbnail", new Document()).put("url", value);
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%u", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -443,15 +470,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("image", new Document("url", value));
 													else
 														embed.get("image", new Document()).put("url", value);
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%u", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -461,15 +488,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("author", new Document("name", String.join(" ", Arrays.copyOfRange(args, 5, args.length))));
 													else
 														embed.get("author", new Document()).put("name", String.join(" ", Arrays.copyOfRange(args, 5, args.length)));
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%n", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -479,15 +506,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("author", new Document("url", value));
 													else
 														embed.get("author", new Document()).put("url", value);
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%u", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -497,15 +524,15 @@ public class CommandTwitch extends BotCommand {
 														embed.put("author", new Document("icon_url", value));
 													else
 														embed.get("author", new Document()).put("icon_url", value);
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 															"%u", value))
 													.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
@@ -521,16 +548,16 @@ public class CommandTwitch extends BotCommand {
 																		.append("value", args[7])
 																		.append("inline", Boolean.valueOf(args[8])));
 																embed.put("fields", fields);
-																guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+																guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 																new ReplayBuilder(event, MessageType.SUCCESS,
 																		i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_TITLE, locale,
-																				"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+																				"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 																				"%n", args[6]))
 																.queue();
 															} else
 																new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_FIELD_MAX_COUNT, locale,
-																		"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+																		"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 																.queue();
 														} else if(value.equalsIgnoreCase("set")) {
 															if(args.length > 8) {
@@ -543,10 +570,10 @@ public class CommandTwitch extends BotCommand {
 																				.append("value", args[8])
 																				.append("inline", Boolean.valueOf(args[9])));
 																		embed.put("fields", fields);
-																		guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+																		guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 																		new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_SET_EMBED_FIELD_SET, locale,
-																				"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+																				"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 																				"%n", field.getString("name")))
 																		.queue();
 
@@ -556,47 +583,47 @@ public class CommandTwitch extends BotCommand {
 																}
 																if(!found)
 																	new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_EMBED_FIELD_NOT_EXIST, locale,
-																			"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+																			"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 																			"%f", args[6])).queue();
 															} else
-																new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-																		"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+																new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+																		"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 																.queue();
 														} else
-															new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 															.queue();
 													} else
-														new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-																"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+																"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 														.queue();
 												} else
 													new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												break;
 
 											default:
-												new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+												new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 											}
 										} else
-											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+											new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 											.queue();
 										break;
 
 									default:
-										new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+										new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 										.queue();
 										break;
 									}
 								} else
-									new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+									new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 									.queue();
 								break;
 
@@ -608,136 +635,136 @@ public class CommandTwitch extends BotCommand {
 								switch(args[3].toLowerCase()) {
 								case "avatar":
 									document.remove("avatar_url");
-									guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+									guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.toJson());
 
 									new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_TITLE, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 									.queue();
 									break;
 
 								case "content":
 									if(document.containsKey("embeds")) {
 										document.remove("content");
-										guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+										guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.toJson());
 
 										new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_TITLE, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 										.queue();
 									} else
 										new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_REMOVE_CONTENT_OR_EMBED, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 										.queue();
 									break;
 
 								case "embed":
-									Document embed = document.get("embeds", Arrays.asList(CommandTwitch.DEFAULT_EMBED_DOCUMENT)).get(0);
+									Document embed = document.get("embeds", Arrays.asList(CommandYoutube.DEFAULT_EMBED_DOCUMENT)).get(0);
 									if(document.containsKey("content")) {
 										if(args.length < 5) {
 											document.remove("embeds");
-											guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.toJson());
+											guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.toJson());
 
 											new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_TITLE, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 											.queue();
 										} else
 											switch(args[4].toLowerCase()) {
 											case "title":
 												embed.remove("title");
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_TITLE, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "description":
 												embed.remove("description");
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_DESCRIPTION, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "url":
 												embed.remove("url");
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_URL, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "color":
 												embed.remove("color");
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_COLOR, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "footertext":
 												embed.put("footer", embed.get("footer", new Document()).remove("text"));
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_FOOTER_TEXT, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "ficonurl":
 											case "footericonurl":
 												embed.put("footer", embed.get("footer", new Document()).remove("icon_url"));
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_FOOTER_ICON_URL, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "footer":
 												embed.remove("footer");
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_FOOTER, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "author":
 												embed.remove("author");
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_AUTHOR, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "authorname":
 												embed.put("author", embed.get("author", new Document()).remove("name"));
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_AUTHOR_NAME, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "authorurl":
 												embed.put("author", embed.get("author", new Document()).remove("url"));
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_AUTHOR_URL, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
 											case "authoriconurl":
 												embed.put("author", embed.get("author", new Document()).remove("icon_url"));
-												guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+												guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 												new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_AUTHOR_ICON_URL, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 
@@ -745,10 +772,10 @@ public class CommandTwitch extends BotCommand {
 											case "fields":
 												if(args.length < 6) {
 													embed.remove("fields");
-													guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+													guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 													new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_FIELD_REMOVE_ALL, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 													.queue();
 												} else {
 													boolean found = false;
@@ -758,10 +785,10 @@ public class CommandTwitch extends BotCommand {
 															List<Document> fields = embed.get("fields", new ArrayList<Document>());
 															fields.remove(field);
 															embed.put("fields", fields);
-															guild.setNotificationMessage(NotificationType.TWITCH, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
+															guild.setNotificationMessage(NotificationType.YOUTUBE, notificationInfo.name, document.append("embeds", Arrays.asList(embed)).toJson());
 
 															new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_UNSET_EMBED_FIELD_REMOVE, locale,
-																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 																	"%n", field.getString("name")))
 															.queue();
 
@@ -772,61 +799,61 @@ public class CommandTwitch extends BotCommand {
 
 													if(!found)
 														new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_EMBED_FIELD_NOT_EXIST, locale,
-																"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
+																"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale),
 																"%f", args[5])).queue();
 												}
 												break;
 
 											default:
-												new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+												new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 												.queue();
 												break;
 											}
 									} else
 										new ReplayBuilder(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_REMOVE_CONTENT_OR_EMBED, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 										.queue();
 									
 									break;
 
 								default:
-									new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+									new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 									.queue();
 									break;
 								}
 								break;
 
 							default:
-								new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+								new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 								.queue();
 								break;
 							}
 						} else
 							new ReplayBuilder(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
-									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 							.queue();
 					} else
-						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+						new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 						.queue();
 					break;
 
 				default:
-					new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+					new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 					.queue();
 					break;
 				}
 			} else
-				new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-						"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+				new ReplayBuilder(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE, locale,
+						"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 				.queue();
 		} else
-			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_NOTIFICATION_TWITCH.key,
-					"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)))
+			new ReplayBuilder(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_NOTIFICATION_YOUTUBE.key,
+					"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_YOUTUBE, locale)))
 			.queue();
 	}
 

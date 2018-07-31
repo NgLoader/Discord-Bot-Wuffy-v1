@@ -21,5 +21,7 @@ public class AnnouncementConfig implements IConfig {
 
 	class YoutubeConfig {
 		public Boolean enabled;
+
+		public String token;
 	}
 }

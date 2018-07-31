@@ -24,9 +24,9 @@ import de.ngloader.core.util.StringUtil;
 @CommandConfig(category = CommandCategory.SETTINGS)
 public class CommandMessage extends BotCommand {
 
-	private static final String HEX_PATTERN = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+	public static final String HEX_PATTERN = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
 
-	private static final Map<String, Color> COLORS = new HashMap<String, Color>();
+	public static final Map<String, Color> COLORS = new HashMap<String, Color>();
 
 	static {
 		CommandMessage.COLORS.put("white", Color.WHITE);
@@ -53,7 +53,7 @@ public class CommandMessage extends BotCommand {
 
 		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_MESSAGE)) {
 			if(args.length > 0) {
-				switch (args[0]) {
+				switch (args[0].toLowerCase()) {
 				case "info":
 					new ReplayBuilder(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_MESSAGE_INFO, locale,
 							"%e", i18n.format(String.format("message_%s", Boolean.toString(guild.isMessageDeleteExecuter()), locale), locale),
@@ -114,7 +114,7 @@ public class CommandMessage extends BotCommand {
 				case "c":
 				case "color":
 					if(args.length > 1) {
-						switch(args[1]) {
+						switch(args[1].toLowerCase()) {
 						case "list":
 							new ReplayBuilder(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_LIST, locale,
 									"%l", String.format("    - **%s**", CommandMessage.COLORS.entrySet().stream(
@@ -213,7 +213,7 @@ public class CommandMessage extends BotCommand {
 									break;
 								}
 
-						switch(args[1]) {
+						switch(args[1].toLowerCase()) {
 
 						case "r":
 						case "rem":

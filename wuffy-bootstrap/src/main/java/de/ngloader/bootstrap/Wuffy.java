@@ -31,21 +31,6 @@ public class Wuffy extends TickingTask {
 
 		Logger.info("Bootstrap", "Starting wuffy.");
 
-//		TwitchAPI api = new TwitchAPI("KEY");
-
-//		TwitchResponseUser user = api.request(TwitchResponseUser.class, new TwitchResponseUser(), EnumTwitchResponse.LOGIN, "h0llylp").data.get(0);
-//		TwitchResponseStream stream = api.request(TwitchResponseStream.class, new TwitchResponseStream(), EnumTwitchResponse.USER_ID, user.id);
-//		TwitchResponseGame game = api.request(TwitchResponseGame.class, new TwitchResponseGame(), EnumTwitchResponse.ID, stream.game_id);
-
-//		TwitchResponseUser user = api.getUserHandler().getUserByName("ungespielt&login=ngloader&login=h0llylp").data.get(0);
-//		TwitchResponseStream stream = api.getStreamHandler().getStreamByUserId(user.id).data.get(0);
-
-//		System.out.println("Game: " + stream.game_id);
-//		System.out.println("Game: " + stream.viewer_count);
-//		System.out.println("Game: " + api.getUserHandler().getUserByName("ungespielt&login=ngloader&login=h0llylp&login=Bonjwa").data.get(3).id);
-
-//		System.out.println("-> " + );
-
 		var threads = 32;
 
 		for(int i = 0; i < args.length; i++) {

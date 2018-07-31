@@ -1,7 +1,6 @@
 {
 	"database": {
 		"mongo": {
-			"enabled": false,
 			"address": "localhost",
 			"port": 27017,
 			"username": "username",
@@ -19,10 +18,9 @@
 		}
 	},
 	"twitch": {
-		"enabled": false,
 		"token": ""
 	},
 	"youtube": {
-		"enabled": false
+		"token": ""
 	}
 }

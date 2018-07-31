@@ -28,7 +28,7 @@ public class CommandLanguage extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 
 		if(args.length > 0) {
-			switch(args[0]) {
+			switch(args[0].toLowerCase()) {
 			case "self":
 			case "member":
 			case "u":

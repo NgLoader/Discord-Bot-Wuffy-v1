@@ -11,5 +11,7 @@ public class BotConfig extends CoreConfig {
 	public String twitchId;
 	public String twithchAppSecret;
 
+	public String youtubeToken;
+
 	public ShardConfig sharding;
 }

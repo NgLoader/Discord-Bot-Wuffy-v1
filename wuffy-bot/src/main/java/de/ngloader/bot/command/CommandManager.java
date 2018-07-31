@@ -21,9 +21,11 @@ import de.ngloader.bot.command.commands.moderator.CommandVCKick;
 import de.ngloader.bot.command.commands.settings.CommandLanguage;
 import de.ngloader.bot.command.commands.settings.CommandMention;
 import de.ngloader.bot.command.commands.settings.CommandMessage;
+import de.ngloader.bot.command.commands.settings.CommandNotification;
 import de.ngloader.bot.command.commands.settings.CommandPermission;
 import de.ngloader.bot.command.commands.settings.CommandPrefix;
 import de.ngloader.bot.command.commands.settings.CommandTwitch;
+import de.ngloader.bot.command.commands.settings.CommandYoutube;
 import de.ngloader.bot.command.commands.utility.CommandUserInfo;
 import de.ngloader.core.command.CommandRegistry;
 
@@ -62,6 +64,8 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandMessage());
 		this.registry.addCommand(new CommandMention());
 		this.registry.addCommand(new CommandTwitch());
+		this.registry.addCommand(new CommandYoutube());
+		this.registry.addCommand(new CommandNotification());
 
 		//Information
 		this.registry.addCommand(new CommandHelp());

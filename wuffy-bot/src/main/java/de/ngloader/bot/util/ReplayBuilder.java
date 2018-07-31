@@ -13,6 +13,7 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 
 public class ReplayBuilder {
 
+	private static final String EMOTE_ERROR = "<a:error:473423519720538112>";
 	private static final String EMOTE_LOADING = "<a:loading:468438447573696522>";
 	private static final String EMOTE_SUCCESS = "<a:checkmark:459068723408535552>";
 
@@ -86,46 +87,72 @@ public class ReplayBuilder {
 	}
 
 	public ReplayBuilder setupTypeEmotes() {
-		if(type == MessageType.SUCCESS)
+		switch(this.type) {
+		case SUCCESS:
 			this.applyEmoteSuccess();
-		else if(type == MessageType.LOADING)
+			break;
+
+		case LOADING:
 			this.applyEmoteLoading();
+			break;
+
+		case ERROR:
+			this.applyEmoteEorror();
+			break;
+
+		default:
+			break;
+		}
+
 		return this;
 	}
 
 	public ReplayBuilder applyEmoteLoading() {
 		this.embedBuilder.setDescription(EMOTE_LOADING + " " + this.embedBuilder.getDescriptionBuilder().toString());
+
 		return this;
 	}
 
 	public ReplayBuilder applyEmoteSuccess() {
 		this.embedBuilder.setDescription(EMOTE_SUCCESS + " " + this.embedBuilder.getDescriptionBuilder().toString());
+
+		return this;
+	}
+
+	public ReplayBuilder applyEmoteEorror() {
+		this.embedBuilder.setDescription(EMOTE_ERROR + " " + this.embedBuilder.getDescriptionBuilder().toString());
+
 		return this;
 	}
 
 	public ReplayBuilder addDescription(String description) {
 		this.embedBuilder.appendDescription(description);
+
 		return this;
 	}
 
 	public ReplayBuilder setDescription(String description) {
 		this.embedBuilder.setDescription(description);
+
 		return this;
 	}
 
 	public ReplayBuilder addField(String name, String value, Boolean inline) {
 		this.embedBuilder.addField(name, value, inline);
+
 		return this;
 	}
 
 	public ReplayBuilder deleteExecuterMessage() {
 		this.event.getTextChannel().getMessageById(event.getMessageId()).queue(success -> success.delete().queue());
+
 		return this;
 	}
 
 	public ReplayBuilder deleteAfter(TimeUnit timeUnit, Integer delay) {
 		this.deleteTimeUnit = timeUnit;
 		this.deleteDelay = delay;
+
 		return this;
 	}
 
@@ -150,6 +177,7 @@ public class ReplayBuilder {
 			event.getChannel().sendMessage(this.embedBuilder.build()).queue(success -> success.delete().queueAfter(this.deleteDelay, this.deleteTimeUnit));
 		else
 			event.getChannel().sendMessage(this.embedBuilder.build()).queue();
+
 		return this;
 	}
 
@@ -158,6 +186,7 @@ public class ReplayBuilder {
 			channel.sendMessage(this.embedBuilder.build()).queue(success -> success.delete().queueAfter(this.deleteDelay, this.deleteTimeUnit));
 		else
 			channel.sendMessage(this.embedBuilder.build()).queue();
+
 		return this;
 	}
 
@@ -168,6 +197,7 @@ public class ReplayBuilder {
 
 			finish.accept(this);
 		});
+
 		return this;
 	}
 
@@ -178,18 +208,19 @@ public class ReplayBuilder {
 
 			finish.accept(this);
 		});
+
 		return this;
 	}
 
 	public EmbedBuilder getEmbedBuilder() {
-		return embedBuilder;
+		return this.embedBuilder;
 	}
 
 	public WuffyGenericMessageEvent getEvent() {
-		return event;
+		return this.event;
 	}
 
 	public MessageType getType() {
-		return type;
+		return this.type;
 	}
 }

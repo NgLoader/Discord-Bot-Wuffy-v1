@@ -41,7 +41,7 @@ public class CommandUnBan extends BotCommand {
 					}
 				}
 
-				this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale));
+				this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 			} else
 				this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_UNBAN_SYNTAX, locale));
 			//No args

@@ -646,12 +646,14 @@ public class MongoGuild extends WuffyGuild {
 
 	@Override
 	public List<NotificationInfo> getNotifications(NotificationType type) {
-		return this.cache.notification.get(type);
+		if(this.cache.notification.containsKey(type))
+			return this.cache.notification.get(type);
+		return new ArrayList<NotificationInfo>();
 	}
 
 	@Override
 	public NotificationInfo getNotification(NotificationType type, String key) {
-		for(NotificationInfo notificationInfo : this.cache.notification.get(type))
+		for(NotificationInfo notificationInfo : this.getNotifications(type))
 			if(notificationInfo.name.equalsIgnoreCase(key)) {
 				return notificationInfo;
 			}

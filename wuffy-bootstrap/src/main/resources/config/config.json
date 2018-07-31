@@ -81,6 +81,8 @@
       "twitchId": "",
       "twithchAppSecret": "",
 
+      "youtubeToken": "",
+
       "sharding": {
         //Is it true sharding will enabled (!!!use this only when your guild size is over 2500!!!)
         "enabled": true,
