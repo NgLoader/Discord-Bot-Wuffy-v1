@@ -36,7 +36,7 @@ public class CommandRename extends BotCommand {
 						if(args.length > 1) {
 							String name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-							if(name.length() > 0 && name.length() < 30) {
+							if(name.length() > 0 && name.length() < 33) {
 								String oldName = member.getEffectiveName();
 
 								guild.getController().setNickname(target.getRealMember(), name).queue();
