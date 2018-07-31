@@ -158,7 +158,7 @@ public class MongoGuild extends WuffyGuild {
 	@Override
 	public void setGuildLocale(String locale) {
 		this.cache.guildLocale = locale;
-		this.queueBulk(new Document("$set", new Document("$guildLocale", locale)));
+		this.queueBulk(new Document("$set", new Document("guildLocale", locale)));
 	}
 
 	@Override
