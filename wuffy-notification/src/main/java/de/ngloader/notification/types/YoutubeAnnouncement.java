@@ -147,7 +147,7 @@ public class YoutubeAnnouncement extends TickingTask {
 			if(this.queueNames.isEmpty())
 				this.running = false;
 		} catch(Exception e) {
-			Logger.fatal("Announcement twitch", "Failed to execute. waiting 10 seconds!", e);
+			Logger.fatal("Announcement youtube", "Failed to execute. waiting 10 seconds!", e);
 
 			this.running = false;
 
