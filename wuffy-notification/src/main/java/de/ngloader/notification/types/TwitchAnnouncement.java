@@ -11,14 +11,15 @@ import org.bson.Document;
 import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
+import de.ngloader.core.logger.Logger;
 import de.ngloader.core.twitch.TwitchAPI;
 import de.ngloader.core.twitch.response.TwitchResponse;
 import de.ngloader.core.twitch.response.TwitchResponseGame;
 import de.ngloader.core.twitch.response.TwitchResponseStream;
 import de.ngloader.core.twitch.response.TwitchResponseUser;
 import de.ngloader.core.util.GsonUtil;
-import de.ngloader.core.util.WebhookUtil;
 import de.ngloader.notification.TickingTask;
+import de.ngloader.notification.WebhookQueue;
 import de.ngloader.notification.Wuffy;
 
 public class TwitchAnnouncement extends TickingTask {
@@ -52,25 +53,38 @@ public class TwitchAnnouncement extends TickingTask {
 				else
 					fetchNames.add(name);
 
-			List<Message> messages = new ArrayList<Message>();
+			Map<String, List<Message>> messages = new HashMap<String, List<Message>>();
 
-			fetchNames.forEach(name -> messages.addAll(this.queueNames.remove(name)));
+			fetchNames.forEach(name -> messages.put(name, this.queueNames.remove(name)));
 
 			if(fetchNames.isEmpty()) {
 				this.running = false;
 				return;
 			}
 
-			Map<String, TwitchResponseUser> users = this.twitchAPI.getUserHandler().getByName(fetchNames).data.stream().collect(Collectors.toMap(key -> key.id, value -> value));
+			Map<String, TwitchResponseUser> users = null;
+			TwitchResponse<TwitchResponseStream> streams = null;
+			Map<String, TwitchResponseGame> games = null;
 
-			TwitchResponse<TwitchResponseStream> streams = this.twitchAPI.getStreamHandler().getById(users.keySet().stream().collect(Collectors.toList()));
+			try {
+				users = this.twitchAPI.getUserHandler().getByName(fetchNames).data.stream().collect(Collectors.toMap(key -> key.id, value -> value));
 
-			Map<String, TwitchResponseGame> games = this.twitchAPI.getGameHandler().getById(streams.data.stream()
-					.filter(data -> data != null && data.game_id != null && data.type != null && data.type.equals("live"))
-					.map(data -> data.game_id)
-					.distinct()
-					.collect(Collectors.toList())).data.stream()
-						.collect(Collectors.toMap(key -> key.id, value -> value));
+				streams = this.twitchAPI.getStreamHandler().getById(users.keySet().stream().collect(Collectors.toList()));
+
+				games = this.twitchAPI.getGameHandler().getById(streams.data.stream()
+						.filter(data -> data != null && data.game_id != null && data.type != null && data.type.equals("live"))
+						.map(data -> data.game_id)
+						.distinct()
+						.collect(Collectors.toList())).data.stream()
+							.collect(Collectors.toMap(key -> key.id, value -> value));
+			} catch(Exception e) {
+				Logger.fatal("Announcement twitch", "Error by requesting data. waiting 10 seconds and adding all names to the end of the queue again!", e);
+
+				this.queueNames.putAll(messages);
+
+				Thread.sleep(10000); //Waiting 10 seconds while error
+				return;
+			}
 
 			List<WriteModel<Document>> writeModels = new ArrayList<WriteModel<Document>>();
 
@@ -80,7 +94,7 @@ public class TwitchAnnouncement extends TickingTask {
 
 				TwitchResponseUser user = users.get(stream.user_id);
 
-				for(Message message : messages.stream().filter(message -> message.name.equalsIgnoreCase(user.display_name)).collect(Collectors.toList())) {
+				for(Message message : messages.get(user.display_name.toLowerCase())) {
 					if(message.lastUpdate != null && message.lastUpdate.equals(stream.started_at))
 						continue;
 
@@ -90,19 +104,19 @@ public class TwitchAnnouncement extends TickingTask {
 								.append("notification.TWITCH.name", message.name),
 							new Document("$set", new Document("notification.TWITCH.$.lastUpdate", stream.started_at))));
 
-					WebhookUtil.send(message.webhook, (message.message == null || message.message.isEmpty() ? DEFAULT_EMBED_MESSAGE : message.message)
-							.replace("%vc", Integer.toString(stream.viewer_count))
-							.replace("%n", user.display_name)
-							.replace("%urll", String.format("https://www.twitch.tv/%s", user.display_name))
-							.replace("%t", stream.title)
-							.replace("%urlt300x300", stream.thumbnail_url.replace("{width}", "300").replace("{height}", "300"))
-							.replace("%urlt580x900", stream.thumbnail_url.replace("{width}", "320").replace("{height}", "180"))
-							.replace("%urlpi", user.profile_image_url)
-							.replace("%urloi", user.offline_image_url)
-							.replace("%sa", stream.started_at)
-							.replace("%g", games.get(stream.game_id).name)
-							.replace("%urlg300x300", games.get(stream.game_id).box_art_url.replace("{width}", "300").replace("{height}", "300"))
-							.replace("%urlg580x900", games.get(stream.game_id).box_art_url.replace("{width}", "320").replace("{height}", "180")));
+					WebhookQueue.add(message.webhook, (message.message == null || message.message.isEmpty() ? DEFAULT_EMBED_MESSAGE : message.message)
+						.replace("%vc", Integer.toString(stream.viewer_count))
+						.replace("%n", user.display_name)
+						.replace("%urll", String.format("https://www.twitch.tv/%s", user.display_name))
+						.replace("%t", stream.title)
+						.replace("%urlt300x300", stream.thumbnail_url.replace("{width}", "300").replace("{height}", "300"))
+						.replace("%urlt580x900", stream.thumbnail_url.replace("{width}", "320").replace("{height}", "180"))
+						.replace("%urlpi", user.profile_image_url)
+						.replace("%urloi", user.offline_image_url)
+						.replace("%sa", stream.started_at)
+						.replace("%g", games.get(stream.game_id).name)
+						.replace("%urlg300x300", games.get(stream.game_id).box_art_url.replace("{width}", "300").replace("{height}", "300"))
+						.replace("%urlg580x900", games.get(stream.game_id).box_art_url.replace("{width}", "320").replace("{height}", "180")));
 				}
 			}
 
@@ -112,8 +126,15 @@ public class TwitchAnnouncement extends TickingTask {
 			if(this.queueNames.isEmpty())
 				this.running = false;
 		} catch(Exception e) {
-			e.printStackTrace();
+			Logger.fatal("Announcement twitch", "Failed to execute. waiting 10 seconds!", e);
+
 			this.running = false;
+
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
+			}
 		}
 	}
 

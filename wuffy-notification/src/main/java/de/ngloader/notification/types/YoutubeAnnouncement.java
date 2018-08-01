@@ -1,23 +1,26 @@
 package de.ngloader.notification.types;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bson.Document;
 
+import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.SearchResult;
 import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
+import de.ngloader.core.logger.Logger;
 import de.ngloader.core.util.GsonUtil;
-import de.ngloader.core.util.WebhookUtil;
 import de.ngloader.core.youtube.YoutubeAPI;
 import de.ngloader.core.youtube.YoutubeOptionalParameterBuilder;
 import de.ngloader.core.youtube.YoutubeOptionalParameters;
 import de.ngloader.core.youtube.YoutubePart;
 import de.ngloader.notification.TickingTask;
+import de.ngloader.notification.WebhookQueue;
 import de.ngloader.notification.Wuffy;
 
 public class YoutubeAnnouncement extends TickingTask {
@@ -43,12 +46,30 @@ public class YoutubeAnnouncement extends TickingTask {
 			String id = this.queueNames.keySet().toArray()[0].toString();
 			List<Message> messages = this.queueNames.remove(id);
 
-			List<SearchResult> searches = this.youtubeAPI.getSearchHandler().get(new YoutubeOptionalParameterBuilder()
-					.add(YoutubeOptionalParameters.CHANNELID, id)
-					.add(YoutubeOptionalParameters.ORDER, "date")
-					.add(YoutubeOptionalParameters.TYPE, "video")
-					.add(YoutubeOptionalParameters.MAXRESULTS, 5),
-					YoutubePart.SNIPPET).getItems();
+			Channel channel = null;
+			List<SearchResult> searches = null;
+
+			try {
+				channel = this.youtubeAPI.getChannelHandler().getById(id,
+						YoutubePart.ID,
+						YoutubePart.SNIPPET).getItems().get(0);
+
+				searches = this.youtubeAPI.getSearchHandler().get(new YoutubeOptionalParameterBuilder()
+						.add(YoutubeOptionalParameters.CHANNELID, id)
+						.add(YoutubeOptionalParameters.ORDER, "date")
+						.add(YoutubeOptionalParameters.TYPE, "video")
+						.add(YoutubeOptionalParameters.MAXRESULTS, 5),
+						YoutubePart.SNIPPET).getItems();
+			} catch(Exception e) {
+				Logger.fatal("Announcement youtube", "Error by requesting data. waiting 10 seconds and adding id to the end of the queue again!", e);
+
+				this.queueNames.put(id, messages);
+
+				Thread.sleep(10000); //Waiting 10 seconds while error
+			}
+
+			if(searches == null || searches.isEmpty())
+				return;
 
 			List<WriteModel<Document>> writeModels = new ArrayList<WriteModel<Document>>();
 
@@ -56,50 +77,47 @@ public class YoutubeAnnouncement extends TickingTask {
 				String last = null;
 				String lastLive = null;
 
+				List<String> webhookMessages = null;
+
 				for(SearchResult result : searches) {
 					if(result.getSnippet().getLiveBroadcastContent().equals("live")) {
 						if(message.lastUpdateLiveStream != null && message.lastUpdateLiveStream.equals(result.getId().getVideoId()))
 							break;
 
-						lastLive = result.getId().getVideoId();
-
-						WebhookUtil.send(message.webhook, (message.message == null || message.message.isEmpty() ? DEFAULT_EMBED_MESSAGE : message.message)
-								.replace("%ct", result.getSnippet().getChannelTitle())
-								.replace("%ti", result.getSnippet().getTitle())
-								.replace("%pa", result.getSnippet().getPublishedAt().toStringRfc3339())
-								.replace("%d", result.getSnippet().getDescription())
-								.replace("%u", String.format("https://www.youtube.com/watch?v=%s", result.getId().getVideoId()))
-								.replace("%td300x300", result.getSnippet().getThumbnails().getDefault().setWidth(300L).setHeight(300L).getUrl())
-								.replace("%tm300x300", result.getSnippet().getThumbnails().getMedium().setWidth(300L).setHeight(300L).getUrl())
-								.replace("%th300x300", result.getSnippet().getThumbnails().getHigh().setWidth(300L).setHeight(300L).getUrl())
-								.replace("%td580x900", result.getSnippet().getThumbnails().getDefault().setWidth(580L).setHeight(900L).getUrl())
-								.replace("%tm580x900", result.getSnippet().getThumbnails().getMedium().setWidth(580L).setHeight(900L).getUrl())
-								.replace("%th580x900", result.getSnippet().getThumbnails().getHigh().setWidth(580L).setHeight(900L).getUrl()));
-
-						if(message.lastUpdate == null)
-							break;
+						if(lastLive == null)
+							lastLive = result.getId().getVideoId();
 					} else {
 						if(message.lastUpdate != null && message.lastUpdate.equals(result.getId().getVideoId()))
 							break;
 
-						last = result.getId().getVideoId();
-
-						WebhookUtil.send(message.webhook, (message.message == null || message.message.isEmpty() ? DEFAULT_EMBED_MESSAGE : message.message)
-								.replace("%ct", result.getSnippet().getChannelTitle())
-								.replace("%ti", result.getSnippet().getTitle())
-								.replace("%pa", result.getSnippet().getPublishedAt().toStringRfc3339())
-								.replace("%d", result.getSnippet().getDescription())
-								.replace("%u", String.format("https://www.youtube.com/watch?v=%s", result.getId().getVideoId()))
-								.replace("%td300x300", result.getSnippet().getThumbnails().getDefault().setWidth(300L).setHeight(300L).getUrl())
-								.replace("%tm300x300", result.getSnippet().getThumbnails().getMedium().setWidth(300L).setHeight(300L).getUrl())
-								.replace("%th300x300", result.getSnippet().getThumbnails().getHigh().setWidth(300L).setHeight(300L).getUrl())
-								.replace("%td580x900", result.getSnippet().getThumbnails().getDefault().setWidth(580L).setHeight(900L).getUrl())
-								.replace("%tm580x900", result.getSnippet().getThumbnails().getMedium().setWidth(580L).setHeight(900L).getUrl())
-								.replace("%th580x900", result.getSnippet().getThumbnails().getHigh().setWidth(580L).setHeight(900L).getUrl()));
-
-						if(message.lastUpdate == null)
-							break;
+						if(last == null)
+							last = result.getId().getVideoId();
 					}
+
+					if(webhookMessages == null)
+						webhookMessages = new ArrayList<String>();
+
+					webhookMessages.add((message.message == null || message.message.isEmpty() ? DEFAULT_EMBED_MESSAGE : message.message)
+							.replace("%ct", result.getSnippet().getChannelTitle())
+							.replace("%ti", result.getSnippet().getTitle())
+							.replace("%pa", result.getSnippet().getPublishedAt().toStringRfc3339())
+							.replace("%d", result.getSnippet().getDescription())
+							.replace("%u", String.format("https://www.youtube.com/watch?v=%s", result.getId().getVideoId()))
+							.replace("%td300x300", result.getSnippet().getThumbnails().getDefault().setWidth(300L).setHeight(300L).getUrl())
+							.replace("%tm300x300", result.getSnippet().getThumbnails().getMedium().setWidth(300L).setHeight(300L).getUrl())
+							.replace("%th300x300", result.getSnippet().getThumbnails().getHigh().setWidth(300L).setHeight(300L).getUrl())
+							.replace("%td580x900", result.getSnippet().getThumbnails().getDefault().setWidth(580L).setHeight(900L).getUrl())
+							.replace("%tm580x900", result.getSnippet().getThumbnails().getMedium().setWidth(580L).setHeight(900L).getUrl())
+							.replace("%th580x900", result.getSnippet().getThumbnails().getHigh().setWidth(580L).setHeight(900L).getUrl())
+							.replace("%tcd300x300", channel.getSnippet().getThumbnails().getDefault().setWidth(300L).setHeight(300L).getUrl())
+							.replace("%tcm300x300", channel.getSnippet().getThumbnails().getMedium().setWidth(300L).setHeight(300L).getUrl())
+							.replace("%tch300x300", channel.getSnippet().getThumbnails().getHigh().setWidth(300L).setHeight(300L).getUrl())
+							.replace("%tcd580x900", channel.getSnippet().getThumbnails().getDefault().setWidth(580L).setHeight(900L).getUrl())
+							.replace("%tcm580x900", channel.getSnippet().getThumbnails().getMedium().setWidth(580L).setHeight(900L).getUrl())
+							.replace("%tch580x900", channel.getSnippet().getThumbnails().getHigh().setWidth(580L).setHeight(900L).getUrl()));
+
+					if(message.lastUpdate == null)
+						break;
 				}
 
 				if(last != null)
@@ -113,6 +131,14 @@ public class YoutubeAnnouncement extends TickingTask {
 							new Document("_guildId", message.guildId)
 								.append("notification.YOUTUBE.channelId", message.channelId),
 							new Document("$set", new Document("notification.YOUTUBE.$.lastUpdateLiveStream", lastLive))));
+
+				if(webhookMessages != null && !webhookMessages.isEmpty()) {
+					if(webhookMessages.size() > 1)
+						Collections.reverse(webhookMessages);
+
+					for(String webhookMessage : webhookMessages)
+						WebhookQueue.add(message.webhook, webhookMessage);
+				}
 			}
 
 			if(!writeModels.isEmpty())
@@ -121,8 +147,15 @@ public class YoutubeAnnouncement extends TickingTask {
 			if(this.queueNames.isEmpty())
 				this.running = false;
 		} catch(Exception e) {
-			e.printStackTrace();
+			Logger.fatal("Announcement twitch", "Failed to execute. waiting 10 seconds!", e);
+
 			this.running = false;
+
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
+			}
 		}
 	}
 

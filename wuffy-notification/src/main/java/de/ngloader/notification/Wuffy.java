@@ -2,6 +2,7 @@ package de.ngloader.notification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bson.Document;
 
@@ -9,6 +10,7 @@ import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 
 import de.ngloader.core.config.ConfigService;
+import de.ngloader.core.console.ConsoleCommandManager;
 import de.ngloader.core.logger.Logger;
 import de.ngloader.core.logger.LoggerManager;
 import de.ngloader.core.twitch.TwitchAPI;
@@ -56,6 +58,8 @@ public class Wuffy extends TickingTask {
 
 	private final AnnouncementConfig config;
 
+	private final ConsoleCommandManager consoleCommandManager;
+
 	private final MongoExtensionGuild extensionGuild;
 	private final MongoCollection<Document> guildCollection;
 
@@ -85,6 +89,8 @@ public class Wuffy extends TickingTask {
 		Logger.info("Bootstrap", "Starting wuffy notification.");
 
 		this.config = ConfigService.getConfig(AnnouncementConfig.class);
+	
+		this.consoleCommandManager = new ConsoleCommandManager();
 
 		this.twitchAnnouncement = new TwitchAnnouncement(new TwitchAPI(this.config.twitch.token));
 		this.youtubeAnnouncement = new YoutubeAnnouncement(new YoutubeAPI(this.config.youtube.token));
@@ -93,6 +99,11 @@ public class Wuffy extends TickingTask {
 		this.extensionGuild.connect();
 
 		this.guildCollection = this.extensionGuild.getCollection("guild");
+
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			Logger.info("Shutdown hook", "Shutting down wuffy notification.");
+			LoggerManager.close();
+		}));
 
 		Logger.info("Bootstrap", "Wuffy notification successful started.");
 
@@ -103,15 +114,44 @@ public class Wuffy extends TickingTask {
 
 					this.guildCollection.find().forEach(this.block);
 
-					if(this.config.twitch.enabled)
-						this.twitchAnnouncement.run();
-					if(this.config.youtube.enabled)
-						this.youtubeAnnouncement.run();
+					AtomicBoolean finishTwitch = new AtomicBoolean(this.config.twitch.enabled);
+					AtomicBoolean finishYoutube = new AtomicBoolean(this.config.youtube.enabled);
+
+					if(finishTwitch.get()) {
+						finishTwitch.set(false);
+
+						new Thread(() -> {
+							try {
+								this.twitchAnnouncement.run();
+							} catch(Exception e) {
+								Logger.fatal("Master", "Failed to execute twitch.", e);
+							} finally {
+								finishTwitch.set(true);
+							}
+						}).start();
+					}
+
+					if(finishYoutube.get()) {
+						finishYoutube.set(false);
+
+						new Thread(() -> {
+							try {
+								this.youtubeAnnouncement.run();
+							} catch(Exception e) {
+								Logger.fatal("Master", "Failed to execute youtube.", e);
+							} finally {
+								finishYoutube.set(true);
+							}
+						}).start();
+					}
+
+					while(!finishTwitch.get() || !finishYoutube.get())
+						Thread.sleep(1000);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}).start();
+		}, "Wuffy Notification").start();
 	}
 
 	public MongoExtensionGuild getExtensionGuild() {
@@ -120,6 +160,14 @@ public class Wuffy extends TickingTask {
 
 	public MongoCollection<Document> getGuildCollection() {
 		return this.guildCollection;
+	}
+
+	public ConsoleCommandManager getConsoleCommandManager() {
+		return this.consoleCommandManager;
+	}
+
+	public AnnouncementConfig getConfig() {
+		return this.config;
 	}
 
 	@Override

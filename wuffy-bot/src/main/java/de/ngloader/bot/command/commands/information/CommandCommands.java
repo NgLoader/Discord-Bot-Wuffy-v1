@@ -34,6 +34,9 @@ public class CommandCommands extends BotCommand {
 			ReplayBuilder builder = new ReplayBuilder(event, MessageType.LIST, true);
 
 			for(CommandCategory category : CommandCategory.values()) {
+				if(category == CommandCategory.BOT_AUTHOR && !event.getCore().isAdmin(event.getAuthor()))
+					continue;
+
 				builder.addField(i18n.format(String.format("command_category_%s", category.name().toLowerCase()), locale),
 						((WuffyBot) event.getCore()).getCommandManager().getRegistry().getCommands().values().stream()
 							.distinct()
