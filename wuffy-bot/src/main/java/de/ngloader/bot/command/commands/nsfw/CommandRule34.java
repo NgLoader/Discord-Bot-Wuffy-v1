@@ -41,7 +41,8 @@ public class CommandRule34 extends BotCommand {
 		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_RULE34)) {
 			if(event.getTextChannel().isNSFW()) {
 				try {
-					Message message = event.getTextChannel().sendMessage(new ReplayBuilder(event, MessageType.LIST)
+					Message message = event.getTextChannel().sendMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
+							.setupDefault(false, false)
 							.setDescription(i18n.format(TranslationKeys.MESSAGE_NSFW_SEARCHING, locale))
 							.getEmbedBuilder()
 							.build())
@@ -63,26 +64,26 @@ public class CommandRule34 extends BotCommand {
 						} else
 							post = posts.getJSONObject("post");
 
-						message.editMessage(new ReplayBuilder(event, MessageType.LIST)
+						ReplayBuilder.queue(event, MessageType.PICTURE, message.editMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
+								.setupDefault(false, false)
 								.setImage(post.getString("file_url"))
 								.addField(i18n.format(TranslationKeys.MESSAGE_NSFW_NOTHING_SCORE, locale), Integer.toString(post.getInt("score")), true)
 								.addField(i18n.format(TranslationKeys.MESSAGE_NSFW_NOTHING_RATING, locale), post.getString("rating").toUpperCase(), true)
 								.setTimestamp(Instant.now())
 							.getEmbedBuilder()
-							.build())
-						.queue();
+							.build()));
 					} else
-						message.editMessage(new ReplayBuilder(event, MessageType.LIST)
+						ReplayBuilder.queue(event, MessageType.PICTURE, message.editMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
+								.setupDefault(false, false)
 								.setDescription(i18n.format(TranslationKeys.MESSAGE_NSFW_NOTHING_FOUND, locale))
 								.setTimestamp(Instant.now())
 							.getEmbedBuilder()
-							.build())
-						.queue();
+							.build()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else
-				this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NSFW_CHANNEL_NOT, locale));
+				this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NSFW_CHANNEL_NOT, locale));
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
 					"%p", PermissionKeys.COMMAND_RULE34.key));

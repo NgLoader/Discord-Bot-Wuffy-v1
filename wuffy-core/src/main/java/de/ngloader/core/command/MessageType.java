@@ -7,6 +7,7 @@ public enum MessageType {
 	SUCCESS(new Color(100, 255, 0)),
 	LOADING(new Color(75, 255, 15)),
 	INFO(new Color(141, 216, 19)),
+	PICTURE(new Color(120, 255, 25)),
 	LIST(new Color(15, 255, 195)),
 	WARN(new Color(255, 231, 14)),
 	PERMISSION(new Color(255, 231, 14)),

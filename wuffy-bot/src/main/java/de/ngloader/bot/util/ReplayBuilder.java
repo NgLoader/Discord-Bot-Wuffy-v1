@@ -8,15 +8,29 @@ import java.util.function.Consumer;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyGenericMessageEvent;
+import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.requests.restaction.MessageAction;
 
 public class ReplayBuilder {
 
 	private static final String EMOTE_ERROR = "<a:error:473423519720538112>";
 	private static final String EMOTE_LOADING = "<a:loading:468438447573696522>";
 	private static final String EMOTE_SUCCESS = "<a:checkmark:459068723408535552>";
+
+	public static void queue(WuffyMessageRecivedEvent event, MessageType type, MessageAction message) {
+		WuffyGuild guild = event.getGuild(WuffyGuild.class);
+
+		if(guild.isMessageDeleteExecuter())
+			event.getMessage().delete().queue();
+
+		if(guild.isMessageDeleteBot() && guild.isMessageDeleteDelay(type))
+			message.queue(success -> {success.delete().queueAfter(guild.getMessageDeleteDelay(type), TimeUnit.SECONDS); System.out.println("HIER");});
+		else
+			message.queue();
+	}
 
 	private final WuffyGenericMessageEvent event;
 	private final MessageType type;
@@ -73,10 +87,10 @@ public class ReplayBuilder {
 	public ReplayBuilder setupDefault(Boolean deleteExecuter, Boolean deleteBot) {
 		WuffyGuild guild = this.event.getGuild(WuffyGuild.class);
 
-		if(guild.isMessageDeleteExecuter())
+		if(deleteExecuter && guild.isMessageDeleteExecuter())
 			this.deleteExecuterMessage();
 
-		if(guild.isMessageDeleteDelay(this.type)) {
+		if(deleteBot && guild.isMessageDeleteDelay(this.type)) {
 			this.deleteTimeUnit = TimeUnit.SECONDS;
 			this.deleteDelay = guild.getMessageDeleteDelay(this.type);
 		}

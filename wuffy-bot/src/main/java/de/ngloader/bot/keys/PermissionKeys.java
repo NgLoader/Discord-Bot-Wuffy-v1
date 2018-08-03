@@ -34,7 +34,10 @@ public enum PermissionKeys {
 	COMMAND_GUILDINFO("command.guildinfo"),
 	COMMAND_USERINFO("command.userinfo"),
 
-	COMMAND_RULE34("command.role34");
+	COMMAND_RULE34("command.role34"),
+	COMMAND_E621("command.e621"),
+
+	COMMAND_CAT("command.cat");
 
 	public String key;
 	public String storageKey;

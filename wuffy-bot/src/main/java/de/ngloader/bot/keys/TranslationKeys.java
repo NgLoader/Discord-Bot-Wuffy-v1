@@ -235,4 +235,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_NSFW_NOTHING_FOUND = "message_nsfw_nothing_found";
 	public static final String MESSAGE_NSFW_NOTHING_SCORE = "message_nsfw_score";
 	public static final String MESSAGE_NSFW_NOTHING_RATING = "message_nsfw_rating";
+
+	public static final String MESSAGE_FUN_SEARCHING = "message_fun_searching";
+	public static final String MESSAGE_FUN_NOTHING_FOUND = "message_fun_nothing_found";
 }
