@@ -54,6 +54,8 @@ public class MongoGuildCache {
 
 	public List<String> disabledCommands = new ArrayList<String>();
 
+	public List<String> autoRole = new ArrayList<String>();
+
 	public MongoGuildMessageCache message = new MongoGuildMessageCache();
 	public MongoGuildHistoryCache history = new MongoGuildHistoryCache();
 	public MongoGuildRankingCache roleRanking = new MongoGuildRankingCache();

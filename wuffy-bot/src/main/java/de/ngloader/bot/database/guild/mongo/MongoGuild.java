@@ -711,4 +711,33 @@ public class MongoGuild extends WuffyGuild {
 
 		this.queueBulk(new Document("$set", new Document("notification", notificationInfos.stream().collect(Collectors.toMap(key -> key, value -> this.toDocument(value))))));
 	}
+
+	@Override
+	public List<String> getAutoRole() {
+		return this.cache.autoRole != null ? this.cache.autoRole : new ArrayList<String>();
+	}
+
+	@Override
+	public void addAutoRole(String role) {
+		if(this.cache.autoRole == null)
+			this.cache.autoRole = new ArrayList<String>();
+		this.cache.autoRole.add(role);
+
+		this.queueBulk(new Document("$addToSet", new Document("autoRole", role)));
+	}
+
+	@Override
+	public void removeAutoRole(String role) {
+		if(this.cache.autoRole != null)
+			this.cache.autoRole.add(role);
+
+		this.queueBulk(new Document("$pull", new Document("autoRole", role)));
+	}
+
+	@Override
+	public void setAutoRole(List<String> roles) {
+		this.cache.autoRole = roles;
+
+		this.queueBulk(new Document("$set", new Document("autoRole", roles)));
+	}
 }

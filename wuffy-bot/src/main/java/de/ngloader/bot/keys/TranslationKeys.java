@@ -219,4 +219,14 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_RENAME_SPEICAL_CHARACTER = "message_rename_special_character"; //%t target %n name
 	public static final String MESSAGE_RENAME_NOT_FOUND = "message_rename_not_found"; //%t target
 	public static final String MESSAGE_RENAME_SYNTAX = "message_rename_syntax";
+
+	public static final String MESSAGE_AUTOROLE_ADDED = "message_autorole_added";
+	public static final String MESSAGE_AUTOROLE_REMOVED = "message_autorole_remove";
+	public static final String MESSAGE_AUTOROLE_MAX_COUNT = "message_autorole_max_count";
+	public static final String MESSAGE_AUTOROLE_ALREADY_ADDED = "message_autorole_alredy_added";
+	public static final String MESSAGE_AUTOROLE_NOT_ADDED = "message_autorole_not_added";
+	public static final String MESSAGE_AUTOROLE_NO_ROLE_FOUND = "message_autorole_no_role_found";
+	public static final String MESSAGE_AUTOROLE_LIST = "message_autorole_list";
+	public static final String MESSAGE_AUTOROLE_NO_ROLE_ADDED = "message_autorole_no_role_added";
+	public static final String MESSAGE_AUTOROLE_SYNTAX = "message_autorole_syntax";
 }

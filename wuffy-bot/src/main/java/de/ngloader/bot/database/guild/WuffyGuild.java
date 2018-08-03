@@ -197,6 +197,15 @@ public abstract class WuffyGuild extends ImplGuild {
 
 	public abstract void setNotification(NotificationType type, List<NotificationInfo> notificationInfos);
 
+	//AutoRole
+	public abstract List<String> getAutoRole();
+
+	public abstract void addAutoRole(String role);
+
+	public abstract void removeAutoRole(String role);
+
+	public abstract void setAutoRole(List<String> roles);
+
 	public WuffyGuild(Core core, Guild guild) {
 		super(core, guild);
 	}

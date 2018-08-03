@@ -31,6 +31,7 @@ public enum PermissionKeys {
 	COMMAND_PREFIX("command.prefix"),
 	COMMAND_RENAME("command.rename"),
 
+	COMMAND_GUILDINFO("command.guildinfo"),
 	COMMAND_USERINFO("command.userinfo");
 
 	public String key;

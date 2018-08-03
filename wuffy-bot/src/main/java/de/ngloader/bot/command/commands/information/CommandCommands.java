@@ -8,6 +8,7 @@ import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
 import de.ngloader.bot.util.ReplayBuilder;
 import de.ngloader.core.command.Command;
@@ -29,7 +30,7 @@ public class CommandCommands extends BotCommand {
 		if(guild.hasPermission(event.getTextChannel(), event.getMember(), "command.commands")) {
 
 			var messageDisabled = i18n.format(TranslationKeys.MESSAGE_COMMANDS_DISABLED, locale);
-			var prefix = guild.getPrefixes().get(0);
+			var prefix = guild.getPrefixes().isEmpty() ? String.format("<@%s> ", event.getJDA().getSelfUser().getIdLong()) : guild.getPrefixes().get(0);
 
 			ReplayBuilder builder = new ReplayBuilder(event, MessageType.LIST, true);
 
@@ -53,6 +54,6 @@ public class CommandCommands extends BotCommand {
 
 			builder.queue();
 		} else
-			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", "command.commands"));
+			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_COMMANDS.key));
 	}
 }

@@ -11,6 +11,8 @@ import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.logger.Logger;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<WuffyBot> {
@@ -50,5 +52,25 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 				onTrigger(new WuffyMessageRecivedEvent(this.manager.getCore(), event.getJDA(), event.getResponseNumber(), event.getMessage()), command, args);
 				return;
 			}
+	}
+
+	@Override
+	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+		WuffyGuild guild = (WuffyGuild) this.manager.getCore().getStorageService().getExtension(IExtensionGuild.class).getGuild(event.getGuild());
+
+		if(!guild.getAutoRole().isEmpty()) {
+			List<Role> roles = new ArrayList<Role>();
+
+			for(String string : guild.getAutoRole()) {
+				Role found = guild.getRoleById(string);
+
+				if(found != null)
+					roles.add(found);
+				else
+					guild.removeAutoRole(string);
+			}
+
+			guild.getController().addRolesToMember(event.getMember(), roles).queue();
+		}
 	}
 }
