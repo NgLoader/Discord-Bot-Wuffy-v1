@@ -32,7 +32,9 @@ public enum PermissionKeys {
 	COMMAND_RENAME("command.rename"),
 
 	COMMAND_GUILDINFO("command.guildinfo"),
-	COMMAND_USERINFO("command.userinfo");
+	COMMAND_USERINFO("command.userinfo"),
+
+	COMMAND_RULE34("command.role34");
 
 	public String key;
 	public String storageKey;

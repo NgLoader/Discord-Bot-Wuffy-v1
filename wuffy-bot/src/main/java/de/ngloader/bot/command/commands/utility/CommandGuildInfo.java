@@ -47,7 +47,7 @@ public class CommandGuildInfo extends BotCommand {
 					.setThumbnail(iconUrl)
 					.setAuthor(target.getName(), iconUrl)
 					.addField("Owner", guild.getOwner().getEffectiveName() + "#" + guild.getOwner().getUser().getDiscriminator(), true)
-					.addField("Mitglieder", String.format("%s (%s Bots)",
+					.addField("Mitglieder", String.format("%s (da von %s Bots)",
 							Integer.toString(members.size()),
 							Integer.toString(members.stream().filter(m -> m.getUser().isBot()).collect(Collectors.toList()).size())), true)
 					.addField("ID", Long.toString(guild.getIdLong()), true)

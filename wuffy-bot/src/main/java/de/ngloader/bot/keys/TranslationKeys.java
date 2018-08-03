@@ -229,4 +229,10 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_AUTOROLE_LIST = "message_autorole_list";
 	public static final String MESSAGE_AUTOROLE_NO_ROLE_ADDED = "message_autorole_no_role_added";
 	public static final String MESSAGE_AUTOROLE_SYNTAX = "message_autorole_syntax";
+
+	public static final String MESSAGE_NSFW_CHANNEL_NOT = "message_nsfw_channel_not";
+	public static final String MESSAGE_NSFW_SEARCHING = "message_nsfw_searching";
+	public static final String MESSAGE_NSFW_NOTHING_FOUND = "message_nsfw_nothing_found";
+	public static final String MESSAGE_NSFW_NOTHING_SCORE = "message_nsfw_score";
+	public static final String MESSAGE_NSFW_NOTHING_RATING = "message_nsfw_rating";
 }

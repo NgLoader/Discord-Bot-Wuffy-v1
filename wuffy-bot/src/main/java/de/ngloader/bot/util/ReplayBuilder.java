@@ -1,6 +1,7 @@
 package de.ngloader.bot.util;
 
 import java.awt.Color;
+import java.time.temporal.TemporalAccessor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -121,6 +122,18 @@ public class ReplayBuilder {
 
 	public ReplayBuilder applyEmoteEorror() {
 		this.embedBuilder.setDescription(EMOTE_ERROR + " " + this.embedBuilder.getDescriptionBuilder().toString());
+
+		return this;
+	}
+
+	public ReplayBuilder setImage(String url) {
+		this.embedBuilder.setImage(url);
+
+		return this;
+	}
+
+	public ReplayBuilder setTimestamp(TemporalAccessor temporal) {
+		this.embedBuilder.setTimestamp(temporal);
 
 		return this;
 	}

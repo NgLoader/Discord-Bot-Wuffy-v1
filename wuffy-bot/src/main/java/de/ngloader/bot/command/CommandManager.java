@@ -18,6 +18,8 @@ import de.ngloader.bot.command.commands.moderator.CommandSoftBan;
 import de.ngloader.bot.command.commands.moderator.CommandUnBan;
 import de.ngloader.bot.command.commands.moderator.CommandUnMute;
 import de.ngloader.bot.command.commands.moderator.CommandVCKick;
+import de.ngloader.bot.command.commands.nsfw.CommandE621;
+import de.ngloader.bot.command.commands.nsfw.CommandRule34;
 import de.ngloader.bot.command.commands.settings.CommandAutoRole;
 import de.ngloader.bot.command.commands.settings.CommandLanguage;
 import de.ngloader.bot.command.commands.settings.CommandMention;
@@ -86,5 +88,9 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 //		this.registry.addCommand(new CommandServerInfo());
 		this.registry.addCommand(new CommandGuildInfo());
 //		this.registry.addCommand(new CommandGlobalInfo());
+
+		//NSFW
+		this.registry.addCommand(new CommandRule34());
+		this.registry.addCommand(new CommandE621());
 	}
 }
