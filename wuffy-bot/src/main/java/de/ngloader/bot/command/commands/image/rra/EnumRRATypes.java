@@ -18,7 +18,8 @@ public enum EnumRRATypes {
 	SMUG("smug"),
 	STARE("stare"),
 	TICKLE("tickle"),
-	TRIGGERED("triggered");
+	TRIGGERED("triggered"),
+	NSFW_GTN("nsfw-gtn");
 
 	public final String value;
 

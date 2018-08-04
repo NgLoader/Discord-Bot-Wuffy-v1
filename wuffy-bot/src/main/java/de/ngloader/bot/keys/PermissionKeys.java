@@ -36,6 +36,7 @@ public enum PermissionKeys {
 
 	COMMAND_RULE34("command.role34"),
 	COMMAND_E621("command.e621"),
+	COMMAND_GTN("command.gtn"),
 
 	COMMAND_CAT("command.cat"),
 	COMMAND_DOG("command.dog"),

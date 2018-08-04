@@ -27,7 +27,7 @@ public class CommandRRAHug extends BotCommand {
 		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_HUG)) {
 			Message message = event.getTextChannel().sendMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
 					.setupDefault(false, false)
-					.setDescription(i18n.format(TranslationKeys.MESSAGE_FUN_SEARCHING, locale))
+					.setDescription(i18n.format(TranslationKeys.MESSAGE_IMAGE_SEARCHING, locale))
 					.getEmbedBuilder()
 					.build())
 				.complete();
@@ -44,7 +44,7 @@ public class CommandRRAHug extends BotCommand {
 			else
 				ReplayBuilder.queue(event, MessageType.PICTURE, message.editMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
 						.setupDefault(false, false)
-						.setDescription(i18n.format(TranslationKeys.MESSAGE_FUN_NOTHING_FOUND, locale))
+						.setDescription(i18n.format(TranslationKeys.MESSAGE_IMAGE_NOTHING_FOUND, locale))
 						.setTimestamp(Instant.now())
 					.getEmbedBuilder()
 					.build()));
