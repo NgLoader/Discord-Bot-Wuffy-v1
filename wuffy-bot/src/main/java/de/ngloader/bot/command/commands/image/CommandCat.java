@@ -1,4 +1,4 @@
-package de.ngloader.bot.command.commands.fun;
+package de.ngloader.bot.command.commands.image;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -21,12 +21,12 @@ import net.dv8tion.jda.core.entities.Message;
 import okhttp3.Request;
 import okhttp3.Response;
 
-@Command(aliases = { "dog", "dogs", "woof", "wuf", "wau" })
-@CommandConfig(category = CommandCategory.FUN)
-public class CommandDog extends BotCommand {
+@Command(aliases = { "cat", "cats", "meow", "meows" })
+@CommandConfig(category = CommandCategory.IMAGE)
+public class CommandCat extends BotCommand {
 
 	private static final Request CAT_REQUEST = new Request.Builder()
-			.url("https://dog.ceo/api/breeds/image/random")
+			.url("https://aws.random.cat/meow")
 			.build();
 
 	@Override
@@ -43,16 +43,14 @@ public class CommandDog extends BotCommand {
 						.build())
 					.complete();
 
-				Response response = WebRequestBuilder.request(CommandDog.CAT_REQUEST);
+				Response response = WebRequestBuilder.request(CommandCat.CAT_REQUEST);
 
 				JSONObject json = new JSONObject(response.body().string());
 
-				System.out.println(json.toString());
-
-				if(json.has("message")) {
+				if(json.has("file")) {
 					ReplayBuilder.queue(event, MessageType.PICTURE, message.editMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
 							.setupDefault(false, false)
-							.setImage(json.getString("message"))
+							.setImage(json.getString("file"))
 							.setTimestamp(Instant.now())
 						.getEmbedBuilder()
 						.build()));

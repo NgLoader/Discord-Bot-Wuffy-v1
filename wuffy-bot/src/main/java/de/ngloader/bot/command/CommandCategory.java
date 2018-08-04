@@ -11,4 +11,5 @@ public enum CommandCategory {
 	UTILITY,
 	OTHER,
 	FUN,
+	IMAGE;
 }

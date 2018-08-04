@@ -1,4 +1,4 @@
-package de.ngloader.bot.command.commands.fun;
+package de.ngloader.bot.command.commands.image;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -21,12 +21,12 @@ import net.dv8tion.jda.core.entities.Message;
 import okhttp3.Request;
 import okhttp3.Response;
 
-@Command(aliases = { "cat", "cats", "meow", "meows" })
-@CommandConfig(category = CommandCategory.FUN)
-public class CommandCat extends BotCommand {
+@Command(aliases = { "dog", "dogs", "woof", "wuf", "wau" })
+@CommandConfig(category = CommandCategory.IMAGE)
+public class CommandDog extends BotCommand {
 
 	private static final Request CAT_REQUEST = new Request.Builder()
-			.url("https://aws.random.cat/meow")
+			.url("https://dog.ceo/api/breeds/image/random")
 			.build();
 
 	@Override
@@ -34,7 +34,7 @@ public class CommandCat extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_CAT)) {
+		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_DOG)) {
 			try {
 				Message message = event.getTextChannel().sendMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
 						.setupDefault(false, false)
@@ -43,14 +43,14 @@ public class CommandCat extends BotCommand {
 						.build())
 					.complete();
 
-				Response response = WebRequestBuilder.request(CommandCat.CAT_REQUEST);
+				Response response = WebRequestBuilder.request(CommandDog.CAT_REQUEST);
 
 				JSONObject json = new JSONObject(response.body().string());
 
-				if(json.has("file")) {
+				if(json.has("message")) {
 					ReplayBuilder.queue(event, MessageType.PICTURE, message.editMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
 							.setupDefault(false, false)
-							.setImage(json.getString("file"))
+							.setImage(json.getString("message"))
 							.setTimestamp(Instant.now())
 						.getEmbedBuilder()
 						.build()));
@@ -66,6 +66,6 @@ public class CommandCat extends BotCommand {
 			}
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_CAT.key));
+					"%p", PermissionKeys.COMMAND_DOG.key));
 	}
 }

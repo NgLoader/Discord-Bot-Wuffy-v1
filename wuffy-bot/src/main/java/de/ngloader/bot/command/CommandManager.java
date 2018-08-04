@@ -1,8 +1,25 @@
 package de.ngloader.bot.command;
 
 import de.ngloader.bot.WuffyBot;
-import de.ngloader.bot.command.commands.fun.CommandCat;
-import de.ngloader.bot.command.commands.fun.CommandDog;
+import de.ngloader.bot.command.commands.image.CommandCat;
+import de.ngloader.bot.command.commands.image.CommandDog;
+import de.ngloader.bot.command.commands.image.CommandGarfield;
+import de.ngloader.bot.command.commands.image.rra.CommandRRACry;
+import de.ngloader.bot.command.commands.image.rra.CommandRRAHug;
+import de.ngloader.bot.command.commands.image.rra.CommandRRAKiss;
+import de.ngloader.bot.command.commands.image.rra.CommandRRALewd;
+import de.ngloader.bot.command.commands.image.rra.CommandRRALick;
+import de.ngloader.bot.command.commands.image.rra.CommandRRANom;
+import de.ngloader.bot.command.commands.image.rra.CommandRRANyan;
+import de.ngloader.bot.command.commands.image.rra.CommandRRAOwo;
+import de.ngloader.bot.command.commands.image.rra.CommandRRAPat;
+import de.ngloader.bot.command.commands.image.rra.CommandRRAPout;
+import de.ngloader.bot.command.commands.image.rra.CommandRRARem;
+import de.ngloader.bot.command.commands.image.rra.CommandRRASlap;
+import de.ngloader.bot.command.commands.image.rra.CommandRRASmug;
+import de.ngloader.bot.command.commands.image.rra.CommandRRAStare;
+import de.ngloader.bot.command.commands.image.rra.CommandRRATickle;
+import de.ngloader.bot.command.commands.image.rra.CommandRRATriggered;
 import de.ngloader.bot.command.commands.information.CommandCommands;
 import de.ngloader.bot.command.commands.information.CommandHelp;
 import de.ngloader.bot.command.commands.information.CommandInvite;
@@ -95,8 +112,25 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandRule34());
 		this.registry.addCommand(new CommandE621());
 
-		//Fun
+		//Image
 		this.registry.addCommand(new CommandCat());
 		this.registry.addCommand(new CommandDog());
+		this.registry.addCommand(new CommandGarfield());
+		this.registry.addCommand(new CommandRRACry());
+		this.registry.addCommand(new CommandRRAHug());
+		this.registry.addCommand(new CommandRRAKiss());
+		this.registry.addCommand(new CommandRRALewd());
+		this.registry.addCommand(new CommandRRALick());
+		this.registry.addCommand(new CommandRRANom());
+		this.registry.addCommand(new CommandRRANyan());
+		this.registry.addCommand(new CommandRRAOwo());
+		this.registry.addCommand(new CommandRRAPat());
+		this.registry.addCommand(new CommandRRAPout());
+		this.registry.addCommand(new CommandRRARem());
+		this.registry.addCommand(new CommandRRASlap());
+		this.registry.addCommand(new CommandRRASmug());
+		this.registry.addCommand(new CommandRRAStare());
+		this.registry.addCommand(new CommandRRATickle());
+		this.registry.addCommand(new CommandRRATriggered());
 	}
 }
