@@ -61,7 +61,10 @@ public enum PermissionKeys {
 	COMMAND_TICKLE("command.tickle"),
 	COMMAND_TRIGGERED("command.triggered"),
 
-	COMMAND_8BALL("command.8ball");
+	COMMAND_8BALL("command.8ball"),
+	COMMAND_COINFLIP("command.coinflip"),
+	COMMAND_TABLEFLIP("command.tableflip"),
+	COMMAND_LOADING("command.loading");
 
 	public String key;
 	public String storageKey;
