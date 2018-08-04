@@ -1,6 +1,7 @@
 package de.ngloader.bot.command;
 
 import de.ngloader.bot.WuffyBot;
+import de.ngloader.bot.command.commands.fun.Command8Ball;
 import de.ngloader.bot.command.commands.image.CommandCat;
 import de.ngloader.bot.command.commands.image.CommandDog;
 import de.ngloader.bot.command.commands.image.CommandGarfield;
@@ -138,5 +139,8 @@ public class CommandManager extends de.ngloader.core.command.CommandManager<Wuff
 		this.registry.addCommand(new CommandRRAStare());
 		this.registry.addCommand(new CommandRRATickle());
 		this.registry.addCommand(new CommandRRATriggered());
+
+		//Fun
+		this.registry.addCommand(new Command8Ball());
 	}
 }

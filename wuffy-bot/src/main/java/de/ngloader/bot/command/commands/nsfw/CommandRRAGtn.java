@@ -26,7 +26,7 @@ public class CommandRRAGtn extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_TRIGGERED)) {
+		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_GTN)) {
 			Message message = event.getTextChannel().sendMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
 					.setupDefault(false, false)
 					.setDescription(i18n.format(TranslationKeys.MESSAGE_NSFW_SEARCHING, locale))
@@ -52,6 +52,6 @@ public class CommandRRAGtn extends BotCommand {
 					.build()));
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_TRIGGERED.key));
+					"%p", PermissionKeys.COMMAND_GTN.key));
 	}
 }

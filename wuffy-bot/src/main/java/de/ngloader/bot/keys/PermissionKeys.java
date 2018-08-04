@@ -37,9 +37,12 @@ public enum PermissionKeys {
 	COMMAND_RULE34("command.role34"),
 	COMMAND_E621("command.e621"),
 	COMMAND_GTN("command.gtn"),
+	COMMAND_KONACHAN("command.konachan"),
+	COMMAND_YANDERE("command.yandere"),
 
 	COMMAND_CAT("command.cat"),
 	COMMAND_DOG("command.dog"),
+	COMMAND_GARFIELD("command.garfied"),
 	COMMAND_CRY("command.cry"),
 	COMMAND_CUDDLE("command.cuddle"),
 	COMMAND_HUG("command.hug"),
@@ -56,7 +59,9 @@ public enum PermissionKeys {
 	COMMAND_SMUG("command.smug"),
 	COMMAND_STARE("command.stare"),
 	COMMAND_TICKLE("command.tickle"),
-	COMMAND_TRIGGERED("command.triggered");
+	COMMAND_TRIGGERED("command.triggered"),
+
+	COMMAND_8BALL("command.8ball");
 
 	public String key;
 	public String storageKey;

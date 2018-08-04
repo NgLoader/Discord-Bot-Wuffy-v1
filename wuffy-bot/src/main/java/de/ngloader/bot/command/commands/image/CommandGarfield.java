@@ -30,7 +30,7 @@ public class CommandGarfield extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_DOG)) {
+		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_GARFIELD)) {
 
 			Calendar calendar = new Calendar.Builder().setInstant(Math.round(Math.floor(Math.random() * (System.currentTimeMillis() - ONE_DAY - GARFIELD_EPOCH_DATE) + GARFIELD_EPOCH_DATE))).build();
 			//OLD: GARFIELD_EPOCH_DATE + (Currentlydate - 24H - GARFIELD_EPOCH_DATE) (started at 1978-06-19)
@@ -41,6 +41,6 @@ public class CommandGarfield extends BotCommand {
 					.setTimestamp(Instant.ofEpochMilli(calendar.getTimeInMillis())));
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_DOG.key));
+					"%p", PermissionKeys.COMMAND_GARFIELD.key));
 	}
 }

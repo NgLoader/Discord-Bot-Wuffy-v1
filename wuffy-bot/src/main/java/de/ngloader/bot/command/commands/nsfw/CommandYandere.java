@@ -38,7 +38,7 @@ public class CommandYandere extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_E621)) {
+		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_YANDERE)) {
 			if(event.getTextChannel().isNSFW()) {
 				try {
 					Message message = event.getTextChannel().sendMessage(new ReplayBuilder(event, MessageType.PICTURE, false)
@@ -77,6 +77,6 @@ public class CommandYandere extends BotCommand {
 				this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_NSFW_CHANNEL_NOT, locale));
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_E621.key));
+					"%p", PermissionKeys.COMMAND_YANDERE.key));
 	}
 }

@@ -238,4 +238,8 @@ public class TranslationKeys extends TranslationKeysCore {
 
 	public static final String MESSAGE_IMAGE_SEARCHING = "message_image_searching";
 	public static final String MESSAGE_IMAGE_NOTHING_FOUND = "message_image_nothing_found";
+
+	public static final String MESSAGE_8BALL_ANSWER = "message_8ball_answer";
+	public static final String MESSAGE_8BALL_NO_ANSWER = "message_8ball_no_answer";
+	public static final String MESSAGE_8BALL_NO_ARGS = "message_8ball_no_args";
 }
