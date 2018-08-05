@@ -245,4 +245,11 @@ public class TranslationKeys extends TranslationKeysCore {
 
 	public static final String MESSAGE_COINFLIP_HEAD = "message_coinflip_head";
 	public static final String MESSAGE_COINFLIP_TAIL = "message_coinflip_tail";
+
+	public static final String MESSAGE_ASCII_LIST = "message_ascii_list";
+	public static final String MESSAGE_ASCII_CREATING = "message_ascii_creating";
+	public static final String MESSAGE_ASCII_MINIMIZED = "message_ascii_minimized";
+	public static final String MESSAGE_ASCII_TEXT_TO_LONG = "message_ascii_text_to_long";
+	public static final String MESSAGE_ASCII_FONT_NOT_FOUND = "message_ascii_font_not_found";
+	public static final String MESSAGE_ASCII_SYNTAX = "message_ascii_syntax";
 }

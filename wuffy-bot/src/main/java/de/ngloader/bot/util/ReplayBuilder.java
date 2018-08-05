@@ -27,7 +27,7 @@ public class ReplayBuilder {
 			event.getMessage().delete().queue();
 
 		if(guild.isMessageDeleteBot() && guild.isMessageDeleteDelay(type))
-			message.queue(success -> {success.delete().queueAfter(guild.getMessageDeleteDelay(type), TimeUnit.SECONDS); System.out.println("HIER");});
+			message.queue(success -> success.delete().queueAfter(guild.getMessageDeleteDelay(type), TimeUnit.SECONDS));
 		else
 			message.queue();
 	}

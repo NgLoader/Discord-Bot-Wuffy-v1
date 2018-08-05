@@ -50,7 +50,6 @@ public class CommandLoading extends BotCommand {
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
 		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_LOADING)) {
-			System.out.println(String.format("%s%s", CommandLoading.URL, CommandLoading.FILES.get(CommandLoading.RANDOM.nextInt(CommandLoading.FILES.size()))));
 			this.replay(event, MessageType.INFO, new EmbedBuilder()
 					.setTimestamp(Instant.now())
 					.setImage(String.format("%s%s", CommandLoading.URL, CommandLoading.FILES.get(CommandLoading.RANDOM.nextInt(CommandLoading.FILES.size())))));

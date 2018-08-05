@@ -64,7 +64,8 @@ public enum PermissionKeys {
 	COMMAND_8BALL("command.8ball"),
 	COMMAND_COINFLIP("command.coinflip"),
 	COMMAND_TABLEFLIP("command.tableflip"),
-	COMMAND_LOADING("command.loading");
+	COMMAND_LOADING("command.loading"),
+	COMMAND_ASCII("command.ascii");
 
 	public String key;
 	public String storageKey;

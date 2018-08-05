@@ -1,5 +1,7 @@
 package de.ngloader.bot.command.commands.fun;
 
+import java.time.Instant;
+
 import de.ngloader.bot.command.BotCommand;
 import de.ngloader.bot.command.CommandCategory;
 import de.ngloader.bot.command.CommandConfig;
@@ -24,10 +26,12 @@ public class CommandCoinflip extends BotCommand {
 		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_COINFLIP)) {
 			if(Math.floor(Math.random() * 100) + 1 > 50) {
 				this.replay(event, MessageType.INFO, new EmbedBuilder()
+						.setTimestamp(Instant.now())
 						.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_HEAD, locale))
 						.setImage("https://wuffy.eu/pictures/coinflip/head.png"));
 			} else {
 				this.replay(event, MessageType.INFO, new EmbedBuilder()
+						.setTimestamp(Instant.now())
 						.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_TAIL, locale))
 						.setImage("https://wuffy.eu/pictures/coinflip/tail.png"));
 			}
