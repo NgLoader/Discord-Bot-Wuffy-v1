@@ -252,4 +252,20 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_ASCII_TEXT_TO_LONG = "message_ascii_text_to_long";
 	public static final String MESSAGE_ASCII_FONT_NOT_FOUND = "message_ascii_font_not_found";
 	public static final String MESSAGE_ASCII_SYNTAX = "message_ascii_syntax";
+
+	public static final String MESSAGE_GUILDINFO_OWNER = "message_guildinfo_owner";
+	public static final String MESSAGE_GUILDINFO_MEMBERS = "message_guildinfo_members";
+	public static final String MESSAGE_GUILDINFO_MEMBERS_ANSWER = "message_guildinfo_members_answer"; //%b bot count %m member count
+	public static final String MESSAGE_GUILDINFO_ID = "message_guildinfo_id";
+	public static final String MESSAGE_GUILDINFO_REGION = "message_guildinfo_region";
+	public static final String MESSAGE_GUILDINFO_VERIFICATION_LEVEL = "message_guildinfo_verification_level";
+	public static final String MESSAGE_GUILDINFO_EXPLICIT_CONTENT_LEVEL = "message_guildinfo_explicit_content_level";
+	public static final String MESSAGE_GUILDINFO_REQUIRED_MFA_LEVEL = "message_guildinfo_required_mfa_level";
+	public static final String MESSAGE_GUILDINFO_DEFAULT_NOTIFICATION_LEVEL = "message_guildinfo_default_notification_level";
+	public static final String MESSAGE_GUILDINFO_TEXT_CHANNELS = "message_guildinfo_text_channels";
+	public static final String MESSAGE_GUILDINFO_VOICE_CHANNELS = "message_guildinfo_voice_channels";
+	public static final String MESSAGE_GUILDINFO_ROLES = "message_guildinfo_roles";
+	public static final String MESSAGE_GUILDINFO_EMOJIS = "message_guildinfo_emojis";
+	public static final String MESSAGE_GUILDINFO_NOT_FOUND = "message_guildinfo_not_found";
+	public static final String MESSAGE_GUILDINFO_NOT_AVAIVIBLE = "message_guildinfo_not_avaivible";
 }
