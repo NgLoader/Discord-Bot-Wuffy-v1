@@ -268,4 +268,22 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_GUILDINFO_EMOJIS = "message_guildinfo_emojis";
 	public static final String MESSAGE_GUILDINFO_NOT_FOUND = "message_guildinfo_not_found";
 	public static final String MESSAGE_GUILDINFO_NOT_AVAIVIBLE = "message_guildinfo_not_avaivible";
+
+	public static final String MESSAGE_PERMISSION_LIST = "message_permission_list"; //%l list
+	public static final String MESSAGE_PERMISSION_LIST_MODE = "message_permission_list_mode"; //%l list
+	public static final String MESSAGE_PERMISSION_LIST_GLOBAL = "message_permission_list_global"; //%l list %t type %id id
+	public static final String MESSAGE_PERMISSION_LIST_CHANNEL = "message_permission_list_channel"; //%l list %t type %id id %c channel
+	public static final String MESSAGE_PERMISSION_PERM_EMPTY = "message_permission_perm_empty"; //%id ID
+	public static final String MESSAGE_PERMISSION_PERM_ADDED = "message_permission_perm_added"; //%p permissions %id ID 
+	public static final String MESSAGE_PERMISSION_PERM_REMOVED = "message_permission_perm_removed"; //%p permissions %id ID 
+	public static final String MESSAGE_PERMISSION_MODE_ADDED = "message_permission_mode_added";
+	public static final String MESSAGE_PERMISSION_MODE_REMOVED = "message_permission_mode_removed";
+	public static final String MESSAGE_PERMISSION_MODE_ALREADY_ADDED = "message_permission_mode_already_added";
+	public static final String MESSAGE_PERMISSION_MODE_ALREADY_REMOVED = "message_permission_mode_already_removed";
+	public static final String MESSAGE_PERMISSION_MODE_NOT_FOUND = "message_permission_mode_not_found";
+	public static final String MESSAGE_PERMISSION_TYPE_NOT_FOUND = "message_permission_type_not_found";
+	public static final String MESSAGE_PERMISSION_CHANNEL_NOT_FOUND = "message_permission_channel_not_found";
+	public static final String MESSAGE_PERMISSION_ID_NOT_FOUND = "message_permission_id_not_found";
+	public static final String MESSAGE_PERMISSION_PERM_NOT_FOUND = "message_permission_perm_not_found";
+	public static final String MESSAGE_PERMISSION_SYNTAX = "message_permission_syntax";
 }

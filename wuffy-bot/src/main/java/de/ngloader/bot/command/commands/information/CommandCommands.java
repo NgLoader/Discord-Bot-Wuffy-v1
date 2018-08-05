@@ -27,7 +27,7 @@ public class CommandCommands extends BotCommand {
 		I18n i18n = event.getCore().getI18n();
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
-		if(guild.hasPermission(event.getTextChannel(), event.getMember(), "command.commands")) {
+		if(guild.hasPermission(event.getTextChannel(), event.getMember(), PermissionKeys.COMMAND_COMMANDS)) {
 
 			var messageDisabled = i18n.format(TranslationKeys.MESSAGE_COMMANDS_DISABLED, locale);
 			var prefix = guild.getPrefixes().isEmpty() ? String.format("<@%s> ", event.getJDA().getSelfUser().getIdLong()) : guild.getPrefixes().get(0);

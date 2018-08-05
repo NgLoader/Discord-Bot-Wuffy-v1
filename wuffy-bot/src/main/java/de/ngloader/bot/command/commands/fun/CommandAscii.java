@@ -1,12 +1,10 @@
 package de.ngloader.bot.command.commands.fun;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 
 import de.ngloader.bot.command.BotCommand;
@@ -106,9 +104,7 @@ public class CommandAscii extends BotCommand {
 
 									JSONObject json = new JSONObject(response.body().string());
 
-									byte[] base64 = Base64.decodeBase64(json.getString("message"));
-
-									String answer = new String(base64, Charset.forName("US-ASCII"));
+									String answer = json.getString("message");
 
 									if(answer.length() > 1000)
 										ReplayBuilder.queue(event, MessageType.INFO, message.editMessage(i18n.format(TranslationKeys.MESSAGE_ASCII_MINIMIZED, locale,

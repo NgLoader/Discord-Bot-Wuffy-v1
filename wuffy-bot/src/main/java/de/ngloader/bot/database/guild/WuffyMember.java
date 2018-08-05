@@ -1,7 +1,5 @@
 package de.ngloader.bot.database.guild;
 
-import java.util.Arrays;
-
 import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.core.Core;
@@ -34,6 +32,6 @@ public abstract class WuffyMember extends ImplMember {
 	}
 
 	public boolean hasPermission(Channel channel, PermissionKeys... permissions) {
-		return this.getGuild().hasPermission(channel, this.member, Arrays.asList(permissions).stream().map(permission -> permission.storageKey).toArray(String[]::new));
+		return this.getGuild().hasPermission(channel, this.member, permissions);
 	}
 }

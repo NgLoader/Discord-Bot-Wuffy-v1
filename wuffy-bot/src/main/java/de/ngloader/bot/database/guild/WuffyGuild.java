@@ -11,6 +11,7 @@ import de.ngloader.bot.database.MuteInfo;
 import de.ngloader.bot.database.NotificationInfo;
 import de.ngloader.bot.database.NotificationType;
 import de.ngloader.bot.database.WarnInfo;
+import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.core.Core;
 import de.ngloader.core.command.MessageType;
 import de.ngloader.core.database.impl.ImplGuild;
@@ -274,17 +275,25 @@ public abstract class WuffyGuild extends ImplGuild {
 		return memberHighest > memberHighest2 || (equals && memberHighest == memberHighest2);
 	}
 
-	public boolean hasPermission(Channel channel, User user, String... permissions) {
+	public boolean hasPermission(Channel channel, User user, PermissionKeys... permissions) {
 		return this.hasPermission(channel, this.getMember(user), permissions);
 	}
 
-	public boolean hasPermission(Channel channel, Member member, String... permissions) {
+	public boolean hasPermission(Channel channel, Member member, PermissionKeys... permissions) {
 		if(member.isOwner() || this.core.isAdmin(member.getUser()))
 			return true;
 
 		List<Role> roles = member.getRoles();
-		List<String> permissionList = Arrays.asList(permissions);
+		List<String> permissionList = Arrays.asList(permissions).stream()
+				.map(permission -> permission.key)
+				.collect(Collectors.toList());
 		List<EnumPermissionMode> permissionMode = this.getPermissionMode();
+
+		//Add category permissions
+		permissionList.addAll(Arrays.asList(permissions).stream()
+				.map(permission -> permission.category.key)
+				.distinct()
+				.collect(Collectors.toList()));
 
 		String userIdString = null;
 		String[] userRoleIds = null;
@@ -355,13 +364,29 @@ public abstract class WuffyGuild extends ImplGuild {
 
 	public enum EnumRoleRankingMode {
 		DISCORD,
-		WUFFY
+		WUFFY;
+
+		public static EnumRoleRankingMode search(String search) {
+			for(EnumRoleRankingMode mode : EnumRoleRankingMode.values())
+				if(mode.name().equalsIgnoreCase(search))
+					return mode;
+
+			return null;
+		}
 	}
 
 	public enum EnumPermissionType {
 		USER,
 		ROLE,
-		RANKING
+		RANKING;
+
+		public static EnumPermissionType search(String search) {
+			for(EnumPermissionType type : EnumPermissionType.values())
+				if(type.name().equalsIgnoreCase(search))
+					return type;
+
+			return null;
+		}
 	}
 
 	public enum EnumPermissionMode {
@@ -371,6 +396,14 @@ public abstract class WuffyGuild extends ImplGuild {
 
 		CHANNEL_USER,
 		CHANNEL_ROLE,
-		CHANNEL_RANKING,
+		CHANNEL_RANKING;
+
+		public static EnumPermissionMode search(String search) {
+			for(EnumPermissionMode mode : EnumPermissionMode.values())
+				if(mode.name().equalsIgnoreCase(search))
+					return mode;
+
+			return null;
+		}
 	}
 }

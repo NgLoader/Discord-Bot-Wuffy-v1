@@ -16,6 +16,7 @@ import de.ngloader.core.command.Command;
 import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
+import de.ngloader.core.util.DiscordUtil;
 import net.dv8tion.jda.core.entities.Role;
 
 @Command(aliases = { "autorole", "arole", "autor" })
@@ -56,21 +57,21 @@ public class CommandAutoRole extends BotCommand {
 					} else
 						this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_NO_ROLE_ADDED, locale));
 				} else if(args.length > 1) {
-					List<Role> role = guild.getRolesByName(String.join(" ", Arrays.copyOfRange(args, 1, args.length)), true);
+					Role role = DiscordUtil.searchRole(guild, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
 
 					switch(args[0].toLowerCase()) {
 					case "a":
 					case "add":
-						if(!role.isEmpty()) {
-							if(!guild.getAutoRole().contains(role.get(0).getId())) {
+						if(role != null) {
+							if(!guild.getAutoRole().contains(role.getId())) {
 								if(guild.getAutoRole().size() < 10) {
-									guild.addAutoRole(role.get(0).getId());
+									guild.addAutoRole(role.getId());
 
-									this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_ADDED, locale, "%n", role.get(0).getName()));
+									this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_ADDED, locale, "%n", role.getName()));
 								} else
-									this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_MAX_COUNT, locale, "%n", role.get(0).getName()));
+									this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_MAX_COUNT, locale, "%n", role.getName()));
 							} else
-								this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_ALREADY_ADDED, locale, "%n", role.get(0).getName()));
+								this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_ALREADY_ADDED, locale, "%n", role.getName()));
 						} else
 							this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_NO_ROLE_FOUND, locale, "%n", args[1]));
 						break;
@@ -78,13 +79,13 @@ public class CommandAutoRole extends BotCommand {
 					case "r":
 					case "rem":
 					case "remove":
-						if(!role.isEmpty()) {
-							if(guild.getAutoRole().contains(role.get(0).getId())) {
-								guild.removeAutoRole(role.get(0).getId());
+						if(role != null) {
+							if(guild.getAutoRole().contains(role.getId())) {
+								guild.removeAutoRole(role.getId());
 
-								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_REMOVED, locale, "%n", role.get(0).getName()));
+								this.replay(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_REMOVED, locale, "%n", role.getName()));
 							} else
-								this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_NOT_ADDED, locale, "%n", role.get(0).getName()));
+								this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_NOT_ADDED, locale, "%n", role.getName()));
 						} else
 							this.replay(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_NO_ROLE_FOUND, locale, "%n", args[1]));
 						break;

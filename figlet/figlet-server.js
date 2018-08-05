@@ -21,11 +21,11 @@ http.createServer(function (request, response) {
 
 								if(text != null) {
 									responseMessage.code = "200 OK";
-									responseMessage.message = Buffer.from(figlet.textSync(text, {
+									responseMessage.message = figlet.textSync(text, {
 										font: font != null ? font : 'Standard',
 										horizontalLayout: horizontalLayout != null ? horizontalLayout : 'default',
 										verticalLayout: verticalLayout != null ? verticalLayout : 'default'
-									}), 'ascii').toString('base64');
+									});
 								} else {
 									responseMessage.message = "No Text";
 								}
@@ -47,7 +47,7 @@ http.createServer(function (request, response) {
 				break;
 		}
 
-		response.writeHead(200, {'Content-Type': 'text/plain'});
+		response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
 		response.end(JSON.stringify(responseMessage));
 	} catch(error) {
 		if(response != null)
