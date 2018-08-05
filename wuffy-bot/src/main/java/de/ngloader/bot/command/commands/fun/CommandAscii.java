@@ -27,7 +27,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 @Command(aliases = { "ascii" })
-@CommandConfig(category = CommandCategory.IMAGE)
+@CommandConfig(category = CommandCategory.FUN)
 public class CommandAscii extends BotCommand {
 
 	private static final String URL_FRONTS_LIST = "http://173.249.11.205:8009/?type=list";
@@ -112,7 +112,7 @@ public class CommandAscii extends BotCommand {
 
 									if(answer.length() > 1000)
 										ReplayBuilder.queue(event, MessageType.INFO, message.editMessage(i18n.format(TranslationKeys.MESSAGE_ASCII_MINIMIZED, locale,
-												"%l", String.format("https://patorjk.com/software/taag/#p=display&f=%s&t=%s", font, text))));
+												"%l", String.format("http://patorjk.com/software/taag/#p=display&f=%s&t=%s", font, text))));
 									else
 										ReplayBuilder.queue(event, MessageType.INFO, message.editMessage(String.format("```ascii\n%s\n```", answer)));
 								} catch (IOException e) {

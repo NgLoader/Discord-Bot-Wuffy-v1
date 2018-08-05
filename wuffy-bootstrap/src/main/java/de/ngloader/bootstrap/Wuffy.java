@@ -1,5 +1,6 @@
 package de.ngloader.bootstrap;
 
+import de.ngloader.bootstrap.command.ConsoleCommandDeveloperMode;
 import de.ngloader.bootstrap.command.ConsoleCommandGarbageCollector;
 import de.ngloader.bootstrap.command.ConsoleCommandStartInstance;
 import de.ngloader.bootstrap.command.ConsoleCommandStopInstance;
@@ -40,6 +41,8 @@ public class Wuffy extends TickingTask {
 				LoggerManager.setDebug(true);
 			else if(arg.equalsIgnoreCase("--threads"))
 				threads = Integer.valueOf(args[i + 1]);
+			else if(arg.equalsIgnoreCase("--dev"))
+				System.setProperty("developerMode", "true");
 		}
 
 		System.setProperty("io.netty.eventLoopThreads", Integer.toString(threads));
@@ -73,6 +76,7 @@ public class Wuffy extends TickingTask {
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandStartInstance());
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandStopInstance());
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandGarbageCollector());
+		this.consoleCommandManager.registerExecutor(new ConsoleCommandDeveloperMode());
 
 		this.masterThread = new Thread(this, "Wuffy Discord Bot - Master");
 		this.masterThread.start();

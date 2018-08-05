@@ -8,6 +8,7 @@ import de.ngloader.bot.command.CommandConfig;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
+import de.ngloader.bot.util.ReplayBuilder;
 import de.ngloader.core.command.Command;
 import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
@@ -25,10 +26,12 @@ public class Command8Ball extends BotCommand {
 		String locale = event.getMember(WuffyMember.class).getLocale();
 
 		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_8BALL)) {
-			String[] answer = i18n.format(TranslationKeys.MESSAGE_8BALL_ANSWER, locale).split("|");
+			String[] answer = i18n.format(TranslationKeys.MESSAGE_8BALL_ANSWER, locale).split("#");
 
 			if(answer.length > 0) {
-				this.replay(event, MessageType.INFO, String.format(":8ball: %s",answer[Command8Ball.RANDOM.nextInt(answer.length)]));
+				new ReplayBuilder(event, MessageType.INFO, String.format(":8ball: %s", answer[Command8Ball.RANDOM.nextInt(answer.length)]), false)
+				.setupDefault(false, true)
+				.queue();
 			} else
 				this.replay(event, MessageType.WARN, i18n.format(TranslationKeys.MESSAGE_8BALL_NO_ANSWER, locale));
 		} else

@@ -32,8 +32,8 @@ public class CommandCoinflip extends BotCommand {
 			} else {
 				this.replay(event, MessageType.INFO, new EmbedBuilder()
 						.setTimestamp(Instant.now())
-						.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_TAIL, locale))
-						.setImage("https://wuffy.eu/pictures/coinflip/tail.png"));
+						.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_NUMBER, locale))
+						.setImage("https://wuffy.eu/pictures/coinflip/number.png"));
 			}
 		} else
 			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,

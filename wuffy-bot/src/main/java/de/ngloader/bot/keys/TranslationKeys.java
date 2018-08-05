@@ -244,7 +244,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_8BALL_NO_ARGS = "message_8ball_no_args";
 
 	public static final String MESSAGE_COINFLIP_HEAD = "message_coinflip_head";
-	public static final String MESSAGE_COINFLIP_TAIL = "message_coinflip_tail";
+	public static final String MESSAGE_COINFLIP_NUMBER = "message_coinflip_tail";
 
 	public static final String MESSAGE_ASCII_LIST = "message_ascii_list";
 	public static final String MESSAGE_ASCII_CREATING = "message_ascii_creating";

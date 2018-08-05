@@ -33,6 +33,10 @@ public class CommandTrigger extends de.ngloader.core.command.CommandTrigger<Wuff
 
 		WuffyGuild guild = (WuffyGuild) this.manager.getCore().getStorageService().getExtension(IExtensionGuild.class).getGuild(event.getGuild());
 
+		if(System.getProperty("developerMode") != null)
+			if(!this.manager.getCore().isAdmin(event.getAuthor()))
+				return;
+
 		List<String> prefixes = new ArrayList<String>(guild.getPrefixes());
 
 		if(guild.isMention() || event.getMember().isOwner() || this.manager.getCore().isAdmin(event.getAuthor().getIdLong()))
