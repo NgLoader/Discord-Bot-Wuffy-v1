@@ -4,14 +4,14 @@ import java.awt.Color;
 
 public enum MessageType {
 
-	SUCCESS(new Color(100, 255, 0)),
-	LOADING(new Color(75, 255, 15)),
-	INFO(new Color(141, 216, 19)),
-	PICTURE(new Color(120, 255, 25)),
+	SUCCESS(new Color(12, 255, 0)),
+	LOADING(new Color(24, 219, 249)),
+	INFO(new Color(4, 237, 66)),
+	PICTURE(new Color(4, 237, 124)),
 	LIST(new Color(15, 255, 195)),
-	HELP(new Color(255, 255, 255)),
-	PERMISSION(new Color(255, 231, 14)),
-	SYNTAX(new Color(211, 79, 16)),
+	HELP(new Color(178, 255, 207)),
+	PERMISSION(new Color(255, 61, 61)),
+	SYNTAX(new Color(244, 144, 15)),
 	ERROR(new Color(255, 0, 0));
 
 	public Color color;

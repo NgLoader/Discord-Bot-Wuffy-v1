@@ -27,15 +27,14 @@ public class MongoGuildCache {
 	private static final Map<MessageType, Integer> DEFAULT_AUTO_PRUNE_DELAYS = new HashMap<MessageType, Integer>();
 
 	static {
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SUCCESS, 5);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.INFO, 240);
-//		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LOADING, 240); Disabled (loading not removeable)
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PICTURE, 240);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LIST, 240);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.HELP, 240);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PERMISSION, 8);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SYNTAX, 8);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.ERROR, 20);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SUCCESS, 4);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.INFO, 60);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PICTURE, 60);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LIST, 180);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.HELP, 120);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PERMISSION, 12);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SYNTAX, 12);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.ERROR, 8);
 	}
 
 	public MongoGuildCache(Long guildId) {

@@ -50,7 +50,7 @@ public abstract class Command {
 			if(guild.isMessageDeleteExecuter())
 				this.deleteMessage(event.getMessage());
 
-			if(guild.isMessageDeleteBot() && guild.isMessageDeleteDelay(type) && guild.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE))
+			if(guild.isMessageDeleteBot() && type != MessageType.LOADING && guild.isMessageDeleteDelay(type) && guild.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_MANAGE))
 				message.queue(success -> this.deleteMessage(success, guild.getMessageDeleteDelay(type)));
 			else
 				message.queue();
