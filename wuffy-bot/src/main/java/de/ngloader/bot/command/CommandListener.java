@@ -74,7 +74,7 @@ public class CommandListener extends ListenerAdapter {
 					@Override
 					public void run() {
 						try {
-							Command command = CommandListener.this.regestry.getCommand(wuffyAlias);
+							Command command = CommandListener.this.regestry.getCommand(wuffyAlias.toLowerCase());
 
 							if(command != null) {
 								Core core = CommandListener.this.handler.getCore();
@@ -128,7 +128,7 @@ public class CommandListener extends ListenerAdapter {
 		String message = event.getMessage().getContentRaw();
 		String[] split = message.split("\\s+");
 		String[] args = Arrays.copyOfRange(split, 1, split.length);
-		String alias = split[0];
+		String alias = split[0].toLowerCase();
 
 		String mention = String.format("<@%s>", Long.toString(event.getJDA().getSelfUser().getIdLong()));
 
@@ -154,7 +154,7 @@ public class CommandListener extends ListenerAdapter {
 			public void run() {
 
 				try {
-					Command command = CommandListener.this.regestry.getCommand(wuffyAlias);
+					Command command = CommandListener.this.regestry.getCommand(wuffyAlias.toLowerCase());
 
 					if(command != null) {
 						Core core = CommandListener.this.handler.getCore();
