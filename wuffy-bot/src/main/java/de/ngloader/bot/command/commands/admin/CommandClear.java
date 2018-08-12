@@ -16,7 +16,6 @@ import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.util.DiscordUtil;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageHistory;
 
 @CommandSettings(
@@ -76,18 +75,23 @@ public class CommandClear extends Command {
 							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[1]));
 						//Member can not found
 						} else {
-							history.retrievePast(count).queue(messages -> {
-								List<Message> delete = messages.stream()
+							int countSize = count;
+							history.retrievePast(100).queue(messages -> {
+								List<String> delete = messages.stream()
 										.filter(msg ->
 											msg.getIdLong() != event.getMessageIdLong() &&
 											msg.getCreationTime().isAfter(OffsetDateTime.now().minusWeeks(2).plusMinutes(2)))
+										.map(msg -> msg.getId())
 										.collect(Collectors.toList());
 
+								if(delete.size() > countSize)
+									delete.subList(0, countSize);
+
 								if(!delete.isEmpty()) {
-									if(delete.size() == 1)
-										delete.get(0).delete().queue();
+									if(delete.size() > 1)
+										event.getTextChannel().deleteMessagesByIds(delete).queue();
 									else
-										event.getTextChannel().deleteMessages(delete).queue();
+										event.getTextChannel().deleteMessageById(delete.get(0)).queue();
 
 									this.sendMessage(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_CLEAR_CLEARED, locale, "%c", Integer.toString(delete.size())));
 								} else
@@ -101,7 +105,7 @@ public class CommandClear extends Command {
 				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOT_A_NUMBER, locale));
 			//Not a number
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_CLEAR_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

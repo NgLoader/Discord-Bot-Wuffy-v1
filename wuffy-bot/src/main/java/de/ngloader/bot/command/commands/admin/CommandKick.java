@@ -60,7 +60,7 @@ public class CommandKick extends Command {
 				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 			//Member not found
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_KICK_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

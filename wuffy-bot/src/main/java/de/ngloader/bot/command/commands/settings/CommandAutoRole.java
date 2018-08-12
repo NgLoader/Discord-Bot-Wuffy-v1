@@ -95,13 +95,13 @@ public class CommandAutoRole extends Command {
 					break;
 
 				default:
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 					break;
 				}
 			} else
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_SYNTAX, locale));
+				this.sendHelpMessage(event, command, args);
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_AUTOROLE_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

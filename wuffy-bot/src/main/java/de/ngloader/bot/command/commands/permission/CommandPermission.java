@@ -83,7 +83,7 @@ public class CommandPermission extends Command {
 							break;
 
 						default:
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+							this.sendHelpMessage(event, command, args);
 							break;
 						}
 					} else
@@ -95,7 +95,7 @@ public class CommandPermission extends Command {
 									.map(mode -> StringUtil.writeFirstUpperCase(mode.name()))
 									.collect(Collectors.toList())))));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			case "list":
@@ -213,9 +213,9 @@ public class CommandPermission extends Command {
 								 this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_TYPE_NOT_FOUND, locale,
 											"%n", args[3]));
 						} else
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+							this.sendHelpMessage(event, command, args);
 					} else
-						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+						this.sendHelpMessage(event, command, args);
 				} else if(args.length > 0) {
 					 if(args[0].equalsIgnoreCase("list")) {
 							List<String> keys =  Arrays.asList(PermissionKeys.values()).stream()
@@ -226,9 +226,9 @@ public class CommandPermission extends Command {
 							this.sendMessage(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_PERMISSION_LIST, locale,
 									"%l", String.format("    - **%s**", String.join("**\n    - **", keys))));
 						} else
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+							this.sendHelpMessage(event, command, args);
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			case "channel":
@@ -302,7 +302,7 @@ public class CommandPermission extends Command {
 											"%p", String.join(", ", remove),
 											"%id", idDisplay));
 								} else
-									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+									this.sendHelpMessage(event, command, args);
 							} else
 								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_ID_NOT_FOUND, locale,
 										"%n", args[3]));
@@ -313,7 +313,7 @@ public class CommandPermission extends Command {
 						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_CHANNEL_NOT_FOUND, locale,
 								"%n", args[1]));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			case "global":
@@ -388,7 +388,7 @@ public class CommandPermission extends Command {
 									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_PERM_NOT_FOUND, locale,
 										"%id", idDisplay));
 							} else
-								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+								this.sendHelpMessage(event, command, args);
 						} else
 							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_ID_NOT_FOUND, locale,
 									"%n", args[3]));
@@ -396,15 +396,15 @@ public class CommandPermission extends Command {
 						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_TYPE_NOT_FOUND, locale,
 								"%n", args[2]));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			default:
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+				this.sendHelpMessage(event, command, args);
 				break;
 			}
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

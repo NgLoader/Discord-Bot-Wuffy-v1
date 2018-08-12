@@ -65,11 +65,11 @@ public class CommandPrefix extends Command {
 //					} else
 //						this.replay(event, MessageType.ERROR, i18n.format(TranslationKeys.MESSAGE_PREFIX_MIN_COUNT, locale));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 			} else
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
+				this.sendHelpMessage(event, command, args);
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PREFIX_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

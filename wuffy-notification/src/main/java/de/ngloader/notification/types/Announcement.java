@@ -64,7 +64,7 @@ public abstract class Announcement implements Runnable {
 	}
 
 	public void add(String guildId, List<Document> documents) {
-		if(guildId == null || guildId.isEmpty() || this.running.get() || !this.isQueueEmpty())
+		if(guildId == null || guildId.isEmpty() || this.running.get())
 			return;
 
 		this._add(guildId, documents);

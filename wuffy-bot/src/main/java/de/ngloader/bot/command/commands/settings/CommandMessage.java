@@ -187,15 +187,15 @@ public class CommandMessage extends Command {
 							} else
 								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_TYPE_NOT_FOUND, locale));
 						} else
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+							this.sendHelpMessage(event, command, args);
 						break;
 
 						default:
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+							this.sendHelpMessage(event, command, args);
 							break;
 					}
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			case "d":
@@ -293,7 +293,7 @@ public class CommandMessage extends Command {
 							} else
 								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOT_A_NUMBER, locale));
 						} else
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+							this.sendHelpMessage(event, command, args);
 						break;
 
 					case "l":
@@ -306,19 +306,19 @@ public class CommandMessage extends Command {
 						break;
 
 					default:
-						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+						this.sendHelpMessage(event, command, args);
 						break;
 					}
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			default:
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+				this.sendHelpMessage(event, command, args);
 				break;
 			}
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MESSAGE_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	private String convertColorToHex(Color color) {

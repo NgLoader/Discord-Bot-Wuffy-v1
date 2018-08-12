@@ -75,39 +75,30 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_INVITE = "message_invite";
 
 	public static final String MESSAGE_VCKICK_KICKED = "message_vckick_kicked";
-	public static final String MESSAGE_VCKICK_SYNTAX = "message_vckick_syntax";
 
 	public static final String MESSAGE_CLEAR_CLEARED = "message_clear_cleared";
 	public static final String MESSAGE_CLEAR_CLEARED_USER = "message_clear_cleared_user";
 	public static final String MESSAGE_CLEAR_NO_MESAGE_TO_DELETE = "message_clear_no_message_to_delete";
-	public static final String MESSAGE_CLEAR_SYNTAX = "message_clear_syntax";
 
 	public static final String MESSAGE_MUTE_MUTED = "message_mute_muted";
 	public static final String MESSAGE_MUTE_ALREADY_MUTED = "message_mute_already_muted";
-	public static final String MESSAGE_MUTE_SYNTAX = "message_mute_syntax";
 
 	public static final String MESSAGE_UNMUTE_UNMUTED = "message_unmute_unmuted";
 	public static final String MESSAGE_UNMUTE_ALREADY_UNMUTED = "message_unmute_already_unmuted";
-	public static final String MESSAGE_UNMUTE_SYNTAX = "message_unmute_syntax";
 
 	public static final String MESSAGE_KICK_KICKED = "message_kick_kicked";
 	public static final String MESSAGE_KICK_KICKED_REASON = "message_kick_kicked_reason";
-	public static final String MESSAGE_KICK_SYNTAX = "message_kick_syntax";
 
 	public static final String MESSAGE_BAN = "message_ban";
 	public static final String MESSAGE_BAN_REASON = "message_ban_reason";
-	public static final String MESSAGE_BAN_SYNTAX = "message_ban_syntax";
 
 	public static final String MESSAGE_SOFTBAN = "message_softban";
 	public static final String MESSAGE_SOFTBAN_REASON = "message_softban_reason";
-	public static final String MESSAGE_SOFTBAN_SYNTAX = "message_softban_syntax";
 
 	public static final String MESSAGE_HARDBAN = "message_hardban";
 	public static final String MESSAGE_HARDBAN_REASON = "message_hardban_reason";
-	public static final String MESSAGE_HARDBAN_SYNTAX = "message_hardban_syntax";
 
 	public static final String MESSAGE_UNBAN = "message_unban";
-	public static final String MESSAGE_UNBAN_SYNTAX = "message_unban_syntax";
 
 	public static final String MESSAGE_PREFIX_LIST = "message_prefix_list";
 	public static final String MESSAGE_PREFIX_REMOVED = "message_prefix_removed";
@@ -118,7 +109,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_PREFIX_MAX_LENGTH = "message_prefix_max_length";
 	public static final String MESSAGE_PREFIX_MAX_COUNT = "message_prefix_max_count";
 	public static final String MESSAGE_PREFIX_MIN_COUNT = "message_prefix_min_count";
-	public static final String MESSAGE_PREFIX_SYNTAX = "message_prefix_syntax";
 
 	public static final String MESSAGE_USERINFO_USERNAME = "message_userinfo_username";
 	public static final String MESSAGE_USERINFO_DISCRIMINATOR = "message_userinfo_discriminator";
@@ -130,7 +120,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_USERINFO_CREATION = "message_userinfo_creation";
 	public static final String MESSAGE_USERINFO_USERLOCALE = "message_userinfo_userlocale";
 	public static final String MESSAGE_USERINFO_USERLOCALE_NOT_SELECTED = "message_userinfo_userlocale_not_selected";
-	public static final String MESSAGE_USERINFO_SYNTAX = "message_userinfo_syntax";
 
 	public static final String MESSAGE_MENTION_ENABLE = "message_mention_enable";
 	public static final String MESSAGE_MENTION_DISABLE = "message_mention_disable";
@@ -143,7 +132,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_LANGUAGE_USER_USE_GUILD = "message_language_user_use_guild";
 	public static final String MESSAGE_LANGUAGE_LIST = "message_language_list"; //%l list
 	public static final String MESSAGE_LANGUAGE_NOT_EXIST = "message_language_not_exist";
-	public static final String MESSAGE_LANGUAGE_SYNTAX = "message_language_syntax";
 
 	public static final String MESSAGE_NOTIFICATION_TYPE_TWITCH = "message_notification_type_twitch";
 	public static final String MESSAGE_NOTIFICATION_TYPE_YOUTUBE = "message_notification_type_youtube";
@@ -209,9 +197,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_TWITCH = "message_notification_default_embed_message_twitch";
 	public static final String MESSAGE_NOTIFICATION_CHANNEL_NOT_FOUND = "message_notification_channel_not_found";
 	public static final String MESSAGE_NOTIFICATION_TEXTCHANNEL_NOT_FOUND = "message_notification_textchannel_not_found";
-	public static final String MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE = "message_notification_syntax_youtube";
-	public static final String MESSAGE_NOTIFICATION_SYNTAX_TWITCH = "message_notification_syntax_twitch";
-	public static final String MESSAGE_NOTIFICATION_SYNTAX = "message_notification_syntax";
 
 	public static final String MESSAGE_MESSAGE_INFO = "message_message_info"; //%e (is delete executer), %b (is delete bot), %l (list of delays)
 	public static final String MESSAGE_MESSAGE_EXECUTER_ENABLE = "message_message_executer_enable";
@@ -231,12 +216,10 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_MESSAGE_COLOR_SET = "message_message_color_set";
 	public static final String MESSAGE_MESSAGE_COLOR_LIST = "message_message_color_list";
 	public static final String MESSAGE_MESSAGE_COLOR_INFO = "message_message_color_info";
-	public static final String MESSAGE_MESSAGE_SYNTAX = "message_message_syntax";
 
 	public static final String MESSAGE_RENAME = "message_rename"; //%on oldName %nn newName %rn realName
 	public static final String MESSAGE_RENAME_SPEICAL_CHARACTER = "message_rename_special_character"; //%t target %n name
 	public static final String MESSAGE_RENAME_NOT_FOUND = "message_rename_not_found"; //%t target
-	public static final String MESSAGE_RENAME_SYNTAX = "message_rename_syntax";
 
 	public static final String MESSAGE_AUTOROLE_ADDED = "message_autorole_added";
 	public static final String MESSAGE_AUTOROLE_REMOVED = "message_autorole_remove";
@@ -246,7 +229,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_AUTOROLE_NO_ROLE_FOUND = "message_autorole_no_role_found";
 	public static final String MESSAGE_AUTOROLE_LIST = "message_autorole_list";
 	public static final String MESSAGE_AUTOROLE_NO_ROLE_ADDED = "message_autorole_no_role_added";
-	public static final String MESSAGE_AUTOROLE_SYNTAX = "message_autorole_syntax";
 
 	public static final String MESSAGE_NSFW_CHANNEL_NOT = "message_nsfw_channel_not";
 	public static final String MESSAGE_NSFW_SEARCHING = "message_nsfw_searching";
@@ -269,7 +251,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_ASCII_MINIMIZED = "message_ascii_minimized";
 	public static final String MESSAGE_ASCII_TEXT_TO_LONG = "message_ascii_text_to_long";
 	public static final String MESSAGE_ASCII_FONT_NOT_FOUND = "message_ascii_font_not_found";
-	public static final String MESSAGE_ASCII_SYNTAX = "message_ascii_syntax";
 
 	public static final String MESSAGE_GUILDINFO_OWNER = "message_guildinfo_owner";
 	public static final String MESSAGE_GUILDINFO_MEMBERS = "message_guildinfo_members";
@@ -303,5 +284,4 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_PERMISSION_CHANNEL_NOT_FOUND = "message_permission_channel_not_found";
 	public static final String MESSAGE_PERMISSION_ID_NOT_FOUND = "message_permission_id_not_found";
 	public static final String MESSAGE_PERMISSION_PERM_NOT_FOUND = "message_permission_perm_not_found";
-	public static final String MESSAGE_PERMISSION_SYNTAX = "message_permission_syntax";
 }

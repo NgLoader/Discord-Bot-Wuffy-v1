@@ -119,8 +119,7 @@ public class CommandTwitch extends Command {
 								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
 								"%n", name));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			case "r":
@@ -139,8 +138,7 @@ public class CommandTwitch extends Command {
 						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
 								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			case "m":
@@ -222,8 +220,7 @@ public class CommandTwitch extends Command {
 									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
 											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
 							} else
-								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+								this.sendHelpMessage(event, command, args);
 							break;
 
 						case "s":
@@ -530,37 +527,30 @@ public class CommandTwitch extends Command {
 																		"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale),
 																		"%f", args[6]));
 														} else
-															this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+															this.sendHelpMessage(event, command, args);
 													} else
-														this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-																"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+														this.sendHelpMessage(event, command, args);
 												} else
-													this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+													this.sendHelpMessage(event, command, args);
 											} else
 												this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
 														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
 											break;
 
 										default:
-											this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+											this.sendHelpMessage(event, command, args);
 											break;
 										}
 									} else
-										this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+										this.sendHelpMessage(event, command, args);
 									break;
 
 								default:
-									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+									this.sendHelpMessage(event, command, args);
 									break;
 								}
 							} else
-								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+								this.sendHelpMessage(event, command, args);
 							break;
 
 						case "r":
@@ -724,8 +714,7 @@ public class CommandTwitch extends Command {
 											break;
 
 										default:
-											this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+											this.sendHelpMessage(event, command, args);
 											break;
 										}
 								} else
@@ -735,33 +724,28 @@ public class CommandTwitch extends Command {
 								break;
 
 							default:
-								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+								this.sendHelpMessage(event, command, args);
 								break;
 							}
 							break;
 
 						default:
-							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+							this.sendHelpMessage(event, command, args);
 							break;
 						}
 					} else
 						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
 								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+					this.sendHelpMessage(event, command, args);
 				break;
 
 			default:
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-						"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+				this.sendHelpMessage(event, command, args);
 				break;
 			}
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX_TWITCH, locale,
-					"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_TWITCH, locale)));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

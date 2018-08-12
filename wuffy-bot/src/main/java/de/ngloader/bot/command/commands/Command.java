@@ -133,6 +133,13 @@ public abstract class Command {
 			message.delete().queueAfter(delay, TimeUnit.SECONDS, success -> { });
 	}
 
+	public void sendHelpMessage(WuffyMessageRecivedEvent event, String command, String[] args) {
+		EmbedBuilder message = this.buildHelpMessage(event, command, args);
+
+		if(message != null)
+			this.sendMessage(event, MessageType.HELP, message);
+	}
+
 	public EmbedBuilder buildHelpMessage(WuffyMessageRecivedEvent event, String command, String[] args) {
 		if(this.hasBotPermission(event, Permission.MESSAGE_EMBED_LINKS)) {
 			EmbedBuilder embedBuilder = this.createEmbed(event, MessageType.HELP);

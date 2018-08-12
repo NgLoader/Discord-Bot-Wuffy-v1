@@ -65,7 +65,7 @@ public class CommandHardBan extends Command {
 			} else
 				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_MEMBER_NOT_FOUND, locale, "%m", args[0]));
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_HARDBAN_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override

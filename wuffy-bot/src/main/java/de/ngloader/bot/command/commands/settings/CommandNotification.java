@@ -186,8 +186,7 @@ public class CommandNotification extends Command {
 									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale),
 									"%n", name));
 					} else
-						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+						this.sendHelpMessage(event, command, args);
 					break;
 
 				case "r":
@@ -206,8 +205,7 @@ public class CommandNotification extends Command {
 							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
 									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
 					} else
-						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+						this.sendHelpMessage(event, command, args);
 					break;
 
 				case "m":
@@ -308,8 +306,7 @@ public class CommandNotification extends Command {
 										this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
 												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
 								} else
-									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+									this.sendHelpMessage(event, command, args);
 								break;
 
 							case "s":
@@ -616,37 +613,30 @@ public class CommandNotification extends Command {
 																			"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale),
 																			"%f", args[7]));
 															} else
-																this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-																		"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+																this.sendHelpMessage(event, command, args);
 														} else
-															this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-																	"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+															this.sendHelpMessage(event, command, args);
 													} else
-														this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-																"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+														this.sendHelpMessage(event, command, args);
 												} else
 													this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_MESSAGE_TOO_LONG, locale,
 															"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
 												break;
 
 											default:
-												this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+												this.sendHelpMessage(event, command, args);
 												break;
 											}
 										} else
-											this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-													"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+											this.sendHelpMessage(event, command, args);
 										break;
 
 									default:
-										this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-												"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+										this.sendHelpMessage(event, command, args);
 										break;
 									}
 								} else
-									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+									this.sendHelpMessage(event, command, args);
 								break;
 
 							case "r":
@@ -810,8 +800,7 @@ public class CommandNotification extends Command {
 												break;
 
 											default:
-												this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-														"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+												this.sendHelpMessage(event, command, args);
 												break;
 											}
 									} else
@@ -821,33 +810,28 @@ public class CommandNotification extends Command {
 									break;
 
 								default:
-									this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-											"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+									this.sendHelpMessage(event, command, args);
 									break;
 								}
 								break;
 
 							default:
-								this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-										"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+								this.sendHelpMessage(event, command, args);
 								break;
 							}
 						} else
 							this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST, locale,
 									"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
 					} else
-						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-								"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+						this.sendHelpMessage(event, command, args);
 					break;
 
 				default:
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-							"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN.replace("unknown", notificationType.name().toLowerCase()), locale)));
+					this.sendHelpMessage(event, command, args);
 					break;
 				}
 			} else
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_SYNTAX, locale,
-						"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN, locale)));
+				this.sendHelpMessage(event, command, args);
 		} else
 			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_NOT_EXIST_TYPE, locale,
 					"%type", i18n.format(TranslationKeys.MESSAGE_NOTIFICATION_TYPE_UNKNOWN, locale)));

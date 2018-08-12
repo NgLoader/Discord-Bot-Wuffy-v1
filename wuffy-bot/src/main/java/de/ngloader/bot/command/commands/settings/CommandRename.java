@@ -67,7 +67,7 @@ public class CommandRename extends Command {
 				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_RENAME_NOT_FOUND, member.getLocale(),
 						"%t", args[0]));
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_RENAME_SYNTAX, member.getLocale()));
+			this.sendHelpMessage(event, command, args);
 		
 	}
 

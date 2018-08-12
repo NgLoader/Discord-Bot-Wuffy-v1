@@ -63,15 +63,15 @@ public class CommandAscii extends Command {
 
 	@Override
 	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
-		this.createAscii(event, args, event.getMember(WuffyMember.class).getLocale());
+		this.createAscii(event, command, args, event.getMember(WuffyMember.class).getLocale());
 	}
 
 	@Override
 	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) {
-		this.createAscii(event, args, event.getAuthor(WuffyUser.class).getUserLocale("en-US"));
+		this.createAscii(event, command, args, event.getAuthor(WuffyUser.class).getUserLocale("en-US"));
 	}
 
-	public void createAscii(WuffyMessageRecivedEvent event, String[] args, String locale) {
+	public void createAscii(WuffyMessageRecivedEvent event, String command, String[] args, String locale) {
 		if(args.length > 0) {
 			switch(args[0].toLowerCase()) {
 			case "l":
@@ -134,10 +134,10 @@ public class CommandAscii extends Command {
 								"%n", args[0]));
 						
 				} else
-					this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_ASCII_SYNTAX, locale));
+					this.sendHelpMessage(event, command, args);
 				break;
 			}
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_ASCII_SYNTAX, locale));
+			this.sendHelpMessage(event, command, args);
 	}
 }

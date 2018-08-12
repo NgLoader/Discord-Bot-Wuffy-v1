@@ -101,11 +101,11 @@ public class CommandLanguage extends Command {
 				break;
 
 			default:
-				this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_SYNTAX, member.getLocale()));
+				this.sendHelpMessage(event, command, args);
 				break;
 			}
 		} else
-			this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_LANGUAGE_SYNTAX, member.getLocale()));
+			this.sendHelpMessage(event, command, args);
 	}
 
 	@Override
