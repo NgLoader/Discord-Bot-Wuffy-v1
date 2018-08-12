@@ -48,7 +48,7 @@ public class CommandListener extends ListenerAdapter {
 
 		List<String> prefixes = new ArrayList<String>(guild.getPrefixes());
 
-		if(System.getProperty("developerMode") != null)
+		if(System.getProperty("developerMode").equals("true"))
 			if(!this.handler.getCore().isAdmin(event.getAuthor()))
 				return;
 			else
@@ -58,8 +58,9 @@ public class CommandListener extends ListenerAdapter {
 			prefixes.add(String.format("<@%s>", Long.toString(event.getJDA().getSelfUser().getIdLong())));
 
 		for(String prefix : prefixes) {
-			if(alias.equalsIgnoreCase(prefix)) {
+			if(alias.startsWith(prefix)) {
 				alias = alias.substring(prefix.length());
+				System.out.println("-> " + alias);
 
 				if(alias.isEmpty() && args.length > 0) {
 					alias = args[0].toLowerCase();

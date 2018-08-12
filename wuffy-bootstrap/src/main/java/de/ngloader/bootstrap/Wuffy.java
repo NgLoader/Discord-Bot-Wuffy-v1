@@ -32,6 +32,8 @@ public class Wuffy extends TickingTask {
 
 		Logger.info("Bootstrap", "Starting wuffy.");
 
+		System.setProperty("developerMode", "false");
+
 		var threads = 32;
 
 		for(int i = 0; i < args.length; i++) {

@@ -22,7 +22,7 @@ public class ConsoleCommandDeveloperMode implements IConsoleCommandExecutor {
 					Logger.info("Bootstrap", "Sorry, the developer mode is already enabled.");
 			else
 				if(System.getProperty("developerMode") != null) {
-					System.clearProperty("developerMode");
+					System.setProperty("developerMode", "false");
 
 					Logger.info("Bootstrap", "Successful, disabled developer mode.");
 				} else
@@ -33,7 +33,7 @@ public class ConsoleCommandDeveloperMode implements IConsoleCommandExecutor {
 
 				Logger.info("Bootstrap", "Successful, enabled developer mode.");
 			} else {
-				System.clearProperty("developerMode");
+				System.setProperty("developerMode", "false");
 
 				Logger.info("Bootstrap", "Successful, disabled developer mode.");
 			}
