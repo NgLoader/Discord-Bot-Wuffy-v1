@@ -59,7 +59,6 @@ public class CommandMessage extends Command {
 		if(args.length > 0) {
 			switch (args[0].toLowerCase()) {
 			case "info":
-				System.out.println("HELP");
 				this.sendMessage(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_MESSAGE_INFO, locale,
 						"%e", i18n.format(String.format("message_%s", Boolean.toString(guild.isMessageDeleteExecuter()), locale), locale),
 						"%b", i18n.format(String.format("message_%s", Boolean.toString(guild.isMessageDeleteBot()), locale), locale),
