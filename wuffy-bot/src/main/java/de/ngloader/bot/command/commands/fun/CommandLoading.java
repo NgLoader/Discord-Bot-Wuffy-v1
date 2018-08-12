@@ -9,21 +9,21 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.keys.PermissionKeys;
-import de.ngloader.bot.keys.TranslationKeys;
-import de.ngloader.core.command.Command;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.lang.I18n;
-import net.dv8tion.jda.core.EmbedBuilder;
 
-@Command(aliases = { "loading", "load" })
-@CommandConfig(category = CommandCategory.FUN)
-public class CommandLoading extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.FUN,
+		memberPermissionList = { PermissionKeys.COMMAND_LOADING },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_LOADING },
+		aliases = { "loading", "load" },
+		privateChatCommand = true)
+public class CommandLoading extends Command {
 
 	private static final String URL = "https://wuffy.eu/pictures/loading/";
 	private static final List<String> FILES = new ArrayList<String>();
@@ -44,17 +44,21 @@ public class CommandLoading extends BotCommand {
 		}
 	}
 
-	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		I18n i18n = event.getCore().getI18n();
-		String locale = event.getMember(WuffyMember.class).getLocale();
+	public CommandLoading(CommandHandler handler) {
+		super(handler);
+	}
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_LOADING)) {
-			this.replay(event, MessageType.INFO, new EmbedBuilder()
-					.setTimestamp(Instant.now())
-					.setImage(String.format("%s%s", CommandLoading.URL, CommandLoading.FILES.get(CommandLoading.RANDOM.nextInt(CommandLoading.FILES.size())))));
-		} else
-			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_LOADING.key));
+	@Override
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.queue(event, MessageType.INFO, event.getTextChannel().sendMessage(this.createEmbed(event, MessageType.PICTURE)
+				.setTimestamp(Instant.now())
+				.setImage(String.format("%s%s", CommandLoading.URL, CommandLoading.FILES.get(CommandLoading.RANDOM.nextInt(CommandLoading.FILES.size())))).build()));
+	}
+
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.queue(event, MessageType.INFO, event.getPrivateChannel().sendMessage(this.createEmbed(event, MessageType.PICTURE)
+				.setTimestamp(Instant.now())
+				.setImage(String.format("%s%s", CommandLoading.URL, CommandLoading.FILES.get(CommandLoading.RANDOM.nextInt(CommandLoading.FILES.size())))).build()));
 	}
 }

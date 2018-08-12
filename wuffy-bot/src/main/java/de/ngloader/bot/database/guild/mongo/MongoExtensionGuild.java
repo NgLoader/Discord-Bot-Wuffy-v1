@@ -20,7 +20,7 @@ import net.dv8tion.jda.core.entities.Member;
 public class MongoExtensionGuild extends MongoBulkWriteSystem implements IExtensionGuild<MongoGuild, MongoMember> {
 
 	private final Map<Long, MongoGuild> CACHED_GUILDS = new HashMap<Long, MongoGuild>();
-	private final Map<Long, MongoMember> CACHED_MEMBERS = new HashMap<Long, MongoMember>();
+	private final Map<Long, Map<Long, MongoMember>> CACHED_MEMBERS = new HashMap<Long, Map<Long, MongoMember>>();
 
 	@Override
 	public void registered(MongoStorage storage) {
@@ -61,11 +61,19 @@ public class MongoExtensionGuild extends MongoBulkWriteSystem implements IExtens
 	@Override
 	public MongoMember getMemeber(Guild guild, Member member) {
 		var longId = member.getUser().getIdLong();
+		var guildId = guild.getIdLong();
 
-		if(!CACHED_MEMBERS.containsKey(longId))
-			CACHED_MEMBERS.put(longId, new MongoMember(this.core, this.core.getStorageService().getExtension(IExtensionUser.class).getUser(member.getUser()), member, this.getGuild(guild), this));
+		if(!CACHED_MEMBERS.containsKey(guildId)) {
+			CACHED_MEMBERS.put(guildId, new HashMap<Long, MongoMember>());
+			CACHED_MEMBERS
+				.get(guildId)
+				.put(longId, new MongoMember(this.core, this.core.getStorageService().getExtension(IExtensionUser.class).getUser(member.getUser()), member, this.getGuild(guild), this));
+		} else if(!CACHED_MEMBERS.get(guildId).containsKey(longId))
+			CACHED_MEMBERS
+				.get(guildId)
+				.put(longId, new MongoMember(this.core, this.core.getStorageService().getExtension(IExtensionUser.class).getUser(member.getUser()), member, this.getGuild(guild), this));
 
-		return CACHED_MEMBERS.get(longId);
+		return CACHED_MEMBERS.get(guildId).get(longId);
 	}
 
 	public MongoCollection<Document> getCollection() {

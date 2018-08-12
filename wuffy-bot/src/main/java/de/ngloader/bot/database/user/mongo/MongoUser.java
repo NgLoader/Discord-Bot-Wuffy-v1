@@ -80,8 +80,25 @@ public class MongoUser extends WuffyUser {
 	}
 
 	@Override
+	public String getUserLocale(String defaultValue) {
+		return this.getUserLocale() != null ? this.getUserLocale() : defaultValue;
+	}
+
+	@Override
 	public void setUserLocale(String locale) {
 		this.cache.userLocale = locale;
 		this.queueBulk(new Document("$set", new Document("userLocale", locale)));
+	}
+
+	@Override
+	public boolean isAlphaTester() {
+		return this.cache.alphaTester != null && this.cache.alphaTester;
+	}
+
+	@Override
+	public void setAlphaTester(boolean alphaTester) {
+		this.cache.alphaTester = alphaTester;
+
+		this.queueBulk(new Document("$set", new Document("alphaTester", alphaTester)));
 	}
 }

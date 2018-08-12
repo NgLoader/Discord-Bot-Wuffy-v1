@@ -4,7 +4,7 @@ public abstract class TickingTask implements Runnable {
 
 	private static final long MS_PER_TICK = 1000L;
 
-	protected boolean running = true;
+	protected boolean running = false;
 
 	public boolean isRunning() {
 		return this.running;
@@ -13,6 +13,7 @@ public abstract class TickingTask implements Runnable {
 	@Override
 	public void run() {
 		try {
+			this.running = true;
 
 			while(this.running) {
 				this.update();
@@ -21,6 +22,8 @@ public abstract class TickingTask implements Runnable {
 		} catch(Throwable throwable) {
 			throwable.printStackTrace();
 		} finally {
+			this.running = false;
+
 			this.stop();
 		}
 	}

@@ -13,7 +13,13 @@ public abstract class WuffyUser extends ImplUser {
 
 	public abstract String getUserLocale();
 
+	public abstract String getUserLocale(String defaultValue);
+
 	public abstract void setUserLocale(String locale);
+
+	public abstract boolean isAlphaTester();
+
+	public abstract void setAlphaTester(boolean alphaTester);
 
 	public WuffyUser(Core core, User user) {
 		super(core, user);

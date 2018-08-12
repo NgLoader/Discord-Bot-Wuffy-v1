@@ -14,7 +14,9 @@ public class MongoUserCache {
 
 	public String _userId;
 
-	public BlockedInfo blocked;
+	public BlockedInfo blocked = null;
 
-	public String userLocale;
+	public String userLocale = null;
+
+	public Boolean alphaTester = false;
 }

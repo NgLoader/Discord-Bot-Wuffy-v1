@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
@@ -13,7 +14,6 @@ import de.ngloader.bot.database.NotificationType;
 import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.core.Core;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.database.impl.ImplGuild;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Guild;
@@ -280,7 +280,7 @@ public abstract class WuffyGuild extends ImplGuild {
 	}
 
 	public boolean hasPermission(Channel channel, Member member, PermissionKeys... permissions) {
-		if(member.isOwner() || this.core.isAdmin(member.getUser()))
+		if(member.isOwner() || this.core.isAdmin(member.getUser()) || permissions.length == 0)
 			return true;
 
 		List<Role> roles = member.getRoles();

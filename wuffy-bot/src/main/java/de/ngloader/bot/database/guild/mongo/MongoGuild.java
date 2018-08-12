@@ -25,6 +25,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.UpdateOneModel;
 
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
@@ -34,7 +35,6 @@ import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.mongo.MongoGuildCache.EnumEditOperator;
 import de.ngloader.core.Core;
-import de.ngloader.core.command.MessageType;
 import net.dv8tion.jda.core.entities.Guild;
 
 public class MongoGuild extends WuffyGuild {

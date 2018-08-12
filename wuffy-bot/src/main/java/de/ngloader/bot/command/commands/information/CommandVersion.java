@@ -1,29 +1,40 @@
 package de.ngloader.bot.command.commands.information;
 
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
-import de.ngloader.core.command.Command;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.lang.I18n;
 
-@Command(aliases = { "version", "ver" })
-@CommandConfig(category = CommandCategory.INFORMATION)
-public class CommandVersion extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.INFORMATION,
+		memberPermissionList = { PermissionKeys.COMMAND_VERSION },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_VERSION },
+		aliases = { "version", "ver" },
+		privateChatCommand = true)
+public class CommandVersion extends Command {
+
+	public CommandVersion(CommandHandler handler) {
+		super(handler);
+	}
 
 	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		WuffyMember member = event.getMember(WuffyMember.class);
-		I18n i18n = event.getCore().getI18n();
-		String locale = event.getMember(WuffyMember.class).getLocale();
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.sendMessage(event, MessageType.INFO, this.i18n.format(TranslationKeys.MESSAGE_VERSION, event.getMember(WuffyMember.class).getLocale(), "%v", event.getCore().getConfig().instanceVersion));
+	}
 
-		if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_VERSION))
-			this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_VERSION, locale, "%v", event.getCore().getConfig().instanceVersion));
-		else
-			this.replay(event, MessageType.INFO, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_VERSION.key));
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) {
+		String locale = event.getAuthor(WuffyUser.class).getUserLocale();
+
+		if(locale == null)
+			locale = "en-US";
+
+		this.sendMessage(event, MessageType.INFO, this.i18n.format(TranslationKeys.MESSAGE_VERSION, locale, "%v", event.getCore().getConfig().instanceVersion));
 	}
 }

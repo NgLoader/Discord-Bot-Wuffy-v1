@@ -9,21 +9,21 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.keys.PermissionKeys;
-import de.ngloader.bot.keys.TranslationKeys;
-import de.ngloader.core.command.Command;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.lang.I18n;
-import net.dv8tion.jda.core.EmbedBuilder;
 
-@Command(aliases = { "tableflip", "tablef", "tflip" })
-@CommandConfig(category = CommandCategory.FUN)
-public class CommandTableflip extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.FUN,
+		memberPermissionList = { PermissionKeys.COMMAND_TABLEFLIP },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_TABLEFLIP },
+		aliases = { "tableflip", "tf" },
+		privateChatCommand = true)
+public class CommandTableflip extends Command {
 
 	private static final String URL = "https://wuffy.eu/pictures/tableflip/";
 	private static final List<String> FILES = new ArrayList<String>();
@@ -44,17 +44,21 @@ public class CommandTableflip extends BotCommand {
 		}
 	}
 
-	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		I18n i18n = event.getCore().getI18n();
-		String locale = event.getMember(WuffyMember.class).getLocale();
+	public CommandTableflip(CommandHandler handler) {
+		super(handler);
+	}
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_TABLEFLIP)) {
-			this.replay(event, MessageType.INFO, new EmbedBuilder()
-					.setTimestamp(Instant.now())
-					.setImage(String.format("%s%s", CommandTableflip.URL, CommandTableflip.FILES.get(CommandTableflip.RANDOM.nextInt(CommandTableflip.FILES.size())))));
-		} else
-			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_TABLEFLIP.key));
+	@Override
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.queue(event, MessageType.INFO, event.getTextChannel().sendMessage(this.createEmbed(event, MessageType.PICTURE)
+				.setTimestamp(Instant.now())
+				.setImage(String.format("%s%s", CommandTableflip.URL, CommandTableflip.FILES.get(CommandTableflip.RANDOM.nextInt(CommandTableflip.FILES.size())))).build()));
+	}
+
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.queue(event, MessageType.INFO, event.getPrivateChannel().sendMessage(this.createEmbed(event, MessageType.PICTURE)
+				.setTimestamp(Instant.now())
+				.setImage(String.format("%s%s", CommandTableflip.URL, CommandTableflip.FILES.get(CommandTableflip.RANDOM.nextInt(CommandTableflip.FILES.size())))).build()));
 	}
 }

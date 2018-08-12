@@ -11,8 +11,8 @@ import de.ngloader.bot.database.user.locale.LocaleExtensionUser;
 import de.ngloader.bot.database.user.mongo.MongoExtensionUser;
 import de.ngloader.bot.database.user.sql.SQLExtensionUser;
 import de.ngloader.bot.jda.JDAAdapter;
+import de.ngloader.bot.jda.ShardInitializer;
 import de.ngloader.core.Core;
-import de.ngloader.core.command.CommandManager;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
@@ -24,8 +24,6 @@ import de.ngloader.core.youtube.YoutubeAPI;
 import net.dv8tion.jda.core.AccountType;
 
 public class WuffyBot extends Core {
-
-	private CommandManager<WuffyBot> commandManager;
 
 	private YoutubeAPI youtube;
 
@@ -58,7 +56,8 @@ public class WuffyBot extends Core {
 
 		this.youtube = new YoutubeAPI(this.getConfig(BotConfig.class).youtubeToken);
 
-		this.commandManager = new de.ngloader.bot.command.CommandManager(this);
+//		this.commandManager = new de.ngloader.bot.command.CommandManager(this);
+		new ShardInitializer(this);
 	}
 
 	@Override
@@ -67,10 +66,6 @@ public class WuffyBot extends Core {
 
 	@Override
 	protected void onDisable() {
-	}
-
-	public CommandManager<WuffyBot> getCommandManager() {
-		return this.commandManager;
 	}
 
 	public YoutubeAPI getYoutube() {

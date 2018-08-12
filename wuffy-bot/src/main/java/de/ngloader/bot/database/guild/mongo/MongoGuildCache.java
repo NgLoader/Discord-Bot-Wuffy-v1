@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.BanInfo;
 import de.ngloader.bot.database.BlockedInfo;
 import de.ngloader.bot.database.MuteInfo;
@@ -17,7 +18,6 @@ import de.ngloader.bot.database.WarnInfo;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumPermissionMode;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumPermissionType;
 import de.ngloader.bot.database.guild.WuffyGuild.EnumRoleRankingMode;
-import de.ngloader.core.command.MessageType;
 
 public class MongoGuildCache {
 
@@ -29,11 +29,12 @@ public class MongoGuildCache {
 	static {
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SUCCESS, 5);
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.INFO, 240);
+//		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LOADING, 240); Disabled (loading not removeable)
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PICTURE, 240);
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LIST, 240);
-//		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.LOADING, 240); Disabled (loading not removing)
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.WARN, 5);
-		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SYNTAX, 40);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.HELP, 240);
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.PERMISSION, 8);
+		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.SYNTAX, 8);
 		MongoGuildCache.DEFAULT_AUTO_PRUNE_DELAYS.put(MessageType.ERROR, 20);
 	}
 

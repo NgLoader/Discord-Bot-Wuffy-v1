@@ -22,14 +22,12 @@ import net.dv8tion.jda.core.entities.Webhook;
 import net.dv8tion.jda.core.managers.AudioManager;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.GuildManager;
-import net.dv8tion.jda.core.managers.GuildManagerUpdatable;
 import net.dv8tion.jda.core.requests.RestAction;
 import net.dv8tion.jda.core.requests.restaction.MemberAction;
 import net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction;
 import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 
-@SuppressWarnings("deprecation")
 public class ImplGuild implements Guild {
 
 	protected final Core core;
@@ -210,12 +208,6 @@ public class ImplGuild implements Guild {
 	@Override
 	public GuildManager getManager() {
 		return this.guild.getManager();
-	}
-
-	@Deprecated
-	@Override
-	public GuildManagerUpdatable getManagerUpdatable() {
-		return this.guild.getManagerUpdatable();
 	}
 
 	@Override

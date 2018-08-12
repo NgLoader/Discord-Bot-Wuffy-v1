@@ -10,6 +10,7 @@ import org.bson.Document;
 
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.SearchResult;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
@@ -19,11 +20,10 @@ import de.ngloader.core.youtube.YoutubeAPI;
 import de.ngloader.core.youtube.YoutubeOptionalParameterBuilder;
 import de.ngloader.core.youtube.YoutubeOptionalParameters;
 import de.ngloader.core.youtube.YoutubePart;
-import de.ngloader.notification.TickingTask;
 import de.ngloader.notification.WebhookQueue;
 import de.ngloader.notification.Wuffy;
 
-public class YoutubeAnnouncement extends TickingTask {
+public class YoutubeAnnouncement extends Announcement {
 
 	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\":\"Youtube\",\"avatar_url\":\"%tm300x300\",\"embeds\":[{\"title\":\"%ti\",\"image\":{\"url\":\"%tm580x900\"},\"url\":\"%u\",\"color\":16711680,\"timestamp\":\"%pa\",\"footer\":{\"icon_url\":\"%tm300x300\",\"text\":\"%ct\"},\"author\":{\"name\":\"%ct\",\"url\":\"%u\",\"icon_url\":\"%tm300x300\"}}]}";
 
@@ -31,7 +31,9 @@ public class YoutubeAnnouncement extends TickingTask {
 
 	private final YoutubeAPI youtubeAPI;
 
-	public YoutubeAnnouncement(YoutubeAPI youtubeAPI) {
+	public YoutubeAnnouncement(MongoCollection<Document> guildCollection, YoutubeAPI youtubeAPI) {
+		super(guildCollection, 4000, "Youtube", "YOUTUBE");
+
 		this.youtubeAPI = youtubeAPI;
 	}
 
@@ -39,7 +41,7 @@ public class YoutubeAnnouncement extends TickingTask {
 	protected void update() {
 		try {
 			if(this.queueNames.isEmpty()) {
-				this.running = false;
+				this.running.set(false);
 				return;
 			}
 
@@ -145,11 +147,12 @@ public class YoutubeAnnouncement extends TickingTask {
 				Wuffy.getInstance().getExtensionGuild().getPrintBatchResult().onResult(Wuffy.getInstance().getGuildCollection().bulkWrite(writeModels), null);
 
 			if(this.queueNames.isEmpty())
-				this.running = false;
+				this.running.set(false);
 		} catch(Exception e) {
 			Logger.fatal("Announcement youtube", "Failed to execute. waiting 10 seconds!", e);
 
-			this.running = false;
+			this.queueNames.clear();
+			this.running.set(false);
 
 			try {
 				Thread.sleep(10000);
@@ -160,15 +163,7 @@ public class YoutubeAnnouncement extends TickingTask {
 	}
 
 	@Override
-	protected void stop() {
-		this.running = true; //Reset for next run
-		this.queueNames.clear();
-	}
-
-	public void add(String guildId, List<Document> documents) {
-		if(guildId == null || guildId.isEmpty())
-			return;
-
+	public void _add(String guildId, List<Document> documents) {
 		for(Document document : documents) {
 			Message message = GsonUtil.GSON.fromJson(document.toJson(), Message.class);
 
@@ -183,6 +178,11 @@ public class YoutubeAnnouncement extends TickingTask {
 				this.queueNames.get(message.channelId).add(message);
 			}
 		}
+	}
+
+	@Override
+	protected boolean isQueueEmpty() {
+		return this.queueNames.isEmpty();
 	}
 
 	class Message {

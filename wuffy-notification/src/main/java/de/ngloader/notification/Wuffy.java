@@ -2,7 +2,6 @@ package de.ngloader.notification;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bson.Document;
 
@@ -16,10 +15,11 @@ import de.ngloader.core.logger.LoggerManager;
 import de.ngloader.core.twitch.TwitchAPI;
 import de.ngloader.core.youtube.YoutubeAPI;
 import de.ngloader.notification.database.MongoExtensionGuild;
+import de.ngloader.notification.types.Announcement;
 import de.ngloader.notification.types.TwitchAnnouncement;
 import de.ngloader.notification.types.YoutubeAnnouncement;
 
-public class Wuffy extends TickingTask {
+public class Wuffy {
 
 	public static final Long START_TIME_IN_MILLIS = System.currentTimeMillis();
 
@@ -63,8 +63,7 @@ public class Wuffy extends TickingTask {
 	private final MongoExtensionGuild extensionGuild;
 	private final MongoCollection<Document> guildCollection;
 
-	private TwitchAnnouncement twitchAnnouncement;
-	private YoutubeAnnouncement youtubeAnnouncement;
+	private final List<Announcement> announcements = new ArrayList<Announcement>();
 
 	private final Block<Document> block = new Block<Document>() {
 
@@ -72,15 +71,9 @@ public class Wuffy extends TickingTask {
 		public void apply(Document document) {
 			Document notification = document.get("notification", Wuffy.this.EMPTY_DOCUMENT);
 			if(!notification.isEmpty()) {
-				//Twitch
-				List<Document> tList = notification.get("TWITCH", Wuffy.this.EMPTY_LIST);
-				if(!tList.isEmpty())
-					Wuffy.this.twitchAnnouncement.add(document.getString("_guildId"), tList);
-
-//				Youtube
-				List<Document> ytList = notification.get("YOUTUBE", Wuffy.this.EMPTY_LIST);
-				if(!ytList.isEmpty())
-					Wuffy.this.youtubeAnnouncement.add(document.getString("_guildId"), ytList);
+				for(Announcement announcement : Wuffy.this.announcements)
+					if(notification.containsKey(announcement.getTypeName()))
+						announcement.add(document.getString("_guildId"), notification.get(announcement.getTypeName(), Wuffy.this.EMPTY_LIST));
 			}
 		}
 	};
@@ -92,9 +85,6 @@ public class Wuffy extends TickingTask {
 	
 		this.consoleCommandManager = new ConsoleCommandManager();
 
-		this.twitchAnnouncement = new TwitchAnnouncement(new TwitchAPI(this.config.twitch.token));
-		this.youtubeAnnouncement = new YoutubeAnnouncement(new YoutubeAPI(this.config.youtube.token));
-
 		this.extensionGuild = new MongoExtensionGuild(config.database.mongo);
 		this.extensionGuild.connect();
 
@@ -105,53 +95,24 @@ public class Wuffy extends TickingTask {
 			LoggerManager.close();
 		}));
 
+		this.announcements.add(new TwitchAnnouncement(this.guildCollection, new TwitchAPI(this.config.twitch.token)));
+		this.announcements.add(new YoutubeAnnouncement(this.guildCollection, new YoutubeAPI(this.config.youtube.token)));
+
 		Logger.info("Bootstrap", "Wuffy notification successful started.");
 
 		new Thread(() -> {
 			while(true) {
 				try {
-					Thread.sleep(5000); //Sleep 5 seconds.
+					Thread.sleep(30000); //Request every 30 seconds all database data.
 
 					this.guildCollection.find().forEach(this.block);
 
-					AtomicBoolean finishTwitch = new AtomicBoolean(this.config.twitch.enabled);
-					AtomicBoolean finishYoutube = new AtomicBoolean(this.config.youtube.enabled);
-
-					if(finishTwitch.get()) {
-						finishTwitch.set(false);
-
-						new Thread(() -> {
-							try {
-								this.twitchAnnouncement.run();
-							} catch(Exception e) {
-								Logger.fatal("Master", "Failed to execute twitch.", e);
-							} finally {
-								finishTwitch.set(true);
-							}
-						}).start();
-					}
-
-					if(finishYoutube.get()) {
-						finishYoutube.set(false);
-
-						new Thread(() -> {
-							try {
-								this.youtubeAnnouncement.run();
-							} catch(Exception e) {
-								Logger.fatal("Master", "Failed to execute youtube.", e);
-							} finally {
-								finishYoutube.set(true);
-							}
-						}).start();
-					}
-
-					while(!finishTwitch.get() || !finishYoutube.get())
-						Thread.sleep(1000);
+					this.announcements.forEach(Announcement::tryStart);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}, "Wuffy Notification").start();
+		}, "Wuffy Notification - Database queue").start();
 	}
 
 	public MongoExtensionGuild getExtensionGuild() {
@@ -168,13 +129,5 @@ public class Wuffy extends TickingTask {
 
 	public AnnouncementConfig getConfig() {
 		return this.config;
-	}
-
-	@Override
-	protected void update() {
-	}
-
-	@Override
-	protected void stop() {
 	}
 }

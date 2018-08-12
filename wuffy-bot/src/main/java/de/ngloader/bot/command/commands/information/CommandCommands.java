@@ -2,58 +2,72 @@ package de.ngloader.bot.command.commands.information;
 
 import java.util.stream.Collectors;
 
-import de.ngloader.bot.WuffyBot;
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
-import de.ngloader.bot.util.ReplayBuilder;
-import de.ngloader.core.command.Command;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.lang.I18n;
 import de.ngloader.core.util.StringUtil;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.ChannelType;
 
-@Command(aliases = { "commands", "cmds", "cmd" })
-@CommandConfig(category = CommandCategory.INFORMATION)
-public class CommandCommands extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.INFORMATION,
+		guildPermissionRequierd = { Permission.MESSAGE_EMBED_LINKS },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_COMMANDS },
+				memberPermissionList = { PermissionKeys.COMMAND_COMMANDS },
+		aliases = { "commands", "cmds", "cmd" },
+		privateChatCommand = true)
+public class CommandCommands extends Command {
+
+	public CommandCommands(CommandHandler handler) {
+		super(handler);
+	}
 
 	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		WuffyGuild guild = event.getGuild(WuffyGuild.class);
-		I18n i18n = event.getCore().getI18n();
-		String locale = event.getMember(WuffyMember.class).getLocale();
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.queue(event, MessageType.LIST, event.getTextChannel().sendMessage(this.createCommandList(event).build()));
+	}
 
-		if(guild.hasPermission(event.getTextChannel(), event.getMember(), PermissionKeys.COMMAND_COMMANDS)) {
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) {
+		event.getPrivateChannel().sendMessage(this.createCommandList(event).build()).queue();
+	}
 
-			var messageDisabled = i18n.format(TranslationKeys.MESSAGE_COMMANDS_DISABLED, locale);
-			var prefix = guild.getPrefixes().isEmpty() ? String.format("<@%s> ", event.getJDA().getSelfUser().getIdLong()) : guild.getPrefixes().get(0);
+	private EmbedBuilder createCommandList(WuffyMessageRecivedEvent event) {
+		WuffyGuild guild = event.getChannelType() == ChannelType.TEXT ? event.getGuild(WuffyGuild.class) : null;
+		String locale = guild != null ? event.getMember(WuffyMember.class).getLocale() : event.getAuthor(WuffyUser.class).getUserLocale("en-US");
 
-			ReplayBuilder builder = new ReplayBuilder(event, MessageType.LIST, true);
+		String messageDisabled = i18n.format(TranslationKeys.MESSAGE_COMMANDS_DISABLED, locale);
+		String messageAlpha = i18n.format(TranslationKeys.MESSAGE_COMMANDS_ALPHA, locale);
+		String prefix = guild != null ? guild.getPrefixes().isEmpty() ? String.format("<@%s> ", event.getJDA().getSelfUser().getIdLong()) : guild.getPrefixes().get(0) : "~";
+		boolean alphaTester = event.getAuthor(WuffyUser.class).isAlphaTester() || this.handler.getCore().isAdmin(event.getAuthor());
 
-			for(CommandCategory category : CommandCategory.values()) {
-				if(category == CommandCategory.BOT_AUTHOR && !event.getCore().isAdmin(event.getAuthor()))
-					continue;
+		EmbedBuilder builder = this.createEmbed(event, MessageType.LIST);
 
-				builder.addField(i18n.format(String.format("command_category_%s", category.name().toLowerCase()), locale),
-						((WuffyBot) event.getCore()).getCommandManager().getRegistry().getCommands().values().stream()
-							.distinct()
-							.filter(command -> command.getClass().getAnnotation(CommandConfig.class).category() == category)
-							.map(command -> {
-								Command annotation = command.getClass().getAnnotation(Command.class);
+		for(CommandCategory category : CommandCategory.values()) {
+			if(category == CommandCategory.BOT_AUTHOR && !event.getCore().isAdmin(event.getAuthor()))
+				continue;
 
-								return prefix +
-										StringUtil.writeFirstUpperCase(annotation.aliases()[0]) +
-										((((BotCommand) command).isCommandBlocked() || guild.getDisabledCommands().contains(annotation.aliases()[0])) ? String.format(" %s", messageDisabled) : "");
-							})
-							.collect(Collectors.joining("\n")), true);
-			}
+			builder.addField(i18n.format(String.format("command_category_%s", category.name().toLowerCase()), locale),
+					this.handler.getRegestry().getAllCommands().stream()
+						.filter(cmd -> cmd.getSettings().category() == category)
+						.filter(cmd -> cmd.getSettings().alpha() ? alphaTester : true)
+						.map(cmd -> String.format("%s%s%s%s",
+								prefix,
+								StringUtil.writeFirstUpperCase(cmd.getSettings().aliases()[0]),
+								this.handler.getRegestry().isDisabled(cmd) ? String.format(" %s", messageDisabled) : "",
+								cmd.getSettings().alpha() ? String.format(" %s", messageAlpha) : ""))
+						.collect(Collectors.joining("\n")), true);
+		}
 
-			builder.queue();
-		} else
-			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale, "%p", PermissionKeys.COMMAND_COMMANDS.key));
+		return builder;
 	}
 }

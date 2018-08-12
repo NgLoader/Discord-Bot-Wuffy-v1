@@ -62,6 +62,9 @@ public class DiscordUtil {
 		if(search.matches("[0-9]{14,20}"))
 			return guild.getRoleById(Long.valueOf(search));
 
+		if(search.equalsIgnoreCase("@everyone") || search.equalsIgnoreCase("everyone"))
+			return guild.getPublicRole();
+
 		List<Role> found = guild.getRolesByName(search, true);
 
 		if(found.isEmpty())

@@ -1,6 +1,6 @@
 package de.ngloader.bot.keys;
 
-import de.ngloader.bot.command.CommandCategory;
+import de.ngloader.bot.command.commands.CommandCategory;
 
 public enum PermissionKeys {
 
@@ -11,15 +11,16 @@ public enum PermissionKeys {
 	COMMAND_STATUS("command.status", CommandCategory.INFORMATION),
 	COMMAND_VERSION("command.version", CommandCategory.INFORMATION),
 
-	COMMAND_BAN("command.ban", CommandCategory.MODERATOR),
-	COMMAND_CLEAR("command.clear", CommandCategory.MODERATOR),
-	COMMAND_HARDBAN("command.hardban", CommandCategory.MODERATOR),
-	COMMAND_KICK("command.kick", CommandCategory.MODERATOR),
-	COMMAND_MUTE("command.mute", CommandCategory.MODERATOR),
-	COMMAND_SOFTBAN("command.softban", CommandCategory.MODERATOR),
-	COMMAND_UNBAN("command.unban", CommandCategory.MODERATOR),
-	COMMAND_UNMUTE("command.unmute", CommandCategory.MODERATOR),
-	COMMAND_VCKICK("command.vckick", CommandCategory.MODERATOR),
+	COMMAND_BAN("command.ban", CommandCategory.ADMIN),
+	COMMAND_CLEAR("command.clear", CommandCategory.ADMIN),
+	COMMAND_HARDBAN("command.hardban", CommandCategory.ADMIN),
+	COMMAND_KICK("command.kick", CommandCategory.ADMIN),
+	COMMAND_MUTE("command.mute", CommandCategory.ADMIN),
+	COMMAND_SOFTBAN("command.softban", CommandCategory.ADMIN),
+	COMMAND_UNBAN("command.unban", CommandCategory.ADMIN),
+	COMMAND_UNMUTE("command.unmute", CommandCategory.ADMIN),
+	COMMAND_VCKICK("command.vckick", CommandCategory.ADMIN),
+	COMMAND_ROLE("command.role", CommandCategory.ADMIN),
 
 	COMMAND_AUTOPRUNE("command.autoprune", CommandCategory.SETTINGS),
 	COMMAND_AUTOROLE("command.autorole", CommandCategory.SETTINGS),

@@ -24,11 +24,28 @@ public class TranslationKeys extends TranslationKeysCore {
 
 	public static final String MESSAGE_BOT_NO_INTERACT = "message_bot_no_interact";
 	public static final String MESSAGE_NO_PERMISSION = "message_no_permission";
-	public static final String MESSAGE_BOT_NO_ADMIN_PERMISSION = "message_bot_no_admin_permission";
+	public static final String MESSAGE_BOT_NO_PERMISSION = "message_bot_no_permission";
+
+	public static final String MESSAGE_ALPHA_NOT_ALPHA_TESTER = "message_alpha_not_alpha_tester";
 
 	public static final String MESSAGE_ERROR_BY_EXECUTE_COMMAND = "message_error_by_execute_command";
 
+	public static final String ENUM_PERMISSION = "enum_permission_";
+
+	public static final String HELP_DESCRIPTION = "help_description_";
+	public static final String HELP_PERMISSION = "help_permission_";
+	public static final String HELP_USAGE = "help_usage_";
+
 	//Commands
+	public static final String MESSAGE_HELP_USAGE = "message_help_usage";
+	public static final String MESSAGE_HELP_PERMISSION = "message_help_permission";
+	public static final String MESSAGE_HELP_ALIASES = "message_help_aliases";
+	public static final String MESSAGE_HELP_DESCRIPTION = "message_help_description";
+	public static final String MESSAGE_HELP_COMMAND_NOT_FOUND = "message_command_not_found";
+	public static final String MESSAGE_HELP_NO_PERMISSION = "message_command_no_permission";
+	public static final String MESSAGE_HELP_LOOK_IN_YOUR_PRIVATE_MESSAGES = "message_help_look_in_your_private_messages";
+	public static final String MESSAGE_HELP = "message_help";
+
 	public static final String MESSAGE_PING = "message_ping";
 	public static final String MESSAGE_PING_CALCULATING = "message_ping_calculating";
 
@@ -39,6 +56,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_SHARDINFO_TOTAL = "message_shardinfo_total";
 
 	public static final String MESSAGE_COMMANDS_DISABLED = "message_commands_disabled";
+	public static final String MESSAGE_COMMANDS_ALPHA = "message_commands_alpha";
 
 	public static final String MESSAGE_VERSION = "message_version";
 
@@ -53,8 +71,6 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_STATS_GUILDS = "message_stats_guilds";
 	public static final String MESSAGE_STATS_USERS = "message_stats_users";
 	public static final String MESSAGE_STATS_VOICES = "message_stats_voices";
-
-	public static final String MESSAGE_HELP = "message_help";
 
 	public static final String MESSAGE_INVITE = "message_invite";
 
@@ -111,6 +127,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_USERINFO_GAME = "message_userinfo_game";
 	public static final String MESSAGE_USERINFO_GAME_NOTHING_PLAYING = "message_userinfo_game_nothing_playing";
 	public static final String MESSAGE_USERINFO_STATUS = "message_userinfo_status";
+	public static final String MESSAGE_USERINFO_CREATION = "message_userinfo_creation";
 	public static final String MESSAGE_USERINFO_USERLOCALE = "message_userinfo_userlocale";
 	public static final String MESSAGE_USERINFO_USERLOCALE_NOT_SELECTED = "message_userinfo_userlocale_not_selected";
 	public static final String MESSAGE_USERINFO_SYNTAX = "message_userinfo_syntax";
@@ -191,6 +208,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_YOUTUBE = "message_notification_default_embed_message_youtube";
 	public static final String MESSAGE_NOTIFICATION_DEFAULT_EMBED_MESSAGE_TWITCH = "message_notification_default_embed_message_twitch";
 	public static final String MESSAGE_NOTIFICATION_CHANNEL_NOT_FOUND = "message_notification_channel_not_found";
+	public static final String MESSAGE_NOTIFICATION_TEXTCHANNEL_NOT_FOUND = "message_notification_textchannel_not_found";
 	public static final String MESSAGE_NOTIFICATION_SYNTAX_YOUTUBE = "message_notification_syntax_youtube";
 	public static final String MESSAGE_NOTIFICATION_SYNTAX_TWITCH = "message_notification_syntax_twitch";
 	public static final String MESSAGE_NOTIFICATION_SYNTAX = "message_notification_syntax";

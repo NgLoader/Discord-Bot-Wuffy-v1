@@ -1,74 +1,63 @@
 package de.ngloader.bot.util;
 
-import java.awt.Color;
-import java.time.temporal.TemporalAccessor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-
-import de.ngloader.bot.database.guild.WuffyGuild;
-import de.ngloader.core.command.MessageType;
-import de.ngloader.core.event.WuffyGenericMessageEvent;
-import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.requests.restaction.MessageAction;
-
 public class ReplayBuilder {
 
+	/*
 	private static final String EMOTE_ERROR = "<a:error:473423519720538112>";
 	private static final String EMOTE_LOADING = "<a:loading:468438447573696522>";
 	private static final String EMOTE_SUCCESS = "<a:checkmark:459068723408535552>";
+	*/
 
-	public static void queue(WuffyMessageRecivedEvent event, MessageType type, MessageAction message) {
-		WuffyGuild guild = event.getGuild(WuffyGuild.class);
+	/*
+		WuffyGuild guild = this.event.getGuild(WuffyGuild.class);
 
-		if(guild.isMessageDeleteExecuter())
-			event.getMessage().delete().queue();
+		if(deleteExecuter && guild.isMessageDeleteExecuter())
+			this.deleteExecuterMessage();
 
-		if(guild.isMessageDeleteBot() && guild.isMessageDeleteDelay(type))
-			message.queue(success -> success.delete().queueAfter(guild.getMessageDeleteDelay(type), TimeUnit.SECONDS));
-		else
-			message.queue();
-	}
+		if(deleteBot && guild.isMessageDeleteDelay(this.type))
+			this.deleteDelay = guild.getMessageDeleteDelay(this.type);
 
-	private final WuffyGenericMessageEvent event;
+		String colorCode = guild.getMessageColorCode(this.type);
+		this.embedBuilder.setColor(colorCode != null ? Color.decode(colorCode) : this.type.color);
+	 */
+
+	/*
+	private final WuffyMessageRecivedEvent event;
 	private final MessageType type;
 
 	private EmbedBuilder embedBuilder = new EmbedBuilder();
 
-	private TimeUnit deleteTimeUnit;
 	private Integer deleteDelay;
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type) {
 		this(event, type, new EmbedBuilder(), true);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, EmbedBuilder embedBuilder) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, EmbedBuilder embedBuilder) {
 		this(event, type, embedBuilder, true);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, MessageEmbed messageEmbed) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, MessageEmbed messageEmbed) {
 		this(event, type, new EmbedBuilder(messageEmbed), true);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, String description) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, String description) {
 		this(event, type, new EmbedBuilder().setDescription(description), true);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, String description, Boolean setup) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, String description, Boolean setup) {
 		this(event, type, new EmbedBuilder().setDescription(description), setup);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, Boolean setup) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, Boolean setup) {
 		this(event, type, new EmbedBuilder(), setup);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, MessageEmbed messageEmbed, Boolean setup) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, MessageEmbed messageEmbed, Boolean setup) {
 		this(event, type, new EmbedBuilder(messageEmbed), setup);
 	}
 
-	public ReplayBuilder(WuffyGenericMessageEvent event, MessageType type, EmbedBuilder embedBuilder, Boolean setup) {
+	public ReplayBuilder(WuffyMessageRecivedEvent event, MessageType type, EmbedBuilder embedBuilder, Boolean setup) {
 		this.event = event;
 		this.type = type;
 
@@ -90,10 +79,8 @@ public class ReplayBuilder {
 		if(deleteExecuter && guild.isMessageDeleteExecuter())
 			this.deleteExecuterMessage();
 
-		if(deleteBot && guild.isMessageDeleteDelay(this.type)) {
-			this.deleteTimeUnit = TimeUnit.SECONDS;
+		if(deleteBot && guild.isMessageDeleteDelay(this.type))
 			this.deleteDelay = guild.getMessageDeleteDelay(this.type);
-		}
 
 		String colorCode = guild.getMessageColorCode(this.type);
 		this.embedBuilder.setColor(colorCode != null ? Color.decode(colorCode) : this.type.color);
@@ -171,13 +158,12 @@ public class ReplayBuilder {
 	}
 
 	public ReplayBuilder deleteExecuterMessage() {
-		this.event.getTextChannel().getMessageById(event.getMessageId()).queue(success -> success.delete().queue());
+		this.deleteMessage(this.event.getMessage());
 
 		return this;
 	}
 
-	public ReplayBuilder deleteAfter(TimeUnit timeUnit, Integer delay) {
-		this.deleteTimeUnit = timeUnit;
+	public ReplayBuilder deleteAfter(Integer delay) {
 		this.deleteDelay = delay;
 
 		return this;
@@ -200,8 +186,8 @@ public class ReplayBuilder {
 	}
 
 	public ReplayBuilder queue(Boolean deleteMessages) {
-		if(deleteMessages && deleteTimeUnit != null && deleteDelay != null)
-			event.getChannel().sendMessage(this.embedBuilder.build()).queue(success -> success.delete().queueAfter(this.deleteDelay, this.deleteTimeUnit));
+		if(deleteMessages && deleteDelay != null)
+			event.getChannel().sendMessage(this.embedBuilder.build()).queue(success -> this.deleteMessage(success, this.deleteDelay));
 		else
 			event.getChannel().sendMessage(this.embedBuilder.build()).queue();
 
@@ -209,8 +195,8 @@ public class ReplayBuilder {
 	}
 
 	public ReplayBuilder queue(Boolean deleteMessages, MessageChannel channel) {
-		if(deleteMessages && deleteTimeUnit != null && deleteDelay != null)
-			channel.sendMessage(this.embedBuilder.build()).queue(success -> success.delete().queueAfter(this.deleteDelay, this.deleteTimeUnit));
+		if(deleteMessages && deleteDelay != null)
+			channel.sendMessage(this.embedBuilder.build()).queue(success -> this.deleteMessage(success, this.deleteDelay));
 		else
 			channel.sendMessage(this.embedBuilder.build()).queue();
 
@@ -219,8 +205,8 @@ public class ReplayBuilder {
 
 	public ReplayBuilder queue(Boolean deleteMessages, Consumer<? super ReplayBuilder> finish) {
 		event.getChannel().sendMessage(this.embedBuilder.build()).queue(success -> {
-			if(deleteMessages && deleteTimeUnit != null && deleteDelay != null)
-				success.delete().queueAfter(this.deleteDelay, this.deleteTimeUnit);
+			if(deleteMessages && deleteDelay != null)
+				this.deleteMessage(success, this.deleteDelay);
 
 			finish.accept(this);
 		});
@@ -230,8 +216,8 @@ public class ReplayBuilder {
 
 	public ReplayBuilder queue(Boolean deleteMessages, MessageChannel channel, Consumer<? super ReplayBuilder> finish) {
 		channel.sendMessage(this.embedBuilder.build()).queue(success -> {
-			if(deleteMessages && deleteTimeUnit != null && deleteDelay != null)
-				success.delete().queueAfter(this.deleteDelay, this.deleteTimeUnit);
+			if(deleteMessages && deleteDelay != null)
+				this.deleteMessage(success, this.deleteDelay);
 
 			finish.accept(this);
 		});
@@ -250,4 +236,5 @@ public class ReplayBuilder {
 	public MessageType getType() {
 		return this.type;
 	}
+	*/
 }

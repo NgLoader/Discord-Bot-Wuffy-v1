@@ -2,41 +2,54 @@ package de.ngloader.bot.command.commands.fun;
 
 import java.time.Instant;
 
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
+import de.ngloader.bot.database.user.WuffyUser;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
-import de.ngloader.core.command.Command;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.lang.I18n;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.MessageChannel;
 
-@Command(aliases = { "coinflip", "cflip", "coinf" })
-@CommandConfig(category = CommandCategory.FUN)
-public class CommandCoinflip extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.FUN,
+		memberPermissionList = { PermissionKeys.COMMAND_COINFLIP },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_COINFLIP },
+		aliases = { "coinflip", "flipcoin" },
+		privateChatCommand = true)
+public class CommandCoinflip extends Command {
+
+	public CommandCoinflip(CommandHandler handler) {
+		super(handler);
+	}
 
 	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-		I18n i18n = event.getCore().getI18n();
-		String locale = event.getMember(WuffyMember.class).getLocale();
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.sendResponse(event, event.getTextChannel());
+	}
 
-		if(event.getMember(WuffyMember.class).hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_COINFLIP)) {
-			if(Math.floor(Math.random() * 100) + 1 > 50) {
-				this.replay(event, MessageType.INFO, new EmbedBuilder()
-						.setTimestamp(Instant.now())
-						.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_HEAD, locale))
-						.setImage("https://wuffy.eu/pictures/coinflip/head.png"));
-			} else {
-				this.replay(event, MessageType.INFO, new EmbedBuilder()
-						.setTimestamp(Instant.now())
-						.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_NUMBER, locale))
-						.setImage("https://wuffy.eu/pictures/coinflip/number.png"));
-			}
-		} else
-			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, locale,
-					"%p", PermissionKeys.COMMAND_COINFLIP.key));
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) {
+		this.sendResponse(event, event.getPrivateChannel());
+	}
+
+	private void sendResponse(WuffyMessageRecivedEvent event, MessageChannel channel) {
+		String locale = event.getChannelType() == ChannelType.TEXT ? event.getMember(WuffyMember.class).getLocale() : event.getAuthor(WuffyUser.class).getUserLocale("en-US");
+
+		if(Math.floor(Math.random() * 100) + 1 > 50) {
+			this.sendMessage(event, MessageType.INFO, this.createEmbed(event, MessageType.PICTURE)
+					.setTimestamp(Instant.now())
+					.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_HEAD, locale))
+					.setImage("https://wuffy.eu/pictures/coinflip/head.png").build());
+		} else {
+			this.sendMessage(event, MessageType.INFO, this.createEmbed(event, MessageType.PICTURE)
+					.setTimestamp(Instant.now())
+					.setDescription(i18n.format(TranslationKeys.MESSAGE_COINFLIP_NUMBER, locale))
+					.setImage("https://wuffy.eu/pictures/coinflip/number.png").build());
+		}
 	}
 }

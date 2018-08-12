@@ -1,16 +1,26 @@
 package de.ngloader.bot.command.commands.settings;
 
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
-import de.ngloader.core.command.Command;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 
-@Command(aliases = { "autoprune", "aprune", "autop" })
-@CommandConfig(category = CommandCategory.SETTINGS)
-public class CommandAutoPrune extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.SETTINGS,
+		memberPermissionList = { PermissionKeys.COMMAND_AUTOPRUNE },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_AUTOPRUNE },
+		aliases = { "autoprune", "aprune" })
+public class CommandAutoPrune extends Command {
+
+	public CommandAutoPrune(CommandHandler handler) {
+		super(handler);
+	}
 
 	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
-	}
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) { }
+
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) { }
 }

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.bson.Document;
 
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
@@ -18,11 +19,10 @@ import de.ngloader.core.twitch.response.TwitchResponseGame;
 import de.ngloader.core.twitch.response.TwitchResponseStream;
 import de.ngloader.core.twitch.response.TwitchResponseUser;
 import de.ngloader.core.util.GsonUtil;
-import de.ngloader.notification.TickingTask;
 import de.ngloader.notification.WebhookQueue;
 import de.ngloader.notification.Wuffy;
 
-public class TwitchAnnouncement extends TickingTask {
+public class TwitchAnnouncement extends Announcement {
 
 	private static final String DEFAULT_EMBED_MESSAGE = "{\"username\":\"Twitch\",\"avatar_url\":\"https://wuffy.eu/pictures/example_avatar_300x300.png\",\"content\":\"@here **%n** ist jetzt live auf Twitch\",\"embeds\":[{\"title\":\"%t\",\"url\":\"%urll\",\"color\":6570405,\"timestamp\":\"%sa\",\"thumbnail\":{\"url\":\"%urlg300x300\"},\"image\":{\"url\":\"%urlt580x900\"},\"author\":{\"name\":\"%n\",\"url\":\"%urll\",\"icon_url\":\"%urlpi\"},\"footer\":{\"icon_url\":\"%urlpi\",\"text\":\"%n\"},\"fields\":[{\"name\":\"Game\",\"value\":\"%g\",\"inline\":true},{\"name\":\"Viewers\",\"value\":\"%vc\",\"inline\":true}]}]}";
 
@@ -30,21 +30,15 @@ public class TwitchAnnouncement extends TickingTask {
 
 	private final TwitchAPI twitchAPI;
 
-	private int ticks;
+	public TwitchAnnouncement(MongoCollection<Document> guildCollection, TwitchAPI twitchAPI) {
+		super(guildCollection, 6000, "Twitch", "TWITCH");
 
-	public TwitchAnnouncement(TwitchAPI twitchAPI) {
 		this.twitchAPI = twitchAPI;
 	}
 
 	@Override
 	protected void update() {
 		try {
-			ticks++;
-			if(ticks > 6)
-				ticks = 0;
-			else
-				return;
-
 			List<String> fetchNames = new ArrayList<String>();
 
 			for(String name : this.queueNames.keySet())
@@ -58,7 +52,7 @@ public class TwitchAnnouncement extends TickingTask {
 			fetchNames.forEach(name -> messages.put(name, this.queueNames.remove(name)));
 
 			if(fetchNames.isEmpty()) {
-				this.running = false;
+				this.running.set(false);
 				return;
 			}
 
@@ -124,11 +118,12 @@ public class TwitchAnnouncement extends TickingTask {
 				Wuffy.getInstance().getExtensionGuild().getPrintBatchResult().onResult(Wuffy.getInstance().getGuildCollection().bulkWrite(writeModels), null);
 
 			if(this.queueNames.isEmpty())
-				this.running = false;
+				this.running.set(false);
 		} catch(Exception e) {
 			Logger.fatal("Announcement twitch", "Failed to execute. waiting 10 seconds!", e);
 
-			this.running = false;
+			this.queueNames.clear();
+			this.running.set(false);
 
 			try {
 				Thread.sleep(10000);
@@ -139,15 +134,7 @@ public class TwitchAnnouncement extends TickingTask {
 	}
 
 	@Override
-	protected void stop() {
-		this.running = true; //Reset for next run
-		this.queueNames.clear();
-	}
-
-	public void add(String guildId, List<Document> documents) {
-		if(guildId == null || guildId.isEmpty())
-			return;
-
+	public void _add(String guildId, List<Document> documents) {
 		for(Document document : documents) {
 			Message message = GsonUtil.GSON.fromJson(document.toJson(), Message.class);
 
@@ -159,6 +146,11 @@ public class TwitchAnnouncement extends TickingTask {
 				this.queueNames.get(message.name.toLowerCase()).add(message);
 			}
 		}
+	}
+
+	@Override
+	protected boolean isQueueEmpty() {
+		return this.queueNames.isEmpty();
 	}
 
 	class Message {

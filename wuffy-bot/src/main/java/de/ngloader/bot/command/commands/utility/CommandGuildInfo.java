@@ -3,60 +3,66 @@ package de.ngloader.bot.command.commands.utility;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.ngloader.bot.command.BotCommand;
-import de.ngloader.bot.command.CommandCategory;
-import de.ngloader.bot.command.CommandConfig;
+import de.ngloader.bot.command.CommandHandler;
+import de.ngloader.bot.command.commands.Command;
+import de.ngloader.bot.command.commands.CommandCategory;
+import de.ngloader.bot.command.commands.CommandSettings;
+import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyGuild;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
-import de.ngloader.bot.util.ReplayBuilder;
-import de.ngloader.core.command.Command;
-import de.ngloader.core.command.MessageType;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 
-@Command(aliases = { "guildinfo", "ginfo", "infog", "guildi", "iguild" })
-@CommandConfig(category = CommandCategory.UTILITY)
-public class CommandGuildInfo extends BotCommand {
+@CommandSettings(
+		category = CommandCategory.UTILITY,
+		guildPermissionRequierd = { Permission.MESSAGE_EMBED_LINKS },
+		memberPermissionList = { PermissionKeys.COMMAND_GUILDINFO },
+		memberPermissionRequierd = { PermissionKeys.COMMAND_GUILDINFO },
+		aliases = { "guildinfo", "guildi"," ginfo" })
+public class CommandGuildInfo extends Command {
 
 	/*
 	 * ~guildInfo //Currently guild (PERMISSION)
 	 * ~guildInfo <guildID> //ADMIN
 	 */
 
+	public CommandGuildInfo(CommandHandler handler) {
+		super(handler);
+	}
+
 	@Override
-	public void execute(WuffyMessageRecivedEvent event, String[] args) {
+	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
 		WuffyMember member = event.getMember(WuffyMember.class);
 		WuffyGuild guild = event.getGuild(WuffyGuild.class);
-		I18n i18n = event.getCore().getI18n();
 
 		if(args.length > 0 && event.getCore().isAdmin(event.getAuthor())) {
 			Guild target = event.getJDA().getGuildById(Long.parseLong(args[0]));
 
 			if(target != null) {
 				if(target.isAvailable()) {
-					new ReplayBuilder(event, MessageType.INFO, getGuildInfo(target, i18n, member.getLocale())).queue();
+					this.queue(event, MessageType.INFO, event.getTextChannel().sendMessage(getGuildInfo(event, guild, i18n, member.getLocale()).build()));
 				} else
-					this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_GUILDINFO_NOT_AVAIVIBLE, member.getLocale(),
+					this.sendMessage(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_GUILDINFO_NOT_AVAIVIBLE, member.getLocale(),
 							"%n", args[0]));
 			} else
-				this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_GUILDINFO_NOT_FOUND, member.getLocale(),
+				this.sendMessage(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_GUILDINFO_NOT_FOUND, member.getLocale(),
 						"%n", args[0]));
-		} else if(member.hasPermission(event.getTextChannel(), PermissionKeys.COMMAND_GUILDINFO)) {
-			new ReplayBuilder(event, MessageType.INFO, getGuildInfo(guild, i18n, member.getLocale())).queue();
-		} else
-			this.replay(event, MessageType.PERMISSION, i18n.format(TranslationKeys.MESSAGE_NO_PERMISSION, member.getLocale(), "%p", PermissionKeys.COMMAND_USERINFO.key));
+		} else {
+			this.queue(event, MessageType.INFO, event.getTextChannel().sendMessage(getGuildInfo(event, guild, i18n, member.getLocale()).build()));
+		}
 	}
 
-	private EmbedBuilder getGuildInfo(Guild guild, I18n i18n, String locale) {
+	private EmbedBuilder getGuildInfo(WuffyMessageRecivedEvent event, Guild guild, I18n i18n, String locale) {
 		List<Member> members = guild.getMembers();
 		String iconUrl = guild.getIconUrl() == null ? "https://wuffy.eu/pictures/example_avatar_300x300.png" : guild.getIconUrl();
 
-		return new EmbedBuilder()
+		return this.createEmbed(event, MessageType.INFO)
 				.setThumbnail(iconUrl)
 				.setAuthor(guild.getName(), iconUrl)
 				.addField(i18n.format(TranslationKeys.MESSAGE_GUILDINFO_OWNER, locale), guild.getOwner().getEffectiveName() + "#" + guild.getOwner().getUser().getDiscriminator(), true)
@@ -79,4 +85,7 @@ public class CommandGuildInfo extends BotCommand {
 				.addField(i18n.format(TranslationKeys.MESSAGE_GUILDINFO_EMOJIS, locale), Integer.toString(guild.getEmotes().size()), true)
 				.setTimestamp(guild.getCreationTime());
 	}
+
+	@Override
+	public void onPrivate(WuffyMessageRecivedEvent event, String command, String[] args) { }
 }
