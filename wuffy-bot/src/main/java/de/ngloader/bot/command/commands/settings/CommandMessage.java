@@ -66,6 +66,7 @@ public class CommandMessage extends Command {
 							.map(entry -> String.format("**%s** - ``%ss.``", StringUtil.writeFirstUpperCase(entry.getKey().name()), Integer.toString(entry.getValue())))
 							.collect(Collectors.joining("\n")),
 						"%c", Arrays.asList(MessageType.values()).stream()
+						.filter(type -> type != MessageType.LOADING)
 						.map(type -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(type.name()),
 								guild.getMessageColorCode(type) != null ?
 									guild.getMessageColorCode(type) :
@@ -109,6 +110,7 @@ public class CommandMessage extends Command {
 			case "type":
 				this.sendMessage(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_LIST, locale,
 						"%l", Arrays.asList(MessageType.values()).stream()
+							.filter(type -> type != MessageType.LOADING)
 							.map(type -> StringUtil.writeFirstUpperCase(type.name()))
 							.collect(Collectors.joining("\n"))));
 				break;
@@ -127,10 +129,11 @@ public class CommandMessage extends Command {
 					case "info":
 						this.sendMessage(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_COLOR_INFO, locale,
 								"%l", Arrays.asList(MessageType.values()).stream()
-							.map(type -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(type.name()),
-									guild.getMessageColorCode(type) != null ?
-										guild.getMessageColorCode(type) :
-										this.convertColorToHex(type.color)))
+									.filter(type -> type != MessageType.LOADING)
+									.map(type -> String.format("**%s** - ``%s``", StringUtil.writeFirstUpperCase(type.name()),
+											guild.getMessageColorCode(type) != null ?
+													guild.getMessageColorCode(type) :
+													this.convertColorToHex(type.color)))
 							.collect(Collectors.joining("\n"))));
 						break;
 
@@ -202,7 +205,7 @@ public class CommandMessage extends Command {
 
 					if(args.length > 2)
 						for(MessageType type : MessageType.values())
-							if(type.name().equalsIgnoreCase(args[2]) || type.name().startsWith(args[2])) {
+							if(type != MessageType.LOADING && (type.name().equalsIgnoreCase(args[2]) || type.name().startsWith(args[2]))) {
 								messageType = type;
 								break;
 							}
@@ -221,13 +224,14 @@ public class CommandMessage extends Command {
 										EmbedBuilder builder = this.createEmbed(event, MessageType.SUCCESS);
 
 										for(MessageType type : MessageType.values()) {
-											if(guild.isMessageDeleteDelay(type)) {
-												guild.removeMessageDeleteDelay(type);
-												builder.appendDescription(i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_REMOVED, locale,
-														"%t", StringUtil.writeFirstUpperCase(type.name())));
-											} else
-												builder.appendDescription(i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_ALREADY_REMOVED, locale,
-														"%t", StringUtil.writeFirstUpperCase(type.name())));
+											if(type != MessageType.LOADING)
+												if(guild.isMessageDeleteDelay(type)) {
+													guild.removeMessageDeleteDelay(type);
+													builder.appendDescription(i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_REMOVED, locale,
+															"%t", StringUtil.writeFirstUpperCase(type.name())));
+												} else
+													builder.appendDescription(i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_ALREADY_REMOVED, locale,
+															"%t", StringUtil.writeFirstUpperCase(type.name())));
 										}
 
 										this.queue(event, MessageType.SUCCESS, event.getTextChannel().sendMessage(builder.build()));
@@ -259,15 +263,16 @@ public class CommandMessage extends Command {
 										EmbedBuilder builder = this.createEmbed(event, MessageType.SUCCESS);
 
 										for(MessageType type : MessageType.values()) {
-											if(guild.isMessageDeleteDelay(type) && (guild.getMessageDeleteDelay(type) == delay))
-												builder.appendDescription("\n" + i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_ALREADY_SET, locale));
-											else {
-												guild.setMessageDeleteDelay(type, delay);
-
-												builder.appendDescription("\n" + i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_ADDED, locale,
-														"%t", StringUtil.writeFirstUpperCase(type.name()),
-														"%d", Integer.toString(delay)));
-											}
+											if(type != MessageType.LOADING)
+												if(guild.isMessageDeleteDelay(type) && (guild.getMessageDeleteDelay(type) == delay))
+													builder.appendDescription("\n" + i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_ALREADY_SET, locale));
+												else {
+													guild.setMessageDeleteDelay(type, delay);
+	
+													builder.appendDescription("\n" + i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_ADDED, locale,
+															"%t", StringUtil.writeFirstUpperCase(type.name()),
+															"%d", Integer.toString(delay)));
+												}
 										}
 
 										this.queue(event, MessageType.SUCCESS, event.getTextChannel().sendMessage(builder.build()));
@@ -295,6 +300,7 @@ public class CommandMessage extends Command {
 					case "list":
 						this.sendMessage(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_MESSAGE_DELAY_LIST, locale,
 								"%l", Arrays.asList(MessageType.values()).stream()
+									.filter(type -> type != MessageType.LOADING)
 									.map(type -> StringUtil.writeFirstUpperCase(type.name()))
 									.collect(Collectors.joining("\n"))));
 						break;
