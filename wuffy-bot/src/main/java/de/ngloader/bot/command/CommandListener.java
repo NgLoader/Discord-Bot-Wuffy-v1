@@ -60,7 +60,6 @@ public class CommandListener extends ListenerAdapter {
 		for(String prefix : prefixes) {
 			if(alias.startsWith(prefix)) {
 				alias = alias.substring(prefix.length());
-				System.out.println("-> " + alias);
 
 				if(alias.isEmpty() && args.length > 0) {
 					alias = args[0].toLowerCase();
