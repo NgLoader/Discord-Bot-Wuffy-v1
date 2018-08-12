@@ -125,12 +125,12 @@ public abstract class Command {
 
 	public void deleteMessage(Message message) {
 		if(message.getGuild().getSelfMember().hasPermission(message.getTextChannel(), Permission.MESSAGE_MANAGE))
-			message.delete().queue(success -> {});
+			message.delete().queue(success -> { });
 	}
 
 	public void deleteMessage(Message message, int delay) {
 		if(message.getGuild().getSelfMember().hasPermission(message.getTextChannel(), Permission.MESSAGE_MANAGE))
-			message.delete().queueAfter(delay, TimeUnit.SECONDS, success -> {});
+			message.delete().queueAfter(delay, TimeUnit.SECONDS, success -> { });
 	}
 
 	public EmbedBuilder buildHelpMessage(WuffyMessageRecivedEvent event, String command, String[] args) {
