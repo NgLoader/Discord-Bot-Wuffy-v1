@@ -23,10 +23,10 @@ import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.database.StorageProvider;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.mongo.MongoStorage;
-import de.ngloader.core.logger.Logger;
 
 public class MongoExtensionLang extends StorageProvider<MongoStorage> implements IExtensionLang<WuffyLang> {
 

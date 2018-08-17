@@ -157,7 +157,8 @@ public abstract class Command {
 
 			embedBuilder.addField(
 					this.i18n.format(TranslationKeys.MESSAGE_HELP_DESCRIPTION, locale),
-					this.i18n.format(String.format("%s%s", TranslationKeys.HELP_DESCRIPTION, className), locale),
+					this.i18n.format(String.format("%s%s", TranslationKeys.HELP_DESCRIPTION, className), locale,
+							"%p", prefix),
 					false)
 			.addField(
 					this.i18n.format(TranslationKeys.MESSAGE_HELP_USAGE, locale),

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import de.ngloader.common.logger.Logger;
+import de.ngloader.common.util.ITickable;
+import de.ngloader.common.util.TickingTask;
 import de.ngloader.core.database.IStorageService;
 import de.ngloader.core.database.StorageService;
 import de.ngloader.core.database.impl.IExtensionGuild;
@@ -13,10 +16,7 @@ import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.IExtensionUser;
 import de.ngloader.core.jda.IJDAAdapter;
 import de.ngloader.core.lang.I18n;
-import de.ngloader.core.logger.Logger;
 import de.ngloader.core.scheduler.WuffyScheduler;
-import de.ngloader.core.util.ITickable;
-import de.ngloader.core.util.TickingTask;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.entities.User;
 
@@ -58,6 +58,8 @@ public abstract class Core extends TickingTask {
 	private boolean enabled = false;
 
 	public Core(CoreConfig config, AccountType accountType, Class<? extends IJDAAdapter> jdaAdapter) {
+		super(1000 / 20);
+
 		WuffyPhantomRefernce.getInstance().add(this, config != null ? config.instanceName : "UNKNOWN");
 
 		this.config = config;

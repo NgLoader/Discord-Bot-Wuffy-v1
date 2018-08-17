@@ -31,7 +31,7 @@ public class DiscordUtil {
 		if(found.isEmpty())
 			found = guild.getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().startsWith(search.toLowerCase())).collect(Collectors.toList());
 
-		return found.isEmpty() ? null : core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(guild, found.get(0));
+		return found.isEmpty() ? null : found.get(0) != null && found.get(0).getUser() != null ? core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(guild, found.get(0)) : null;
 	}
 
 	public static TextChannel searchChannel(ImplGuild guild, String search) {
@@ -49,7 +49,7 @@ public class DiscordUtil {
 		if(found.isEmpty())
 			found = guild.getTextChannels().stream().filter(textChannel -> textChannel.getName().toLowerCase().startsWith(search.toLowerCase())).collect(Collectors.toList());
 
-		return found.isEmpty() ? null : found.get(0);
+		return found.isEmpty() ? null : found.get(0) != null ? found.get(0) : null;
 	}
 
 	public static Role searchRole(ImplGuild guild, String search) {
@@ -70,6 +70,6 @@ public class DiscordUtil {
 		if(found.isEmpty())
 			found = guild.getRoles().stream().filter(textChannel -> textChannel.getName().toLowerCase().startsWith(search.toLowerCase())).collect(Collectors.toList());
 
-		return found.isEmpty() ? null : found.get(0);
+		return found.isEmpty() ? null : found.get(0) != null ? found.get(0) : null;
 	}
 }

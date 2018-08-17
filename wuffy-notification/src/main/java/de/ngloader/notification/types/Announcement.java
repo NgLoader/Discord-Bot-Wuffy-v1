@@ -9,11 +9,11 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 
-import de.ngloader.core.logger.Logger;
+import de.ngloader.common.logger.Logger;
 
 public abstract class Announcement implements Runnable {
 
-	private static final ExecutorService executorService = Executors.newCachedThreadPool();
+	private static final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
 	protected abstract void update();
 

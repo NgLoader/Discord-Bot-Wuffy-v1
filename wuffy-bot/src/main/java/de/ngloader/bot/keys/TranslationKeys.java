@@ -270,6 +270,7 @@ public class TranslationKeys extends TranslationKeysCore {
 
 	public static final String MESSAGE_PERMISSION_LIST = "message_permission_list"; //%l list
 	public static final String MESSAGE_PERMISSION_LIST_MODE = "message_permission_list_mode"; //%l list
+	public static final String MESSAGE_PERMISSION_LIST_MODE_ACTIVE = "message_permission_list_mode_active"; //%l list
 	public static final String MESSAGE_PERMISSION_LIST_GLOBAL = "message_permission_list_global"; //%l list %t type %id id
 	public static final String MESSAGE_PERMISSION_LIST_CHANNEL = "message_permission_list_channel"; //%l list %t type %id id %c channel
 	public static final String MESSAGE_PERMISSION_PERM_EMPTY = "message_permission_perm_empty"; //%id ID

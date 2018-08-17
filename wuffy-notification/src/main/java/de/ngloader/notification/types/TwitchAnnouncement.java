@@ -12,7 +12,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
-import de.ngloader.core.logger.Logger;
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.twitch.TwitchAPI;
 import de.ngloader.core.twitch.response.TwitchResponse;
 import de.ngloader.core.twitch.response.TwitchResponseGame;

@@ -14,7 +14,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
-import de.ngloader.core.logger.Logger;
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.util.GsonUtil;
 import de.ngloader.core.youtube.YoutubeAPI;
 import de.ngloader.core.youtube.YoutubeOptionalParameterBuilder;

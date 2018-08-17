@@ -5,11 +5,11 @@ import de.ngloader.bot.BotConfig;
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.client.ClientConfig;
 import de.ngloader.client.WuffyClient;
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.Core;
 import de.ngloader.core.console.ConsoleCommand;
 import de.ngloader.core.console.ConsoleCommandResult;
 import de.ngloader.core.console.IConsoleCommandExecutor;
-import de.ngloader.core.logger.Logger;
 
 @ConsoleCommand(aliases = { "starti", "startinstance", "instancestart", "istart" }, usage = "StartInstance <instanceName>")
 public class ConsoleCommandStartInstance implements IConsoleCommandExecutor {

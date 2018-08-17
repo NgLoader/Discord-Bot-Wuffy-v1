@@ -6,8 +6,8 @@ import java.lang.ref.ReferenceQueue;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.ngloader.core.logger.Logger;
-import de.ngloader.core.util.ITickable;
+import de.ngloader.common.logger.Logger;
+import de.ngloader.common.util.ITickable;
 
 public class WuffyPhantomRefernce implements ITickable {
 

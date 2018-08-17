@@ -8,9 +8,9 @@ import de.ngloader.bot.command.commands.MessageType;
 import de.ngloader.bot.database.guild.WuffyMember;
 import de.ngloader.bot.keys.PermissionKeys;
 import de.ngloader.bot.keys.TranslationKeys;
+import de.ngloader.common.util.HardwareUtil;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
 import de.ngloader.core.lang.I18n;
-import de.ngloader.core.util.HardwareUtil;
 import net.dv8tion.jda.core.Permission;
 
 @CommandSettings(

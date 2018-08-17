@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import de.ngloader.core.logger.Logger;
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.util.GsonUtil;
 
 public class ConfigService {

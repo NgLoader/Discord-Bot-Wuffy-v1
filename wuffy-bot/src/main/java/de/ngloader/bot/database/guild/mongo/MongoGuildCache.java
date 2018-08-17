@@ -22,7 +22,7 @@ import de.ngloader.bot.database.guild.WuffyGuild.EnumRoleRankingMode;
 public class MongoGuildCache {
 
 	private static final List<String> DEFAULT_PREFIX_LIST = Arrays.asList("~");
-	private static final List<EnumPermissionMode> DEFAULT_PERMISSION_MODE_LIST = Arrays.asList(EnumPermissionMode.GLOBAL_USER, EnumPermissionMode.GLOBAL_ROLE);
+	private static final List<EnumPermissionMode> DEFAULT_PERMISSION_MODE_LIST = Arrays.asList(EnumPermissionMode.values());
 	private static final EnumRoleRankingMode DEFAULT_RANKING_MODE = EnumRoleRankingMode.DISCORD;
 	private static final Map<MessageType, Integer> DEFAULT_AUTO_PRUNE_DELAYS = new HashMap<MessageType, Integer>();
 

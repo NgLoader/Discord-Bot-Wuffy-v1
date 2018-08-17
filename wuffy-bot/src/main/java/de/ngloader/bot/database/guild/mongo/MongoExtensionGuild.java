@@ -50,6 +50,9 @@ public class MongoExtensionGuild extends MongoBulkWriteSystem implements IExtens
 
 	@Override
 	public MongoGuild getGuild(Guild guild) {
+		if(guild == null)
+			return null;
+
 		var longId = guild.getIdLong();
 
 		if(!CACHED_GUILDS.containsKey(longId))
@@ -60,6 +63,9 @@ public class MongoExtensionGuild extends MongoBulkWriteSystem implements IExtens
 
 	@Override
 	public MongoMember getMemeber(Guild guild, Member member) {
+		if(member == null || member.getUser() == null)
+			return null;
+
 		var longId = member.getUser().getIdLong();
 		var guildId = guild.getIdLong();
 

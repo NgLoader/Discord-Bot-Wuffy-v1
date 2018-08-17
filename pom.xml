@@ -35,6 +35,9 @@
 		<module>wuffy-core</module>
 		<module>wuffy-bootstrap</module>
     	<module>wuffy-notification</module>
+    	<module>wuffy-master</module>
+    	<module>wuffy-network</module>
+    	<module>wuffy-common</module>
 	</modules>
 
 	<developers>

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.console.ConsoleCommand;
 import de.ngloader.core.console.ConsoleCommandManager;
 import de.ngloader.core.console.ConsoleCommandResult;
 import de.ngloader.core.console.IConsoleCommandExecutor;
-import de.ngloader.core.logger.Logger;
 
 /**
  * @author Ingrim4

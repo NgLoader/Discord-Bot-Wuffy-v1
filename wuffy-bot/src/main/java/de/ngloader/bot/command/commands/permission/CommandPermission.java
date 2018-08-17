@@ -89,6 +89,11 @@ public class CommandPermission extends Command {
 					} else
 						this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_MODE_NOT_FOUND, locale,
 								"%n", args[2]));
+				} else if(args[1].equalsIgnoreCase("ac") || args[1].equalsIgnoreCase("activ") || args[1].equalsIgnoreCase("active") || args[1].equalsIgnoreCase("activated")) {
+					this.sendMessage(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_PERMISSION_LIST_MODE_ACTIVE, locale,
+							"%l", String.format("    - **%s**", String.join("**\n    - **", guild.getPermissionMode().stream()
+									.map(mode2 -> StringUtil.writeFirstUpperCase(mode2.name()))
+									.collect(Collectors.toList())))));
 				} else if(args[1].equalsIgnoreCase("list")) {
 					this.sendMessage(event, MessageType.LIST, i18n.format(TranslationKeys.MESSAGE_PERMISSION_LIST_MODE, locale,
 							"%l", String.format("    - **%s**", String.join("**\n    - **", Arrays.asList(EnumPermissionMode.values()).stream()
@@ -296,10 +301,14 @@ public class CommandPermission extends Command {
 											.distinct()
 											.toArray(String[]::new);
 
-									guild.removePermissionChannel(type, channel.getIdLong(), id, remove);
+									if(remove.length > 0) {
+										guild.removePermissionChannel(type, channel.getIdLong(), id, remove);
 
-									this.sendMessage(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_PERMISSION_PERM_REMOVED, locale,
-											"%p", String.join(", ", remove),
+										this.sendMessage(event, MessageType.SUCCESS, i18n.format(TranslationKeys.MESSAGE_PERMISSION_PERM_REMOVED, locale,
+												"%p", String.join(", ", remove),
+												"%id", idDisplay));
+									} else
+										this.sendMessage(event, MessageType.SYNTAX, i18n.format(TranslationKeys.MESSAGE_PERMISSION_PERM_NOT_FOUND, locale,
 											"%id", idDisplay));
 								} else
 									this.sendHelpMessage(event, command, args);

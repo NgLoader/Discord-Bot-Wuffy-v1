@@ -12,8 +12,8 @@ import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.WriteModel;
 
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.database.StorageProvider;
-import de.ngloader.core.logger.Logger;
 
 public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage> {
 

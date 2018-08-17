@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bson.Document;
 
-import de.ngloader.core.logger.Logger;
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.util.Pair;
 import de.ngloader.core.util.WebhookUtil;
 

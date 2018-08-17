@@ -7,10 +7,10 @@ import java.util.concurrent.TimeUnit;
 
 import de.ngloader.bot.command.commands.Command;
 import de.ngloader.bot.database.guild.WuffyGuild;
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.IExtensionGuild;
 import de.ngloader.core.event.WuffyMessageRecivedEvent;
-import de.ngloader.core.logger.Logger;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;

@@ -1,5 +1,6 @@
 package de.ngloader.bot.database.guild;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -283,7 +284,9 @@ public abstract class WuffyGuild extends ImplGuild {
 		if(member.isOwner() || this.core.isAdmin(member.getUser()) || permissions.length == 0)
 			return true;
 
-		List<Role> roles = member.getRoles();
+		List<Role> roles = new ArrayList<Role>(member.getRoles());
+		roles.add(member.getGuild().getPublicRole()); //Add @everyone role (not contains by $.getRoles())
+
 		List<String> permissionList = Arrays.asList(permissions).stream()
 				.map(permission -> permission.key)
 				.collect(Collectors.toList());

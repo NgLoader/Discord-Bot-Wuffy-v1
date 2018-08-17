@@ -6,13 +6,13 @@ import de.ngloader.bootstrap.command.ConsoleCommandStartInstance;
 import de.ngloader.bootstrap.command.ConsoleCommandStopInstance;
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.client.WuffyClient;
+import de.ngloader.common.logger.Logger;
+import de.ngloader.common.logger.LoggerManager;
+import de.ngloader.common.util.TickingTask;
 import de.ngloader.core.Core;
 import de.ngloader.core.WuffyPhantomRefernce;
 import de.ngloader.core.config.ConfigService;
 import de.ngloader.core.console.ConsoleCommandManager;
-import de.ngloader.core.logger.Logger;
-import de.ngloader.core.logger.LoggerManager;
-import de.ngloader.core.util.TickingTask;
 
 public class Wuffy extends TickingTask {
 
@@ -71,6 +71,8 @@ public class Wuffy extends TickingTask {
 	private final Thread masterThread;
 
 	public Wuffy(GlobalConfig config) {
+		super(1000 / 40);
+
 		this.config = config;
 
 		this.consoleCommandManager = new ConsoleCommandManager();

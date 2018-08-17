@@ -3,10 +3,10 @@ package de.ngloader.core.lang;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.impl.IExtensionLang;
 import de.ngloader.core.database.impl.ImplLang;
-import de.ngloader.core.logger.Logger;
 
 public class I18n {
 

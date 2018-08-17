@@ -106,5 +106,10 @@
 			<artifactId>google-api-services-youtube</artifactId>
 			<version>v3-rev204-1.23.0</version>
 		</dependency>
+		<dependency>
+			<groupId>de.ngloader</groupId>
+			<artifactId>wuffy-common</artifactId>
+		<version>${wuffy.version}</version>
+		</dependency>
 	</dependencies>
 </project>

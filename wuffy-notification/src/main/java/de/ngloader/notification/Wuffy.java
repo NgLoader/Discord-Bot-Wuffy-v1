@@ -8,10 +8,10 @@ import org.bson.Document;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 
+import de.ngloader.common.logger.Logger;
+import de.ngloader.common.logger.LoggerManager;
 import de.ngloader.core.config.ConfigService;
 import de.ngloader.core.console.ConsoleCommandManager;
-import de.ngloader.core.logger.Logger;
-import de.ngloader.core.logger.LoggerManager;
 import de.ngloader.core.twitch.TwitchAPI;
 import de.ngloader.core.youtube.YoutubeAPI;
 import de.ngloader.notification.database.MongoExtensionGuild;

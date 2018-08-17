@@ -10,8 +10,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.database.mongo.MongoConfig;
-import de.ngloader.core.logger.Logger;
 
 public class MongoExtensionGuild {
 

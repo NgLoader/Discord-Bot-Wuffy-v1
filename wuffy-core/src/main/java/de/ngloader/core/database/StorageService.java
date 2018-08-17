@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import de.ngloader.common.logger.Logger;
 import de.ngloader.core.Core;
 import de.ngloader.core.database.locale.LocaleStorage;
 import de.ngloader.core.database.mongo.MongoStorage;
 import de.ngloader.core.database.poeditor.POEditorStorage;
 import de.ngloader.core.database.sql.SQLStorage;
-import de.ngloader.core.logger.Logger;
 
 public final class StorageService {
 

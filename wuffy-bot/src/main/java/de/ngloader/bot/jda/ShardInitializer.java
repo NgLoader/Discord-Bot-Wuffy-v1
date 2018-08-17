@@ -2,7 +2,7 @@ package de.ngloader.bot.jda;
 
 import de.ngloader.bot.WuffyBot;
 import de.ngloader.bot.command.CommandHandler;
-import de.ngloader.core.logger.Logger;
+import de.ngloader.common.logger.Logger;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
