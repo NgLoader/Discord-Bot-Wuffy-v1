@@ -12,10 +12,10 @@ import net.wuffy.bot.database.guild.WuffyGuild;
 import net.wuffy.bot.database.guild.WuffyMember;
 import net.wuffy.bot.keys.PermissionKeys;
 import net.wuffy.bot.keys.TranslationKeys;
+import net.wuffy.common.util.LocaleUtil;
 import net.wuffy.core.database.impl.ImplLang;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
 import net.wuffy.core.lang.I18n;
-import net.wuffy.core.util.LocaleUtil;
 
 @CommandSettings(
 		category = CommandCategory.SETTINGS,

@@ -32,6 +32,7 @@ public class CommandUserInfo extends Command {
 	public void onGuild(WuffyMessageRecivedEvent event, String command, String[] args) {
 		WuffyMember member = event.getMember(WuffyMember.class);
 		String locale = member.getLocale();
+		event.getTextChannel()
 
 		if(args.length > 0) {
 			Member memberSelected = DiscordUtil.searchMember(event.getCore(), event.getGuild(), args[0]);

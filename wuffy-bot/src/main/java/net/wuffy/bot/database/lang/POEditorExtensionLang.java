@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import net.wuffy.common.util.LocaleUtil;
 import net.wuffy.core.database.StorageProvider;
 import net.wuffy.core.database.impl.IExtensionLang;
 import net.wuffy.core.database.poeditor.POEditorStorage;
 import net.wuffy.core.poeditor.POEditor;
-import net.wuffy.core.util.LocaleUtil;
 
 public class POEditorExtensionLang extends StorageProvider<POEditorStorage> implements IExtensionLang<WuffyLang> {
 

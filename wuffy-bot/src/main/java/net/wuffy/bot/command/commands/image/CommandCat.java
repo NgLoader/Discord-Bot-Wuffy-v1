@@ -14,8 +14,8 @@ import net.wuffy.bot.database.guild.WuffyMember;
 import net.wuffy.bot.database.user.WuffyUser;
 import net.wuffy.bot.keys.PermissionKeys;
 import net.wuffy.bot.keys.TranslationKeys;
+import net.wuffy.common.util.WebRequestBuilder;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
-import net.wuffy.core.util.WebRequestBuilder;
 import okhttp3.Request;
 import okhttp3.Response;
 

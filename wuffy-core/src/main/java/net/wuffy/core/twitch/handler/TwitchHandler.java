@@ -1,8 +1,8 @@
 package net.wuffy.core.twitch.handler;
 
+import net.wuffy.common.util.GsonUtil;
 import net.wuffy.core.twitch.TwitchAPI;
 import net.wuffy.core.twitch.response.TwitchResponse;
-import net.wuffy.core.util.GsonUtil;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

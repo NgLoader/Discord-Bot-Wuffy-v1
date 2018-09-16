@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
-import net.wuffy.core.util.WebRequestBuilder;
+import net.wuffy.common.util.WebRequestBuilder;
 import okhttp3.Request;
 import okhttp3.Response;
 

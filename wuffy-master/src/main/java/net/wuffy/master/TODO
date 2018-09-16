@@ -1,0 +1,8 @@
+Start:
+Master -> Connect to every other master
+Other Masters <- Login & Sync
+
+Client connect:
+Master <-> Client Login
+Master -> send shards to sync
+Client login 

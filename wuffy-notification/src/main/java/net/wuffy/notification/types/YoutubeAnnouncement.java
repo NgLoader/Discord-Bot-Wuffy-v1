@@ -15,7 +15,7 @@ import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
 import net.wuffy.common.logger.Logger;
-import net.wuffy.core.util.GsonUtil;
+import net.wuffy.common.util.GsonUtil;
 import net.wuffy.core.youtube.YoutubeAPI;
 import net.wuffy.core.youtube.YoutubeOptionalParameterBuilder;
 import net.wuffy.core.youtube.YoutubeOptionalParameters;

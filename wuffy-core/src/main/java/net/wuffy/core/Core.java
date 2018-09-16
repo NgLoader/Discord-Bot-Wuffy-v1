@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.entities.User;
+import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.logger.Logger;
+import net.wuffy.common.util.IWuffyPhantomReference;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
 import net.wuffy.core.database.IStorageService;
@@ -20,7 +22,7 @@ import net.wuffy.core.jda.IJDAAdapter;
 import net.wuffy.core.lang.I18n;
 import net.wuffy.core.scheduler.WuffyScheduler;
 
-public abstract class Core extends TickingTask {
+public abstract class Core extends TickingTask implements IWuffyPhantomReference {
 
 	private static final List<Core> INSTANCES = new CopyOnWriteArrayList<Core>();
 

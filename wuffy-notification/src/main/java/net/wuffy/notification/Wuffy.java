@@ -8,9 +8,9 @@ import org.bson.Document;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 
+import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
-import net.wuffy.core.config.ConfigService;
 import net.wuffy.core.console.ConsoleCommandManager;
 import net.wuffy.core.twitch.TwitchAPI;
 import net.wuffy.core.youtube.YoutubeAPI;

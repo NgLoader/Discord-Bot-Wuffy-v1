@@ -1,7 +1,7 @@
 package net.wuffy.notification;
 
-import net.wuffy.core.config.Config;
-import net.wuffy.core.config.IConfig;
+import net.wuffy.common.config.Config;
+import net.wuffy.common.config.IConfig;
 import net.wuffy.core.database.DatabaseConfig;
 
 @Config(path = "./wuffy/config.json", sourcePath = "/config/config.json")

@@ -6,12 +6,12 @@ import net.wuffy.bootstrap.command.ConsoleCommandStartInstance;
 import net.wuffy.bootstrap.command.ConsoleCommandStopInstance;
 import net.wuffy.bot.WuffyBot;
 import net.wuffy.client.WuffyClient;
+import net.wuffy.common.WuffyPhantomRefernce;
+import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.common.util.TickingTask;
 import net.wuffy.core.Core;
-import net.wuffy.core.WuffyPhantomRefernce;
-import net.wuffy.core.config.ConfigService;
 import net.wuffy.core.console.ConsoleCommandManager;
 
 public class Wuffy extends TickingTask {

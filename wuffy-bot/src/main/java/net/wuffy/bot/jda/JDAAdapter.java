@@ -1,6 +1,7 @@
 package net.wuffy.bot.jda;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
@@ -12,6 +13,8 @@ import net.dv8tion.jda.core.hooks.EventListener;
 import net.wuffy.bot.WuffyBot;
 import net.wuffy.core.Core;
 import net.wuffy.core.jda.IJDAAdapter;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 
 public class JDAAdapter implements IJDAAdapter {
 
@@ -47,6 +50,9 @@ public class JDAAdapter implements IJDAAdapter {
 			builder.setGame(config.game.url != null && !config.game.url.isEmpty() ?
 					Game.of(config.game.gameType, config.game.name, config.game.url) :
 					Game.of(config.game.gameType, config.game.name));
+
+			builder.setHttpClientBuilder(new OkHttpClient.Builder()
+					.protocols(Arrays.asList(Protocol.HTTP_2))); //TODO check if work
 
 			this.shardManager = builder.build();
 		} catch (LoginException | IllegalArgumentException e) {

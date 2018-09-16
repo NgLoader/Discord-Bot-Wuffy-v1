@@ -1,18 +1,25 @@
 package net.wuffy.master;
 
-import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.wuffy.common.WuffyPhantomRefernce;
+import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
-import net.wuffy.common.util.CryptUtil;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
+import net.wuffy.master.sharding.ServerHandler;
 
 public class Master extends TickingTask {
 
-	public static final KeyPair KEY_PAIR = CryptUtil.generateKeyPair();
+	public static final Long START_TIME_IN_MILLIS = System.currentTimeMillis();
+
+	private static Master instance;
+
+	public static Master getInstance() {
+		return Master.instance;
+	}
 
 	public static void main(String[] args) {
 		if(Float.parseFloat(System.getProperty( "java.class.version" )) < 54) {
@@ -38,14 +45,21 @@ public class Master extends TickingTask {
 		System.setProperty("io.netty.eventLoopThreads", Integer.toString(threads));
 
 		Logger.info("Bootstrap", "Loading");
-		new Master();
+		Master.instance = new Master();
 	}
+
+	private final MasterConfig config;
 
 	private List<ITickable> tickables = new ArrayList<ITickable>();
 	private Thread masterThread;
 
 	public Master() {
-		super(1000 / 40);
+		super(500);
+
+		this.config = ConfigService.getConfig(MasterConfig.class);
+
+		this.tickables.add(WuffyPhantomRefernce.getInstance());
+		this.tickables.add(ServerHandler.getInstance());
 
 		this.masterThread = new Thread(this, "Wuffy Master");
 		this.masterThread.start();
@@ -66,5 +80,9 @@ public class Master extends TickingTask {
 
 	public void addTickable(ITickable tickable) {
 		this.tickables.add(tickable);
+	}
+
+	public MasterConfig getConfig() {
+		return config;
 	}
 }

@@ -77,6 +77,7 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String MESSAGE_VCKICK_KICKED = "message_vckick_kicked";
 
 	public static final String MESSAGE_CLEAR_CLEARED = "message_clear_cleared";
+	public static final String MESSAGE_CLEAR_CLEARING = "message_clear_clearing";
 	public static final String MESSAGE_CLEAR_CLEARED_USER = "message_clear_cleared_user";
 	public static final String MESSAGE_CLEAR_NO_MESAGE_TO_DELETE = "message_clear_no_message_to_delete";
 

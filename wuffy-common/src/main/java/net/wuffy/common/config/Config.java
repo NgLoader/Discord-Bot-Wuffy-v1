@@ -1,4 +1,4 @@
-package net.wuffy.core.config;
+package net.wuffy.common.config;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

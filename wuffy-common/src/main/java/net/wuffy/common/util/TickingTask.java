@@ -8,7 +8,9 @@ import net.wuffy.common.logger.Logger;
  */
 public abstract class TickingTask implements Runnable {
 
-	private final long ms_per_tick;
+	private final long ms_per_tick; //20 (1000 / 50)
+	private final long delta_higher; //2000
+	private final long lastLaggWarning_higher; //15000
 
 	protected boolean running = true;
 	private long lastTickTime;
@@ -16,6 +18,10 @@ public abstract class TickingTask implements Runnable {
 
 	public TickingTask(long ms_per_tick) {
 		this.ms_per_tick = ms_per_tick;
+
+		//TODO auto calculate by ms_per_tick
+		this.delta_higher = 2000;
+		this.lastLaggWarning_higher = 15000;
 	}
 
 	public boolean isRunning() {
@@ -32,9 +38,9 @@ public abstract class TickingTask implements Runnable {
 				var time = System.currentTimeMillis();
 				var delta = time - this.lastTickTime;
 
-				if(delta > 2000L && this.lastTickTime - this.lastLaggWarning >= 15000L) {
+				if(delta > this.delta_higher && this.lastTickTime - this.lastLaggWarning >= this.lastLaggWarning_higher) {
 					Logger.warn(String.format("Can\'t keep up! Did the system time change, or is the server overloaded? Running %dms behind, skipping %d tick(s)", delta, (delta / this.ms_per_tick)));
-					delta = 2000;
+					delta = this.delta_higher;
 					this.lastLaggWarning = this.lastTickTime;
 				}
 

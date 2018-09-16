@@ -4,8 +4,8 @@ import java.util.List;
 
 import net.wuffy.bot.BotConfig;
 import net.wuffy.client.ClientConfig;
-import net.wuffy.core.config.Config;
-import net.wuffy.core.config.IConfig;
+import net.wuffy.common.config.Config;
+import net.wuffy.common.config.IConfig;
 
 @Config(path = "./wuffy/config.json", sourcePath = "/config/config.json")
 public class GlobalConfig implements IConfig {

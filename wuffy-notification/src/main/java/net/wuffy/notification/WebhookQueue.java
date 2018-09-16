@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bson.Document;
 
 import net.wuffy.common.logger.Logger;
-import net.wuffy.core.util.Pair;
+import net.wuffy.common.util.Pair;
 import net.wuffy.core.util.WebhookUtil;
 
 public class WebhookQueue implements Runnable {

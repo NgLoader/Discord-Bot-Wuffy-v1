@@ -13,12 +13,12 @@ import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 
 import net.wuffy.common.logger.Logger;
+import net.wuffy.common.util.GsonUtil;
 import net.wuffy.core.twitch.TwitchAPI;
 import net.wuffy.core.twitch.response.TwitchResponse;
 import net.wuffy.core.twitch.response.TwitchResponseGame;
 import net.wuffy.core.twitch.response.TwitchResponseStream;
 import net.wuffy.core.twitch.response.TwitchResponseUser;
-import net.wuffy.core.util.GsonUtil;
 import net.wuffy.notification.WebhookQueue;
 import net.wuffy.notification.Wuffy;
 

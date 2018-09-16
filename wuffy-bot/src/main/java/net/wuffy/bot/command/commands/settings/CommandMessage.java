@@ -16,8 +16,8 @@ import net.wuffy.bot.database.guild.WuffyGuild;
 import net.wuffy.bot.database.guild.WuffyMember;
 import net.wuffy.bot.keys.PermissionKeys;
 import net.wuffy.bot.keys.TranslationKeys;
+import net.wuffy.common.util.StringUtil;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
-import net.wuffy.core.util.StringUtil;
 
 @CommandSettings(
 		category = CommandCategory.SETTINGS,

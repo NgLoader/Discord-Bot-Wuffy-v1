@@ -1,7 +1,6 @@
 package net.wuffy.bot.command;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +14,7 @@ import net.wuffy.common.logger.Logger;
 import net.wuffy.core.Core;
 import net.wuffy.core.database.impl.IExtensionGuild;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
+import net.wuffy.core.util.ArgumentBuffer;
 
 public class CommandListener extends ListenerAdapter {
 
@@ -39,10 +39,8 @@ public class CommandListener extends ListenerAdapter {
 		if(!event.getGuild().isAvailable() || event.getAuthor().isBot() || event.getAuthor().isFake() || !event.getChannel().canTalk())
 			return;
 
-		String message = event.getMessage().getContentRaw();
-		String[] split = message.split("\\s+");
-		String[] args = Arrays.copyOfRange(split, 1, split.length);
-		String alias = split[0].toLowerCase();
+		ArgumentBuffer args = new ArgumentBuffer(event.getMessage().getContentRaw());
+		String alias = args.removeArgument("");
 
 		WuffyGuild guild = (WuffyGuild) this.guildExtension.getGuild(event.getGuild());
 
@@ -61,20 +59,17 @@ public class CommandListener extends ListenerAdapter {
 			if(alias.startsWith(prefix)) {
 				alias = alias.substring(prefix.length());
 
-				if(alias.isEmpty() && args.length > 0) {
-					alias = args[0].toLowerCase();
-					args = Arrays.copyOfRange(args, 1, args.length);
-				}
+				if(alias.isEmpty() && args.getSize() > 0)
+					alias = args.removeArgument("");
 
-				String wuffyAlias = alias;
-				String[] wuffyArgs = args;
+				String wuffyAlias = alias.toLowerCase();
 
 				this.executer.add(new Runnable() {
 
 					@Override
 					public void run() {
 						try {
-							Command command = CommandListener.this.regestry.getCommand(wuffyAlias.toLowerCase());
+							Command command = CommandListener.this.regestry.getCommand(wuffyAlias);
 
 							if(command != null) {
 								Core core = CommandListener.this.handler.getCore();
@@ -86,7 +81,7 @@ public class CommandListener extends ListenerAdapter {
 										if(command.hasBotPermission(wuffyEvent))
 											if(!command.getSettings().nsfw() || command.isNSFWChannel(wuffyEvent))
 												if(!command.getSettings().alpha() || command.isAlphaTesting(wuffyEvent))
-													command.onGuild(wuffyEvent, wuffyAlias, wuffyArgs);
+													command.onGuild(wuffyEvent, wuffyAlias, args);
 
 									Logger.debug("CommandExecutor", String.format("Command (%s) was executed in %sms",
 											command.getClass().getSimpleName(),
@@ -94,7 +89,7 @@ public class CommandListener extends ListenerAdapter {
 								} catch(Exception e) {
 									Logger.fatal("CommandExecuter", String.format("Failed to execute command \"%s\" with arguments \"%s\" on shard \"%s\".",
 												command.getClass().getSimpleName(),
-												String.join(", ", wuffyArgs),
+												args.join(", "),
 												Integer.toString(guild.getJDA().getShardInfo().getShardId())),
 											e);
 								}
@@ -125,28 +120,25 @@ public class CommandListener extends ListenerAdapter {
 		if(event.getAuthor().isBot() || event.getAuthor().isFake())
 			return;
 
-		String message = event.getMessage().getContentRaw();
-		String[] split = message.split("\\s+");
-		String[] args = Arrays.copyOfRange(split, 1, split.length);
-		String alias = split[0].toLowerCase();
+		ArgumentBuffer args = new ArgumentBuffer(event.getMessage().getContentRaw());
+		String alias = args.removeArgument("");
 
 		String mention = String.format("<@%s>", Long.toString(event.getJDA().getSelfUser().getIdLong()));
 
 		if(alias.startsWith(mention)) {
 			alias = alias.substring(mention.length());
 
-			if(alias.isEmpty() && args.length > 0)
-				alias = args[0];
-		}
-		if(alias.startsWith("~"))
-			alias = alias.substring(1);
-		if(alias.isEmpty() && args.length > 0) {
-			alias = args[0];
-			args = Arrays.copyOfRange(args, 1, args.length);
+			if(alias.isEmpty() && args.getSize() > 0)
+				alias = args.get(0);
 		}
 
-		String wuffyAlias = alias;
-		String[] wuffyArgs = args;
+		if(alias.startsWith("~"))
+			alias = alias.substring(1);
+
+		if(alias.isEmpty() && args.getSize() > 0)
+			alias = args.removeArgument("");
+
+		String wuffyAlias = alias.toLowerCase();
 
 		this.executer.add(new Runnable() {
 
@@ -154,7 +146,7 @@ public class CommandListener extends ListenerAdapter {
 			public void run() {
 
 				try {
-					Command command = CommandListener.this.regestry.getCommand(wuffyAlias.toLowerCase());
+					Command command = CommandListener.this.regestry.getCommand(wuffyAlias);
 
 					if(command != null) {
 						Core core = CommandListener.this.handler.getCore();
@@ -163,7 +155,7 @@ public class CommandListener extends ListenerAdapter {
 							WuffyMessageRecivedEvent wuffyEvent = new WuffyMessageRecivedEvent(core, event.getJDA(), event.getResponseNumber(), event.getMessage());
 
 							if(command.getSettings().privateChatCommand()) {
-								command.onPrivate(wuffyEvent, wuffyAlias, wuffyArgs);
+								command.onPrivate(wuffyEvent, wuffyAlias, args);
 
 								Logger.debug("CommandExecutor", String.format("Command (%s) was executed in %sms",
 										command.getClass().getSimpleName(),
@@ -173,7 +165,7 @@ public class CommandListener extends ListenerAdapter {
 						} catch(Exception e) {
 							Logger.fatal("CommandExecuter", String.format("Failed to execute command \"%s\" with arguments \"%s\" on shard \"%s\".",
 									command.getClass().getSimpleName(),
-									String.join(", ", wuffyArgs),
+									args.join(", "),
 									Integer.toString(event.getJDA().getShardInfo().getShardId())),
 									e);
 						}

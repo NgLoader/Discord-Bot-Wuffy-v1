@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game.GameType;
-import net.wuffy.core.config.IConfig;
+import net.wuffy.common.config.IConfig;
 import net.wuffy.core.database.DatabaseConfig;
 
 public class CoreConfig implements IConfig {

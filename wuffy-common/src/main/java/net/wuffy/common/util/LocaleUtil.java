@@ -1,4 +1,4 @@
-package net.wuffy.core.util;
+package net.wuffy.common.util;
 
 import java.util.Locale;
 

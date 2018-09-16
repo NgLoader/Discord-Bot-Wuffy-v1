@@ -2,7 +2,7 @@ package net.wuffy.core.poeditor;
 
 import java.io.IOException;
 
-import net.wuffy.core.util.GsonUtil;
+import net.wuffy.common.util.GsonUtil;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

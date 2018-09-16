@@ -2,6 +2,7 @@ package net.wuffy.core.util;
 
 import java.io.IOException;
 
+import net.wuffy.common.util.WebRequestBuilder;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;

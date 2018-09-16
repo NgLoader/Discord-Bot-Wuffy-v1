@@ -1,4 +1,4 @@
-package net.wuffy.core.config;
+package net.wuffy.common.config;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import net.wuffy.common.logger.Logger;
-import net.wuffy.core.util.GsonUtil;
+import net.wuffy.common.util.GsonUtil;
 
 public class ConfigService {
 
