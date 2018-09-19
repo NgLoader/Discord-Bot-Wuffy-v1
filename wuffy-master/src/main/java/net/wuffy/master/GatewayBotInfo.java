@@ -21,7 +21,7 @@ public class GatewayBotInfo {
 	public static void refresh() {
 		while(true) {
 			try {
-				DiscordRequestGateway gateway = DiscordRequest.gatewayBot(Master.getInstance().getConfig().token);
+				DiscordRequestGateway gateway = DiscordRequest.gatewayBot(Master.getInstance().getConfig().bot_token);
 
 				GatewayBotInfo.discord_wss_url = gateway.url;
 				GatewayBotInfo.discord_shards = new AtomicInteger(gateway.shards);

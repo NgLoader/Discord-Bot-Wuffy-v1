@@ -40,7 +40,7 @@ public class ServerHandler implements ITickable {
 			if(this.servers.stream().anyMatch(server -> server.isShardRunning(currentlyCopy)))
 				continue;
 
-			Server server = getBestSever();
+			Server server = this.getBestSever();
 
 			if(server != null)
 				server.startShard(currently);

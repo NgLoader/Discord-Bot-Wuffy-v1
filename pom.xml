@@ -38,6 +38,7 @@
     	<module>wuffy-master</module>
     	<module>wuffy-network</module>
     	<module>wuffy-common</module>
+    	<module>wuffy-dns</module>
 	</modules>
 
 	<developers>

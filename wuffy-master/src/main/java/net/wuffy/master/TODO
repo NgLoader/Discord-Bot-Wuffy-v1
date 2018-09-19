@@ -3,6 +3,12 @@ Master -> Connect to every other master
 Other Masters <- Login & Sync
 
 Client connect:
-Master <-> Client Login
+Master <- Client Login
 Master -> send shards to sync
-Client login 
+Client login
+
+Master to master connection system (CloudSystem):
+Master1 <- Master2 Login
+Master1 -> Master2 Login
+Master1 -> Master2 request uptime and look who is the oldest
+				   then oldest is main master and the junger master become commands from the oldest

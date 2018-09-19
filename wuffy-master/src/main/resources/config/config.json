@@ -1,3 +1,5 @@
 {
-	"token": "BOT TOKEN"
+	"bot_token": "BOT TOKEN",
+	"master_address": "0.0.0.0",
+	"master_port": 8080
 }
