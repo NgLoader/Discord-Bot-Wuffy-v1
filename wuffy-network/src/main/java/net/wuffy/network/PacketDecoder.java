@@ -8,6 +8,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
 import net.wuffy.network.PacketRegistry.EnumProtocolDirection;
 
+/**
+ * @author Ingrim4
+ */
 public class PacketDecoder extends ByteToMessageDecoder {
 
 	private EnumProtocolDirection protocolDirection;

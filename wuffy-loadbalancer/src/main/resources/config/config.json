@@ -1,0 +1,15 @@
+{
+	"dns": {
+		"host": "0.0.0.0",
+		"port": 53,
+		"recordName": "master.wuffy.eu",
+		"recordTimeToLive": 0
+	},
+	"master": {
+		"host": 0.0.0.0,
+		"port": 25020,
+		"reconnectTrys": 30,
+		"keyCertChainFile": "wuffy/fullchain.pem",
+		"keyFile": "wuffy/privkey.pem"
+	}
+}

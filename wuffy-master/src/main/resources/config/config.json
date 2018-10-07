@@ -1,5 +1,11 @@
 {
-	"bot_token": "BOT TOKEN",
-	"master_address": "0.0.0.0",
-	"master_port": 8080
+	"botToken": "BOT TOKEN",
+	"masterAddress": "0.0.0.0",
+	"masterPort": 8080,
+	"loadBalancerAddress": "127.0.0.1",
+	"loadBalancerPort": 25020,
+	"masterId", "0000-0000-0000-0000",
+	"masterPrivateKey": "was",
+	"keyCertChainFile": "wuffy/fullchain.pem",
+	"keyFile": "wuffy/privkey.pem"
 }

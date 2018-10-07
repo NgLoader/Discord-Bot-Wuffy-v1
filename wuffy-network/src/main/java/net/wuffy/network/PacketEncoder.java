@@ -6,6 +6,9 @@ import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.wuffy.network.PacketRegistry.EnumProtocolDirection;
 
+/**
+ * @author Ingrim4
+ */
 public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
 
 	private EnumProtocolDirection protocolDirection;

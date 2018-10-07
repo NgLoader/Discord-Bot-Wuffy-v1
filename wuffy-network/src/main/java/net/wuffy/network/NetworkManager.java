@@ -2,9 +2,6 @@ package net.wuffy.network;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -18,12 +15,12 @@ import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.common.util.ITickable;
 
+/**
+ * @author Ingrim4
+ */
 public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandler>> implements ITickable {
 
 	public static final AttributeKey<EnumProtocolState> PROTOCOL = AttributeKey.valueOf("protocol");
-
-	private final Queue<QueuedPacket> packetsQueue = new ConcurrentLinkedQueue<QueuedPacket>();
-	private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
 	private Channel channel;
 	private boolean needsFlush;
@@ -37,12 +34,9 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 		this.channel = ctx.channel();
 
 		this.setProtocol(EnumProtocolState.AUTH);
-		this.flushPacketQueue();
-	}
 
-	@Override
-	public void channelWritabilityChanged(ChannelHandlerContext ctx) throws Exception {
-		this.flushPacketQueue();
+		if(this.handler instanceof IInitNetHandler)
+			((IInitNetHandler)this.handler).onChannelActive();
 	}
 
 	@Override
@@ -71,11 +65,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 
 	@SafeVarargs
 	public final void sendPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>>... listeners) {
-		if(this.channel != null && this.channel.isOpen() && this.channel.isWritable()) {
-			this.flushPacketQueue();
-			this.dispatchPacket(packet, listeners);
-		} else
-			this.queuePacket(packet, listeners);
+		this.dispatchPacket(packet, listeners);
 	}
 
 	private void dispatchPacket(final Packet<?> packet, GenericFutureListener<? extends Future<? super Void>>[] listeners) {
@@ -95,30 +85,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 		}
 	}
 
-	private void queuePacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>>[] listeners) {
-		this.readWriteLock.writeLock().lock();
-		try {
-			this.packetsQueue.add(new QueuedPacket(packet, listeners));
-		} finally {
-			this.readWriteLock.writeLock().unlock();
-		}
-	}
-
-	private void flushPacketQueue() {
-		if(this.channel != null && this.channel.isOpen() && this.channel.isWritable()) {
-			this.readWriteLock.readLock().lock();
-			try {
-				while(!this.packetsQueue.isEmpty() && this.channel.isWritable()) {
-					QueuedPacket queuedPacket = this.packetsQueue.poll();
-					this.dispatchPacket(queuedPacket.packet, queuedPacket.listeners);
-				}
-				this.flush();
-			} finally {
-				this.readWriteLock.readLock().unlock();
-			}
-		}
-	}
-
 	public void handleDisconnect() {
 		if(this.channel != null && !this.channel.isOpen()) {
 			if(this.disconnected) {
@@ -133,7 +99,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 
 	@Override
 	public void update() {
-		this.flushPacketQueue();
 		if(this.handler instanceof ITickable)
 			((ITickable) this.handler).update();
 
@@ -176,17 +141,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 	}
 
 	public void setProtocol(EnumProtocolState protocolState) {
-		this.channel.attr(PROTOCOL).set(protocolState);
+		this.channel.attr(NetworkManager.PROTOCOL).set(protocolState);
 	}
 
-	private class QueuedPacket {
-		private final Packet<?> packet;
-		private final GenericFutureListener<? extends Future<? super Void>>[] listeners;
+	public INetHandler getHandler() {
+		return this.handler;
+	}
 
-		public QueuedPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>>[] listeners) {
-			super();
-			this.packet = packet;
-			this.listeners = listeners;
-		}
+	public EnumProtocolState getProtocol() {
+		return this.channel.attr(NetworkManager.PROTOCOL).get();
 	}
 }

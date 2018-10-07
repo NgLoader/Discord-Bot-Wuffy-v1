@@ -5,16 +5,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.kqueue.KQueue;
+import io.netty.channel.kqueue.KQueueDatagramChannel;
 import io.netty.channel.kqueue.KQueueEventLoopGroup;
 import io.netty.channel.kqueue.KQueueServerSocketChannel;
 import io.netty.channel.kqueue.KQueueSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
@@ -23,7 +27,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class NettyUtil {
 
-	private static final boolean PREFER_NIO = Boolean.getBoolean("imprex.netty.preferNio"); //TODO property
+	private static final boolean PREFER_NIO = Boolean.getBoolean("wuffy.netty.preferNio"); //TODO property
 	private static final boolean EPOLL = !PREFER_NIO && Epoll.isAvailable();
 	private static final boolean KQUEUE = !PREFER_NIO && KQueue.isAvailable();
 
@@ -64,5 +68,13 @@ public class NettyUtil {
 		else if(KQUEUE)
 			return KQueueSocketChannel.class;
 		return NioSocketChannel.class;
+	}
+
+	public static final Class<? extends DatagramChannel> getDatagramChannelClass() {
+		if(EPOLL)
+			return EpollDatagramChannel.class;
+		else if(KQUEUE)
+			return KQueueDatagramChannel.class;
+		return NioDatagramChannel.class;
 	}
 }

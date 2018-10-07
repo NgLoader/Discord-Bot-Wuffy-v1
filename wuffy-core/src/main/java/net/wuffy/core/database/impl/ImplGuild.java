@@ -12,6 +12,7 @@ import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Invite;
+import net.dv8tion.jda.core.entities.ListedEmote;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -28,14 +29,19 @@ import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 import net.wuffy.core.Core;
 
+//TODO remove implements Guild and use getGuild
 public class ImplGuild implements Guild {
 
 	protected final Core core;
 	protected final Guild guild;
 
+	protected final IExtensionGuild<?, ?> extensionGuild;
+
 	public ImplGuild(Core core, Guild guild) {
 		this.core = core;
 		this.guild = guild;
+
+		this.extensionGuild = this.core.getStorageService().getExtension(IExtensionGuild.class);
 	}
 
 	public Core getCore() {
@@ -108,7 +114,7 @@ public class ImplGuild implements Guild {
 
 	@Override
 	public ImplMember getOwner() {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getOwner());
+		return this.extensionGuild.getMemeber(this.guild, this.guild.getOwner());
 	}
 
 	@Override
@@ -128,26 +134,26 @@ public class ImplGuild implements Guild {
 
 	@Override
 	public ImplMember getSelfMember() {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getSelfMember());
+		return this.extensionGuild.getMemeber(this.guild, this.guild.getSelfMember());
 	}
 
 	@Override
 	public ImplMember getMember(User user) {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMember(user));
+		return this.extensionGuild.getMemeber(this.guild, this.guild.getMember(user));
 	}
 
 	public ImplMember getMember(ImplUser user) {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(user.getIdLong()));
+		return this.extensionGuild.getMemeber(this.guild, this.guild.getMemberById(user.getIdLong()));
 	}
 
 	@Override
 	public ImplMember getMemberById(long userId) {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(userId));
+		return this.extensionGuild.getMemeber(this.guild, this.guild.getMemberById(userId));
 	}
 
 	@Override
 	public ImplMember getMemberById(String userId) {
-		return this.core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(this.guild, this.guild.getMemberById(Long.parseLong(userId.replace("<@", "").replace(">", ""))));
+		return this.extensionGuild.getMemeber(this.guild, this.guild.getMemberById(Long.parseLong(userId.replace("<@", "").replace(">", ""))));
 	}
 
 	@Override
@@ -293,5 +299,25 @@ public class ImplGuild implements Guild {
 	@Override
 	public boolean isAvailable() {
 		return this.guild.isAvailable();
+	}
+
+	@Override
+	public long getOwnerIdLong() {
+		return this.guild.getOwnerIdLong();
+	}
+
+	@Override
+	public RestAction<List<ListedEmote>> retrieveEmotes() {
+		return this.guild.retrieveEmotes();
+	}
+
+	@Override
+	public RestAction<ListedEmote> retrieveEmoteById(String id) {
+		return this.guild.retrieveEmoteById(id);
+	}
+
+	@Override
+	public RestAction<Ban> getBanById(String userId) {
+		return this.guild.getBanById(userId);
 	}
 }

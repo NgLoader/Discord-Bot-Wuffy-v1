@@ -76,5 +76,10 @@
 			<artifactId>wuffy-common</artifactId>
 		<version>${wuffy.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.ngloader</groupId>
+			<artifactId>wuffy-network</artifactId>
+		<version>${wuffy.version}</version>
+		</dependency>
 	</dependencies>
 </project>

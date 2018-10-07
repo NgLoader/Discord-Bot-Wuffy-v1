@@ -1,13 +1,16 @@
 package net.wuffy.network;
 
 import net.wuffy.network.PacketRegistry.EnumProtocolDirection;
+import net.wuffy.network.authentication.AuthenticationRegistry;
+import net.wuffy.network.loadbalancer.LoadBalancerRegistry;
 
 /**
  * @author Ingrim4
  */
 public enum EnumProtocolState {
 
-	AUTH(null);
+	AUTH(AuthenticationRegistry.INSTANCE),
+	LOADBALANCER(LoadBalancerRegistry.INSTANCE);
 
 	private PacketRegistry registry;
 

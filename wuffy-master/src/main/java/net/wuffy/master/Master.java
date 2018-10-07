@@ -3,12 +3,15 @@ package net.wuffy.master;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLException;
+
 import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
+import net.wuffy.master.network.loadbalancer.NetworkSystemLoadBalancer;
 import net.wuffy.master.sharding.ServerHandler;
 
 public class Master extends TickingTask {
@@ -46,12 +49,15 @@ public class Master extends TickingTask {
 
 		Logger.info("Bootstrap", "Loading");
 		Master.instance = new Master();
+		Master.instance.start();
 	}
 
 	private final MasterConfig config;
 
 	private List<ITickable> tickables = new ArrayList<ITickable>();
 	private Thread masterThread;
+
+	private NetworkSystemLoadBalancer networkSystemLoadBalancer;
 
 	public Master() {
 		super(500);
@@ -61,10 +67,28 @@ public class Master extends TickingTask {
 		this.tickables.add(WuffyPhantomRefernce.getInstance());
 		this.tickables.add(ServerHandler.getInstance());
 
-		this.masterThread = new Thread(this, "Wuffy Master");
-		this.masterThread.start();
+		this.running = false;
 
 		Logger.info("Bootstrap", "Started");
+	}
+
+	public void start() {
+		if(this.running)
+			return;
+		this.running = true;
+
+		try {
+			this.networkSystemLoadBalancer = new NetworkSystemLoadBalancer().start(this.config);
+
+			this.tickables.add(this.networkSystemLoadBalancer);
+		} catch (SSLException e) {
+			Logger.fatal("Bootstrap", "SSLException", e);
+			this.running = false;
+			return;
+		}
+
+		this.masterThread = new Thread(this, "Wuffy Master");
+		this.masterThread.start();
 	}
 
 	@Override
@@ -75,6 +99,7 @@ public class Master extends TickingTask {
 	@Override
 	protected void stop() {
 		Logger.info("Bootstrap", "Stopping master. goodbye");
+		this.networkSystemLoadBalancer.close();
 		LoggerManager.close();
 	}
 

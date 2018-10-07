@@ -9,17 +9,17 @@
 		<version>${wuffy.version}</version>
 	</parent>
 
-	<artifactId>wuffy-dns</artifactId>
+	<artifactId>wuffy-loadbalancer</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>${netty.version}</version>
+			<groupId>de.ngloader</groupId>
+			<artifactId>wuffy-common</artifactId>
+			<version>${wuffy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-common</artifactId>
+			<artifactId>wuffy-network</artifactId>
 			<version>${wuffy.version}</version>
 		</dependency>
 	</dependencies>

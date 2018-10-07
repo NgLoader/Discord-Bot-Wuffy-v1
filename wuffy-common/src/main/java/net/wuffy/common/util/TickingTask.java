@@ -8,20 +8,20 @@ import net.wuffy.common.logger.Logger;
  */
 public abstract class TickingTask implements Runnable {
 
-	private final long ms_per_tick; //20 (1000 / 50)
-	private final long delta_higher; //2000
-	private final long lastLaggWarning_higher; //15000
+	private final long msPerTick; //20 (1000 / 50)
+	private final long deltaHigher; //2000
+	private final long lastLaggWarningHigher; //15000
 
 	protected boolean running = true;
 	private long lastTickTime;
 	private long lastLaggWarning;
 
-	public TickingTask(long ms_per_tick) {
-		this.ms_per_tick = ms_per_tick;
+	public TickingTask(long msPerTick) {
+		this.msPerTick = msPerTick;
 
 		//TODO auto calculate by ms_per_tick
-		this.delta_higher = 2000;
-		this.lastLaggWarning_higher = 15000;
+		this.deltaHigher = 2000;
+		this.lastLaggWarningHigher = 15000;
 	}
 
 	public boolean isRunning() {
@@ -38,9 +38,9 @@ public abstract class TickingTask implements Runnable {
 				var time = System.currentTimeMillis();
 				var delta = time - this.lastTickTime;
 
-				if(delta > this.delta_higher && this.lastTickTime - this.lastLaggWarning >= this.lastLaggWarning_higher) {
-					Logger.warn(String.format("Can\'t keep up! Did the system time change, or is the server overloaded? Running %dms behind, skipping %d tick(s)", delta, (delta / this.ms_per_tick)));
-					delta = this.delta_higher;
+				if(delta > this.deltaHigher && this.lastTickTime - this.lastLaggWarning >= this.lastLaggWarningHigher) {
+					Logger.warn(String.format("Can\'t keep up! Did the system time change, or is the server overloaded? Running %dms behind, skipping %d tick(s)", delta, (delta / this.msPerTick)));
+					delta = this.deltaHigher;
 					this.lastLaggWarning = this.lastTickTime;
 				}
 
@@ -51,12 +51,12 @@ public abstract class TickingTask implements Runnable {
 
 				timeLeft += delta;
 				this.lastTickTime = time;
-				while(timeLeft > this.ms_per_tick) {
-					timeLeft -= this.ms_per_tick;
+				while(timeLeft > this.msPerTick) {
+					timeLeft -= this.msPerTick;
 					this.update();
 				}
 
-				Thread.sleep(Math.max(1L, this.ms_per_tick) - timeLeft);
+				Thread.sleep(Math.max(1L, this.msPerTick) - timeLeft);
 			}
 		} catch(Throwable throwable) {
 			throwable.printStackTrace();
