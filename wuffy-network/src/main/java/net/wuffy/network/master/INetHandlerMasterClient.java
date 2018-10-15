@@ -7,9 +7,9 @@ import net.wuffy.network.master.client.CPacketMasterStopShard;
 
 public interface INetHandlerMasterClient extends INetHandler {
 
+	public void handleMasterStatsUpdate(CPacketMasterStatsUpdate masterStatsUpdate);
+
 	public void handleMasterStartShard(CPacketMasterStartShard masterStartShard);
 
 	public void handleMasterStopShard(CPacketMasterStopShard masterStopShard);
-
-	public void handleMasterStatsUpdate(CPacketMasterStatsUpdate masterStatsUpdate);
 }

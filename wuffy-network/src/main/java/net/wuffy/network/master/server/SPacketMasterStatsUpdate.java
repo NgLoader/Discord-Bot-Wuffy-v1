@@ -54,6 +54,8 @@ public class SPacketMasterStatsUpdate implements Packet<INetHandlerMasterServer>
 		this.userOnlineCount = packetBuffer.readInt();
 		this.userAwayCount = packetBuffer.readInt();
 		this.userDNDCount = packetBuffer.readInt();
+
+		this.userTotalCount = this.userOnlineCount + this.userAwayCount + this.userDNDCount;
 	}
 
 	@Override

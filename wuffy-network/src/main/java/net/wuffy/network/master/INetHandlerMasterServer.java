@@ -8,11 +8,11 @@ import net.wuffy.network.master.server.SPacketMasterSystemUpdate;
 
 public interface INetHandlerMasterServer extends INetHandler {
 
-	public void handleMasterStoppedShard(SPacketMasterStoppedShard masterStoppedShard);
-
-	public void handleMasterSystemUpdate(SPacketMasterSystemUpdate masterSystemUpdate);
+	public void handleMasterInit(SPacketMasterInit masterInit);
 
 	public void handleMasterStatsUpdate(SPacketMasterStatsUpdate masterStatsUpdate);
 
-	public void handleMasterInit(SPacketMasterInit masterInit);
+	public void handleMasterSystemUpdate(SPacketMasterSystemUpdate masterSystemUpdate);
+
+	public void handleMasterStoppedShard(SPacketMasterStoppedShard masterStoppedShard);
 }
