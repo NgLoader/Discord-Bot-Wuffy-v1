@@ -22,5 +22,10 @@
 			<artifactId>wuffy-network</artifactId>
 			<version>${wuffy.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.ngloader</groupId>
+			<artifactId>wuffy-console</artifactId>
+			<version>${wuffy.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -39,6 +39,7 @@
     	<module>wuffy-network</module>
     	<module>wuffy-common</module>
     	<module>wuffy-loadbalancer</module>
+    	<module>wuffy-console</module>
 	</modules>
 
 	<developers>

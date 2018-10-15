@@ -1,9 +1,12 @@
 package net.wuffy.master.network.loadbalancer;
 
 import net.wuffy.common.logger.Logger;
+import net.wuffy.common.util.WebUtil;
+import net.wuffy.master.Master;
 import net.wuffy.network.NetworkManager;
 import net.wuffy.network.loadbalancer.INetHandlerLoadBalancerClient;
 import net.wuffy.network.loadbalancer.client.CPacketLoadBalancerNowMaster;
+import net.wuffy.network.loadbalancer.server.SPacketLoadBalancerInit;
 import net.wuffy.network.universal.INetHandlerUniversalClient;
 import net.wuffy.network.universal.client.CPacketUniversalDisconnect;
 import net.wuffy.network.universal.client.CPacketUniversalKeepAlive;
@@ -15,6 +18,8 @@ public class NetHandlerLoadBalancerClient implements INetHandlerUniversalClient,
 
 	public NetHandlerLoadBalancerClient(NetworkManager networkManager) {
 		this.networkManager = networkManager;
+
+		this.networkManager.sendPacket(new SPacketLoadBalancerInit(WebUtil.convertIpToInt(Master.getInstance().getConfig().masterAddress)));
 	}
 
 	@Override

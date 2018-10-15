@@ -14,9 +14,6 @@ public class MasterConfig implements IConfig {
 	public String loadBalancerAddress;
 	public Integer loadBalancerPort;
 
-	public String masterId;
-	public String masterPrivateKey;
-
 	public String keyCertChainFile;
 	public String keyFile;
 }

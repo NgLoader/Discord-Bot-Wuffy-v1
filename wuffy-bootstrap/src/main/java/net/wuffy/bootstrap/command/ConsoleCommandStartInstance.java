@@ -6,10 +6,10 @@ import net.wuffy.bot.WuffyBot;
 import net.wuffy.client.ClientConfig;
 import net.wuffy.client.WuffyClient;
 import net.wuffy.common.logger.Logger;
+import net.wuffy.console.ConsoleCommand;
+import net.wuffy.console.ConsoleCommandResult;
+import net.wuffy.console.IConsoleCommandExecutor;
 import net.wuffy.core.Core;
-import net.wuffy.core.console.ConsoleCommand;
-import net.wuffy.core.console.ConsoleCommandResult;
-import net.wuffy.core.console.IConsoleCommandExecutor;
 
 @ConsoleCommand(aliases = { "starti", "startinstance", "instancestart", "istart" }, usage = "StartInstance <instanceName>")
 public class ConsoleCommandStartInstance implements IConsoleCommandExecutor {

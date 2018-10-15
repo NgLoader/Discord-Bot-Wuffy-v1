@@ -8,7 +8,10 @@ import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.bot.sharding.ShardManager;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.hooks.EventListener;
 import net.wuffy.bot.WuffyBot;
 import net.wuffy.core.Core;

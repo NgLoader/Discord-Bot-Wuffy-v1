@@ -3,13 +3,15 @@ package net.wuffy.master.network.loadbalancer;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.CryptUtil;
-import net.wuffy.master.Master;
 import net.wuffy.network.EnumProtocolState;
 import net.wuffy.network.IInitNetHandler;
 import net.wuffy.network.NetworkManager;
@@ -24,22 +26,47 @@ public class NetHandlerAuthenticationClient implements INetHandlerAuthentication
 
 	private NetworkManager networkManager;
 
+	private UUID id;
+	private PrivateKey privateKey;
+
 	public NetHandlerAuthenticationClient(NetworkManager networkManager) {
 		this.networkManager = networkManager;
+
+		Path keyPath = Paths.get("wuffy");
+
+		if(Files.exists(keyPath))
+			try (Stream<Path> paths = Files.walk(keyPath)) {
+				paths.filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
+					.forEach(path -> {
+						if(path.getFileName().toString().endsWith(".key"))
+							try (DataInputStream inputStream = new DataInputStream(Files.newInputStream(path))) {
+								this.id = new UUID(inputStream.readLong(), inputStream.readLong());
+								this.privateKey = CryptUtil.generatePrivateKey(inputStream.readAllBytes());
+	
+								Logger.info("NetworkHandler", String.format("Loaded Id \"%s\" with privateKey.", this.id.toString()));
+								return;
+							} catch (IOException e) {
+								Logger.fatal("NetworkHandler", String.format("Error by loading logindata. (Path: \"%s\")", path.toString()), e);
+							}
+					});
+			} catch (IOException e) {
+				Logger.fatal("AuthManager", "Failed by initializing.", e);
+			}
+
+		if(this.id == null || this.privateKey == null) {
+			this.networkManager.close("Logindata not found.\nPlease create logindata with the command \"master generate\" in LoadBalancer.");
+			Logger.err("NetworkHandler", "Logindata not found.\nPlease create logindata with the command \"master generate\" in LoadBalancer.");
+		}
+	}
+
+	@Override
+	public void onChannelActive() {
+		this.networkManager.sendPacket(new SPacketAuthenticationStart(this.id));
 	}
 
 	@Override
 	public void handleAuthenticationChallenge(CPacketAuthenticationChallenge packetAuthenticationChallenge) {
-		PrivateKey key = null;
-
-		try (DataInputStream inputStream = new DataInputStream(Files.newInputStream(Paths.get("wuffy/keys.key")))) {
-			key = CryptUtil.generatePrivateKey(inputStream.readAllBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		this.networkManager.sendPacket(new SPacketAuthenticationAnswer(
-			CryptUtil.generateSignature(key, packetAuthenticationChallenge.getToken())));
+		this.networkManager.sendPacket(new SPacketAuthenticationAnswer(CryptUtil.generateSignature(this.privateKey, packetAuthenticationChallenge.getToken())));
 	}
 
 	@Override
@@ -56,10 +83,5 @@ public class NetHandlerAuthenticationClient implements INetHandlerAuthentication
 	@Override
 	public void onDisconnect(String reason) {
 		Logger.info(String.format("Disconnected: %s", reason));
-	}
-
-	@Override
-	public void onChannelActive() {
-		this.networkManager.sendPacket(new SPacketAuthenticationStart(UUID.fromString(Master.getInstance().getConfig().masterId)));
 	}
 }

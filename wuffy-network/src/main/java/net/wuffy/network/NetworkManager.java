@@ -136,7 +136,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<INetHandl
 	public void setNetHandler(INetHandler handler) {
 		Objects.nonNull(handler);
 		if(LoggerManager.isDebug())
-			Logger.debug("NetworkManager", String.format("Set handler of %s to %s", this, handler));
+			if(this.handler != null)
+				Logger.debug("NetworkManager", String.format("Set handler from \"%s\" to \"%s\"", this.handler.getClass().getSimpleName(), handler.getClass().getSimpleName()));
+			else
+				Logger.debug("NetworkManager", String.format("Set handler to \"%s\"", handler.getClass().getSimpleName()));
 		this.handler = handler;
 	}
 

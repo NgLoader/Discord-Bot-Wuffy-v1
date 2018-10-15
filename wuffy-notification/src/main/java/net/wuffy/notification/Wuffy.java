@@ -11,7 +11,7 @@ import com.mongodb.client.MongoCollection;
 import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
-import net.wuffy.core.console.ConsoleCommandManager;
+import net.wuffy.console.ConsoleCommandManager;
 import net.wuffy.core.twitch.TwitchAPI;
 import net.wuffy.core.youtube.YoutubeAPI;
 import net.wuffy.notification.database.MongoExtensionGuild;

@@ -12,6 +12,7 @@ import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
 import net.wuffy.master.network.loadbalancer.NetworkSystemLoadBalancer;
+import net.wuffy.master.network.master.NetworkSystemMaster;
 import net.wuffy.master.sharding.ServerHandler;
 
 public class Master extends TickingTask {
@@ -58,6 +59,7 @@ public class Master extends TickingTask {
 	private Thread masterThread;
 
 	private NetworkSystemLoadBalancer networkSystemLoadBalancer;
+	private NetworkSystemMaster networkSystemMaster;
 
 	public Master() {
 		super(500);
@@ -79,8 +81,10 @@ public class Master extends TickingTask {
 
 		try {
 			this.networkSystemLoadBalancer = new NetworkSystemLoadBalancer().start(this.config);
-
 			this.tickables.add(this.networkSystemLoadBalancer);
+
+			this.networkSystemMaster = new NetworkSystemMaster().start(this.config);
+			this.tickables.add(this.networkSystemMaster);
 		} catch (SSLException e) {
 			Logger.fatal("Bootstrap", "SSLException", e);
 			this.running = false;

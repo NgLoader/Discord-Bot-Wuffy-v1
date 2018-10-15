@@ -11,8 +11,8 @@ import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.common.util.TickingTask;
+import net.wuffy.console.ConsoleCommandManager;
 import net.wuffy.core.Core;
-import net.wuffy.core.console.ConsoleCommandManager;
 
 public class Wuffy extends TickingTask {
 
@@ -82,7 +82,7 @@ public class Wuffy extends TickingTask {
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandGarbageCollector());
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandDeveloperMode());
 
-		this.masterThread = new Thread(this, "Wuffy Discord Bot - Master");
+		this.masterThread = new Thread(this, "Wuffy Discord Bot - Main");
 		this.masterThread.start();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {

@@ -102,7 +102,7 @@ public class CommandHelp extends Command {
 		}
 
 		builder.setDescription(this.i18n.format(TranslationKeys.MESSAGE_HELP, locale,
-				"%p", "~"/*prefix DISABLED (discord display numbers)*/)); //TODO check can be used.
+				"%p", "~"/*prefix DISABLED (discord display the numbers)*/)); //TODO check can be used.
 
 		event.getAuthor().openPrivateChannel().queue(success -> success.sendMessage(builder.build()).queue());
 	}
