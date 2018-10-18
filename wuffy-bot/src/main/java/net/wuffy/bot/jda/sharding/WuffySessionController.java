@@ -1,44 +1,61 @@
 package net.wuffy.bot.jda.sharding;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.utils.SessionController;
 import net.dv8tion.jda.core.utils.tuple.Pair;
+import net.wuffy.common.logger.Logger;
+import net.wuffy.network.master.client.CPacketMasterSettings;
 
 public class WuffySessionController implements SessionController {
 
-	public WuffySessionController() {
+	private CPacketMasterSettings gatewayBot;
+	private Pair<String, Integer> gatewayBotPair;
+
+	private AtomicLong globalRatelimit = new AtomicLong(Long.MIN_VALUE);
+
+	public WuffySessionController(CPacketMasterSettings gatewayBot) {
+		this.gatewayBot = gatewayBot;
+		this.gatewayBotPair = Pair.of(this.gatewayBot.getUrl(), this.gatewayBot.getShards());
+	}
+
+	public void handlePacketMasterGatewayBot(CPacketMasterSettings gatewayBot) {
+		this.gatewayBot = gatewayBot;
+		this.gatewayBotPair = Pair.of(this.gatewayBot.getUrl(), this.gatewayBot.getShards());
 	}
 
 	@Override
 	public void appendSession(SessionConnectNode node) {
-		// TODO Auto-generated method stub
+		try {
+			node.run(true);
+		} catch (InterruptedException e) {
+			Logger.fatal("WuffySessionController", "Error by append session", e);
+		}
 	}
 
 	@Override
 	public void removeSession(SessionConnectNode node) {
-		// TODO Auto-generated method stub
+		//Currently not needed
 	}
 
 	@Override
 	public long getGlobalRatelimit() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.globalRatelimit.get();
 	}
 
 	@Override
 	public void setGlobalRatelimit(long ratelimit) {
-		// TODO Auto-generated method stub
+		this.globalRatelimit.set(ratelimit);
 	}
 
 	@Override
 	public String getGateway(JDA api) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.gatewayBot.getUrl();
 	}
 
 	@Override
 	public Pair<String, Integer> getGatewayBot(JDA api) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.gatewayBotPair;
 	}
 }
