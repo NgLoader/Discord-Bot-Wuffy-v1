@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import net.wuffy.network.NetworkManager;
 import net.wuffy.network.master.INetHandlerMasterServer;
-import net.wuffy.network.master.server.SPacketMasterInit;
+import net.wuffy.network.master.server.SPacketMasterHallo;
 import net.wuffy.network.master.server.SPacketMasterStatsUpdate;
 import net.wuffy.network.master.server.SPacketMasterStoppedShard;
 import net.wuffy.network.master.server.SPacketMasterSystemUpdate;
@@ -16,7 +16,7 @@ public class NetHandlerMasterServer extends NetHandlerUniversalServer implements
 	}
 
 	@Override
-	public void handleMasterInit(SPacketMasterInit masterInit) {
+	public void handleMasterInit(SPacketMasterHallo masterInit) {
 		// TODO Auto-generated method stub
 	}
 

@@ -10,4 +10,6 @@ public class Defaults {
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("hh:mm:ss mm.HH.yyyy");
 
 	public static final String DISCORD_API = "https://discordapp.com/api/";
+
+	public static final int SHARD_RAM_COST = 1024;
 }

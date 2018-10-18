@@ -2,7 +2,6 @@ package net.wuffy.master.sharding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.ITickable;
@@ -21,10 +20,6 @@ public class ServerHandler implements ITickable {
 	private Long lastCheck = 0L;
 	private Long lastNoFreeServerWarnMessage = 0L;
 
-	public ServerHandler() {
-		servers.add(new Server(UUID.randomUUID(), "Server #1", "0.0.0.0", 0, 0, 0, 0, 0, 100, 1));
-	}
-
 	@Override
 	public void update() {
 		if(lastCheck < System.currentTimeMillis())
@@ -32,7 +27,16 @@ public class ServerHandler implements ITickable {
 		else
 			return;
 
+		int guilds = 0;
+		for(Server server : this.servers)
+			guilds += server.isReady() ? server.getStatsUpdate().getGuildCount() : 0;
+
 		int needToRun = GatewayBotInfo.getDiscord_shards().get();
+		int needToRunByGuilds = (guilds / 2500) + 1;
+
+		if(needToRunByGuilds > needToRun)
+			GatewayBotInfo.getDiscord_shards().set(needToRunByGuilds);
+
 		int currently = 0;
 
 		do {

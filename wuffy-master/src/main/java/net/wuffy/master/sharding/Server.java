@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.wuffy.common.Defaults;
 import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.IWuffyPhantomReference;
+import net.wuffy.network.master.server.SPacketMasterHallo;
+import net.wuffy.network.master.server.SPacketMasterStatsUpdate;
+import net.wuffy.network.master.server.SPacketMasterSystemUpdate;
 
 public class Server implements IWuffyPhantomReference {
 
@@ -18,29 +22,16 @@ public class Server implements IWuffyPhantomReference {
 	private String name;
 	private String address;
 
+	private SPacketMasterHallo defaultStats;
+	private SPacketMasterSystemUpdate systemUpdate;
+	private SPacketMasterStatsUpdate statsUpdate;
+
 	private Map<Integer, Shard> shardsRunning = new HashMap<Integer, Shard>();
 
-	private double cpuUsage;
-	private double cpuAverage;
-	private long freeMemory;
-	private long freeSwap;
-	private long freeDiskSpace;
-	private long maxMemory; //Max memory for using
-	private long shardMemoryCost; //Memory for one shard
-
-	public Server(UUID uuid, String name, String address,
-			double cpuUsage, double cpuAverage, long freeMemory, long freeSwap, long freeDiskSpace,
-			long maxMemory, long shardMemoryCost) {
+	public Server(UUID uuid, String name, String address) {
 		this.uuid = uuid;
 		this.name = name;
 		this.address = address;
-		this.cpuUsage = cpuUsage;
-		this.cpuAverage = cpuAverage;
-		this.freeMemory = freeMemory;
-		this.freeSwap = freeSwap;
-		this.freeDiskSpace = freeDiskSpace;
-		this.maxMemory = maxMemory;
-		this.shardMemoryCost = shardMemoryCost;
 
 		WuffyPhantomRefernce.getInstance().add(this, String.format("%s (%s)", this.uuid, this.name));
 	}
@@ -84,6 +75,7 @@ public class Server implements IWuffyPhantomReference {
 				return;
 			}
 
+			
 			//TODO send stop to server
 		} catch(Exception ex) {
 			Logger.fatal("ShardHandler", String.format("Failed to stop shard \"%s\"", shardId), ex);
@@ -91,18 +83,44 @@ public class Server implements IWuffyPhantomReference {
 	}
 
 	public boolean canShardStart() {
-		if(this.maxMemory - this.shardMemoryCost < this.getUsedMemoryByShardCount())
+		if(!this.isReady())
 			return false;
 
-		//TODO check CPU usage and more...
-		return true;
+		if(this.defaultStats.getTotalMemory() - Defaults.SHARD_RAM_COST < this.getUsedMemoryByShardCount())
+			return false;
+
+		if(this.statsUpdate != null &&
+				this.systemUpdate.getCpuUsage() < 80 && //Check if the currently CPU Usage under 80%
+				this.systemUpdate.getFreeMemory() - Defaults.SHARD_RAM_COST > 512) //Check has the currently freeMemory with the SHARD_RAM_COST more then 520MB free
+			return true;
+		return false;
+	}
+
+	public void handlePacketHallo(SPacketMasterHallo packetMasterHallo) {
+		this.defaultStats = packetMasterHallo;
+	}
+
+	public void handlePacketSystemUpdate(SPacketMasterSystemUpdate packetSystemUpdate) {
+		this.systemUpdate = packetSystemUpdate;
+	}
+
+	public void handlePacketStatsUpdate(SPacketMasterStatsUpdate packetStatsUpdate) {
+		this.statsUpdate = packetStatsUpdate;
+	}
+
+	public boolean isReady() {
+		return this.statsUpdate != null && this.systemUpdate != null && this.defaultStats != null;
+	}
+
+	public int getUsedMemoryByShardCount() {
+		return this.shardsRunning.size() * Defaults.SHARD_RAM_COST;
 	}
 
 	public boolean isShardRunning(int shardId) {
 		return this.shardsRunning.containsKey(shardId);
 	}
 
-	public List<Integer> getShardIdsRunning(){
+	public List<Integer> getShardIdsRunning() {
 		return Collections.unmodifiableList(new ArrayList<>(this.shardsRunning.keySet()));
 	}
 
@@ -122,35 +140,19 @@ public class Server implements IWuffyPhantomReference {
 		return this.address;
 	}
 
-	public double getCPUUsage() {
-		return this.cpuUsage;
+	public UUID getId() {
+		return this.uuid;
 	}
 
-	public double getCPUAverage() {
-		return this.cpuAverage;
+	public SPacketMasterStatsUpdate getStatsUpdate() {
+		return this.statsUpdate;
 	}
 
-	public long getFreeMemory() {
-		return this.freeMemory;
+	public SPacketMasterHallo getStats() {
+		return this.defaultStats;
 	}
 
-	public long getFreeSwap() {
-		return this.freeSwap;
-	}
-
-	public long getFreeDiskSpace() {
-		return this.freeDiskSpace;
-	}
-
-	public long getMaxMemory() {
-		return this.maxMemory;
-	}
-
-	public long getUsedMemoryByShardCount() {
-		return this.shardsRunning.size() * this.shardMemoryCost;
-	}
-
-	public long getShardMemoryCost() {
-		return this.shardMemoryCost;
+	public SPacketMasterSystemUpdate getSystemUpdate() {
+		return this.systemUpdate;
 	}
 }

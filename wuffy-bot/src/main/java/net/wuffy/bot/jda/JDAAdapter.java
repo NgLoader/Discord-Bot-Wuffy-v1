@@ -49,6 +49,8 @@ public class JDAAdapter implements IJDAAdapter {
 					.setShardsTotal(shardingConfig.total)
 					.setShards(shardingConfig.shardIds);
 
+//			builder.setSessionController(controller); //TODO use WuffySessionController
+
 			builder.setStatus(config.status);
 			builder.setGame(config.game.url != null && !config.game.url.isEmpty() ?
 					Game.of(config.game.gameType, config.game.name, config.game.url) :
