@@ -2,6 +2,7 @@ package net.wuffy.master.sharding;
 
 import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.util.IWuffyPhantomReference;
+import net.wuffy.master.server.Server;
 
 public class Shard implements IWuffyPhantomReference {
 

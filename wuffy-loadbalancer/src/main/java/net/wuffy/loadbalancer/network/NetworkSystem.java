@@ -37,7 +37,6 @@ public class NetworkSystem extends AbstractServer implements ITickable {
 		this.start(address, 0, new ChannelInitializer<Channel>() {
 
 			protected void initChannel(Channel channel) throws Exception {
-
 				channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 				channel.pipeline()
 					.addLast(sslContext.newHandler(channel.alloc()))

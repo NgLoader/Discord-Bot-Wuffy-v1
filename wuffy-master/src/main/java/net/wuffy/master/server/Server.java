@@ -1,4 +1,4 @@
-package net.wuffy.master.sharding;
+package net.wuffy.master.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,16 +11,21 @@ import net.wuffy.common.Defaults;
 import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.IWuffyPhantomReference;
+import net.wuffy.master.sharding.Shard;
+import net.wuffy.network.NetworkManager;
+import net.wuffy.network.master.client.CPacketMasterShardUpdate;
+import net.wuffy.network.master.client.CPacketMasterShardUpdate.EnumMasterShard;
 import net.wuffy.network.master.server.SPacketMasterHallo;
 import net.wuffy.network.master.server.SPacketMasterStatsUpdate;
 import net.wuffy.network.master.server.SPacketMasterSystemUpdate;
 
 public class Server implements IWuffyPhantomReference {
 
+	private final NetworkManager networkManager;
+
 	private final UUID uuid;
 
 	private String name;
-	private String address;
 
 	private SPacketMasterHallo defaultStats;
 	private SPacketMasterSystemUpdate systemUpdate;
@@ -28,10 +33,10 @@ public class Server implements IWuffyPhantomReference {
 
 	private Map<Integer, Shard> shardsRunning = new HashMap<Integer, Shard>();
 
-	public Server(UUID uuid, String name, String address) {
+	public Server(NetworkManager networkManager, UUID uuid, String name) {
+		this.networkManager = networkManager;
 		this.uuid = uuid;
 		this.name = name;
-		this.address = address;
 
 		WuffyPhantomRefernce.getInstance().add(this, String.format("%s (%s)", this.uuid, this.name));
 	}
@@ -39,9 +44,18 @@ public class Server implements IWuffyPhantomReference {
 	public void destroy() {
 		shardsRunning.values().forEach(shard -> this.stopShard(shard.getId()));
 
+		if(this.networkManager != null)
+			this.networkManager.close("Destoryed");
+
 		this.shardsRunning = null;
 		this.name = null;
-		this.address = null;
+		this.defaultStats = null;
+		this.systemUpdate = null;
+		this.statsUpdate = null;
+	}
+
+	public void updateShardCount(int newShardCount) {
+		this.networkManager.sendPacket(new CPacketMasterShardUpdate(EnumMasterShard.SHARDCOUNT, newShardCount));
 	}
 
 	public void startShard(int shardId) {
@@ -54,10 +68,10 @@ public class Server implements IWuffyPhantomReference {
 			Shard shard = new Shard(this, shardId);
 			shardsRunning.put(shardId, shard);
 
-			//TODO send start to server
+			this.networkManager.sendPacket(new CPacketMasterShardUpdate(EnumMasterShard.START, shardId));
 			Logger.debug("ShardHandler", String.format("Shard \"%s\" successful starting on \"%s\".", shardId, this.name));
-		} catch(Exception ex) {
-			Logger.fatal("ShardHandler", String.format("Failed to start shard \"%s\"", shardId), ex);
+		} catch(Exception e) {
+			Logger.fatal("ShardHandler", String.format("Failed to start shard \"%s\"", shardId), e);
 		}
 	}
 
@@ -75,10 +89,9 @@ public class Server implements IWuffyPhantomReference {
 				return;
 			}
 
-			
-			//TODO send stop to server
-		} catch(Exception ex) {
-			Logger.fatal("ShardHandler", String.format("Failed to stop shard \"%s\"", shardId), ex);
+			this.networkManager.sendPacket(new CPacketMasterShardUpdate(EnumMasterShard.STOP, shardId));
+		} catch(Exception e) {
+			Logger.fatal("ShardHandler", String.format("Failed to stop shard \"%s\"", shardId), e);
 		}
 	}
 
@@ -128,16 +141,16 @@ public class Server implements IWuffyPhantomReference {
 		return Collections.unmodifiableMap(this.shardsRunning);
 	}
 
+	public NetworkManager getNetworkManager() {
+		return this.networkManager;
+	}
+
 	public UUID getUUID() {
 		return this.uuid;
 	}
 
 	public String getName() {
 		return this.name;
-	}
-
-	public String getAddress() {
-		return this.address;
 	}
 
 	public UUID getId() {

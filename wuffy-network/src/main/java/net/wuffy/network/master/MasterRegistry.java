@@ -1,8 +1,7 @@
 package net.wuffy.network.master;
 
-import net.wuffy.network.master.client.CPacketMasterStartShard;
+import net.wuffy.network.master.client.CPacketMasterShardUpdate;
 import net.wuffy.network.master.client.CPacketMasterStatsUpdate;
-import net.wuffy.network.master.client.CPacketMasterStopShard;
 import net.wuffy.network.master.server.SPacketMasterHallo;
 import net.wuffy.network.master.server.SPacketMasterStatsUpdate;
 import net.wuffy.network.master.server.SPacketMasterStoppedShard;
@@ -14,8 +13,7 @@ public final class MasterRegistry extends UniversalRegistry {
 	public static final MasterRegistry INSTANCE = new MasterRegistry();
 
 	protected MasterRegistry() {
-		this.addPacket(EnumProtocolDirection.CLIENTBOUND, CPacketMasterStartShard.class);
-		this.addPacket(EnumProtocolDirection.CLIENTBOUND, CPacketMasterStopShard.class);
+		this.addPacket(EnumProtocolDirection.CLIENTBOUND, CPacketMasterShardUpdate.class);
 		this.addPacket(EnumProtocolDirection.CLIENTBOUND, CPacketMasterStatsUpdate.class);
 
 		this.addPacket(EnumProtocolDirection.SERVERBOUND, SPacketMasterStoppedShard.class);

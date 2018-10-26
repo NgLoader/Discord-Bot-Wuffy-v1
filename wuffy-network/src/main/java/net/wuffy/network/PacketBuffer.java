@@ -13,6 +13,7 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
@@ -172,6 +173,33 @@ public class PacketBuffer extends ByteBuf {
 	 */
 	public void writeEnum(Enum<?> e) {
 		this.writeVarInt(e.ordinal());
+	}
+
+	/**
+	 * Reads {@link EnumSet} of given class
+	 * 
+	 * @param <T> your {@link EnumSet}
+	 * @param clazz class of {@link EnumSet}
+	 * @return read {@link EnumSet}
+	 */
+	public <T extends Enum<T>> EnumSet<T> readEnumSet(Class<T> clazz) {
+		EnumSet<T> enumSet = EnumSet.noneOf(clazz);
+
+		for (int i = 0; i < this.readVarInt(); i++)
+			enumSet.add(this.readEnum(clazz));
+
+		return enumSet;
+	}
+
+	/**
+	 * Writes an {@link EnumSet}
+	 * 
+	 * @param es {@link EnumSet} to write
+	 */
+	public void writeEnumSet(EnumSet<?> es) {
+		this.writeVarInt(es.size());
+
+		es.forEach(e -> this.writeEnum(e));
 	}
 
 	/**

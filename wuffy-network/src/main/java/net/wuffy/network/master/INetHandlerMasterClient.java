@@ -2,17 +2,14 @@ package net.wuffy.network.master;
 
 import net.wuffy.network.INetHandler;
 import net.wuffy.network.master.client.CPacketMasterSettings;
-import net.wuffy.network.master.client.CPacketMasterStartShard;
+import net.wuffy.network.master.client.CPacketMasterShardUpdate;
 import net.wuffy.network.master.client.CPacketMasterStatsUpdate;
-import net.wuffy.network.master.client.CPacketMasterStopShard;
 
 public interface INetHandlerMasterClient extends INetHandler {
 
 	public void handleMasterStatsUpdate(CPacketMasterStatsUpdate masterStatsUpdate);
 
-	public void handleMasterStartShard(CPacketMasterStartShard masterStartShard);
-
-	public void handleMasterStopShard(CPacketMasterStopShard masterStopShard);
+	public void handleMasterShardUpdate(CPacketMasterShardUpdate masterShardUpdate);
 
 	public void handleMasterGatewayBot(CPacketMasterSettings masterGatewayBot);
 }

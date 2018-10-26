@@ -11,9 +11,13 @@ import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
+import net.wuffy.console.ConsoleCommandManager;
+import net.wuffy.master.auth.AuthManager;
+import net.wuffy.master.command.CommandClient;
 import net.wuffy.master.network.loadbalancer.NetworkSystemLoadBalancer;
 import net.wuffy.master.network.master.NetworkSystemMaster;
-import net.wuffy.master.sharding.ServerHandler;
+import net.wuffy.master.server.ServerHandler;
+import net.wuffy.master.sharding.ShardingHandler;
 
 public class Master extends TickingTask {
 
@@ -58,6 +62,11 @@ public class Master extends TickingTask {
 	private List<ITickable> tickables = new ArrayList<ITickable>();
 	private Thread masterThread;
 
+	private ConsoleCommandManager consoleCommandManager;
+
+	private ServerHandler serverHandler;
+	private ShardingHandler shardingHandler;
+
 	private NetworkSystemLoadBalancer networkSystemLoadBalancer;
 	private NetworkSystemMaster networkSystemMaster;
 
@@ -66,8 +75,17 @@ public class Master extends TickingTask {
 
 		this.config = ConfigService.getConfig(MasterConfig.class);
 
+		AuthManager.initialize();
+
+		this.serverHandler = new ServerHandler();
+		this.shardingHandler = new ShardingHandler(this.serverHandler);
+
+		this.consoleCommandManager = new ConsoleCommandManager();
+		this.consoleCommandManager.registerExecutor(new CommandClient());
+
 		this.tickables.add(WuffyPhantomRefernce.getInstance());
-		this.tickables.add(ServerHandler.getInstance());
+		this.tickables.add(this.consoleCommandManager);
+		this.tickables.add(this.shardingHandler);
 
 		this.running = false;
 
@@ -80,9 +98,11 @@ public class Master extends TickingTask {
 		this.running = true;
 
 		try {
+			//LoadBalancer
 			this.networkSystemLoadBalancer = new NetworkSystemLoadBalancer().start(this.config);
 			this.tickables.add(this.networkSystemLoadBalancer);
 
+			//Master
 			this.networkSystemMaster = new NetworkSystemMaster().start(this.config);
 			this.tickables.add(this.networkSystemMaster);
 		} catch (SSLException e) {
@@ -91,6 +111,7 @@ public class Master extends TickingTask {
 			return;
 		}
 
+		//Start main thread
 		this.masterThread = new Thread(this, "Wuffy Master");
 		this.masterThread.start();
 	}
@@ -113,5 +134,13 @@ public class Master extends TickingTask {
 
 	public MasterConfig getConfig() {
 		return config;
+	}
+
+	public ServerHandler getServerHandler() {
+		return this.serverHandler;
+	}
+
+	public ShardingHandler getShardingHandler() {
+		return this.shardingHandler;
 	}
 }

@@ -29,10 +29,15 @@ public class NetHandlerAuthenticationServer implements INetHandlerAuthentication
 		this.uuid = packetAuthenticationStart.getId();
 
 		if(AuthManager.verifyId(this.uuid)) {
-			AuthManager.lockId(this.uuid);
+			if(AuthManager.getName(this.uuid) != null) {
+				AuthManager.lockId(this.uuid);
 
-			CryptUtil.SECURE_RANDOM.nextBytes(this.token);
-			this.networkManager.sendPacket(new CPacketAuthenticationChallenge(this.token));
+				CryptUtil.SECURE_RANDOM.nextBytes(this.token);
+				this.networkManager.sendPacket(new CPacketAuthenticationChallenge(this.token));
+			} else {
+				this.disconnect("No name found");
+				Logger.warn("NetworkHandler (AuthenticationServer)", String.format("No name found for id %s", this.uuid.toString()));
+			}
 		} else {
 			this.disconnect("Invalid or locked id");
 			Logger.warn("NetworkHandler (AuthenticationServer)", String.format("Invalid id by %s", this.networkManager.getAddress()));

@@ -39,7 +39,7 @@ public class CommandMaster implements IConsoleCommandExecutor {
 					Logger.fatal("Command", "Failed by creating path \"./wuffy/\"", e);
 				}
 
-				try (DataOutputStream outputStream = new DataOutputStream(Files.newOutputStream(Paths.get(String.format("wuffy/%s.key", id.toString()))))) {
+				try (DataOutputStream outputStream = new DataOutputStream(Files.newOutputStream(Paths.get(String.format("wuffy/%s#lb.key", id.toString()))))) {
 					outputStream.writeLong(id.getMostSignificantBits());
 					outputStream.writeLong(id.getLeastSignificantBits());
 					outputStream.write(keyPair.getPrivate().getEncoded());
@@ -47,8 +47,7 @@ public class CommandMaster implements IConsoleCommandExecutor {
 					outputStream.close();
 					Logger.info("Command", "Saved.");
 
-					Logger.info("Command", String.format("Login data saved in \"wuffy/%s.key\"\n"
-							+ "Copy this file into the Master server.", id.toString()));
+					Logger.info("Command", String.format("Login data saved in \"wuffy/%s.key\" copy this file into the Master server.", id.toString()));
 				} catch (IOException e) {
 					Logger.fatal("AuthManager", String.format("Failed to save id \"%s\".", id.toString()), e);
 				}

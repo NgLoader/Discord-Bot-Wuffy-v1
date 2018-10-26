@@ -32,8 +32,6 @@ public class JDAAdapter implements IJDAAdapter {
 		this.eventListeners = new ArrayList<>();
 	}
 
-	public void handlePacketHallo(CPacketMaster)
-
 	@Override
 	public void login() {
 		if(this.shardManager != null)
@@ -45,8 +43,6 @@ public class JDAAdapter implements IJDAAdapter {
 			var builder = new DefaultShardManagerBuilder()
 					.setToken(this.core.getConfig().token)
 					.addEventListeners(this.eventListeners.toArray());
-
-			config.
 
 			var shardingConfig = config.sharding;
 			if(shardingConfig.enabled)

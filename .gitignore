@@ -3,6 +3,7 @@ bin/
 target/
 tmp/
 */wuffy/config.json
+*/wuffy/*.key
 *.tmp
 *.bak
 *.swp

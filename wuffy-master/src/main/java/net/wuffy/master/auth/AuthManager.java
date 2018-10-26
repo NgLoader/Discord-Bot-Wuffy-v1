@@ -24,6 +24,7 @@ public class AuthManager {
 	private static final Set<UUID> USED_UUIDS = new HashSet<UUID>();
 	private static final Set<UUID> LOCK = new HashSet<UUID>();
 	private static final Map<UUID, PublicKey> CREDENTIALS = new HashMap<UUID, PublicKey>();
+	private static final Map<UUID, String> NAMES = new HashMap<UUID, String>();
 
 	private static boolean initialized = false;
 
@@ -42,6 +43,7 @@ public class AuthManager {
 							UUID uuid = new UUID(inputStream.readLong(), inputStream.readLong());
 	
 							AuthManager.USED_UUIDS.add(uuid);
+							AuthManager.NAMES.put(uuid, inputStream.readUTF());
 							AuthManager.CREDENTIALS.put(uuid, CryptUtil.generatePublicKey(inputStream.readAllBytes()));
 	
 							Logger.debug("Auth", String.format("Loaded ID: \"%s\"", uuid.toString()));
@@ -56,7 +58,7 @@ public class AuthManager {
 			}
 	}
 
-	public static void saveId(UUID uuid, PublicKey publicKey) {
+	public static void saveId(UUID uuid, PublicKey publicKey, String name) {
 		try {
 			Files.createDirectories(Paths.get("wuffy/keys"));
 		} catch (IOException e) {
@@ -66,6 +68,7 @@ public class AuthManager {
 		try (DataOutputStream outputStream = new DataOutputStream(Files.newOutputStream(Paths.get(String.format("wuffy/keys/%s.key", uuid.toString()))))) {
 			outputStream.writeLong(uuid.getMostSignificantBits());
 			outputStream.writeLong(uuid.getLeastSignificantBits());
+			outputStream.writeUTF(name);
 			outputStream.write(publicKey.getEncoded());
 
 			outputStream.close();
@@ -74,6 +77,7 @@ public class AuthManager {
 				AuthManager.USED_UUIDS.add(uuid);
 
 			AuthManager.CREDENTIALS.put(uuid, publicKey);
+			AuthManager.NAMES.put(uuid, name);
 		} catch (IOException e) {
 			Logger.fatal("AuthManager", String.format("Failed to save id \"%s\".", uuid.toString()), e);
 		}
@@ -135,6 +139,10 @@ public class AuthManager {
 
 	public static PublicKey getPublicKey(UUID id) {
 		return AuthManager.CREDENTIALS.get(id);
+	}
+
+	public static String getName(UUID id) {
+		return AuthManager.NAMES.get(id);
 	}
 
 	public static Set<UUID> getAllUsedIds() {

@@ -39,12 +39,22 @@ public class DNSServer extends AbstractServer implements ITickable {
 	private UUID currentlyMasterId;
 	private int currentlyMasterTrys = 0;
 
+	private Long lastStartTry = 0L;
+	private boolean starting = false;
+	private Channel channel;
+
 	public DNSServer(DNSConfig config) {
 		this.config = config;
 	}
 
 	@Override
 	public void update() {
+		if(this.channel != null && !this.channel.isOpen() && !this.starting)
+			if(lastStartTry < System.currentTimeMillis()) {
+				this.lastStartTry = System.currentTimeMillis() + 30000;
+				this.start();
+			}
+
 		if(this.lastUpdate > System.currentTimeMillis())
 			return;
 		this.lastUpdate = System.currentTimeMillis() + 1000;
@@ -99,38 +109,45 @@ public class DNSServer extends AbstractServer implements ITickable {
 	}
 
 	public void start() {
-		new Bootstrap()
-		.group(NettyUtil.createEventLoopGroup(0))
-		.channel(NettyUtil.getDatagramChannelClass())
-		.handler(new ChannelInitializer<Channel>() {
+		this.starting = true;
 
-			protected void initChannel(Channel channel) throws Exception {
-				channel.pipeline()
-				.addLast("dnsQueryDecoder", new DatagramDnsQueryDecoder())
-				.addLast("dnsResponseEncode", new DatagramDnsResponseEncoder())
-				.addLast("dnsHandler", new SimpleChannelInboundHandler<DatagramDnsQuery>() {
+		try {
+			this.channel = new Bootstrap()
+			.group(NettyUtil.createEventLoopGroup(0))
+			.channel(NettyUtil.getDatagramChannelClass())
+			.handler(new ChannelInitializer<Channel>() {
 
-					@Override
-					protected void channelRead0(ChannelHandlerContext ctx, DatagramDnsQuery msg) throws Exception {
-						DatagramDnsResponse response = new DatagramDnsResponse(msg.recipient(), msg.sender(), msg.id());
+				protected void initChannel(Channel channel) throws Exception {
+					channel.pipeline()
+					.addLast("dnsQueryDecoder", new DatagramDnsQueryDecoder())
+					.addLast("dnsResponseEncode", new DatagramDnsResponseEncoder())
+					.addLast("dnsHandler", new SimpleChannelInboundHandler<DatagramDnsQuery>() {
 
-						response.addRecord(
-							DnsSection.QUESTION,
-							msg.recordAt(DnsSection.QUESTION)
-						).addRecord(
-							DnsSection.ANSWER,
-							new DefaultDnsRawRecord(
-								DNSServer.this.config.dns.recordName,
-								DnsRecordType.A,
-								DNSServer.this.config.dns.recordTimeToLive,
-								Unpooled.buffer(4).writeInt(LoadBalancer.currentlyMasterAddress)
-							)
-						);
+						@Override
+						protected void channelRead0(ChannelHandlerContext ctx, DatagramDnsQuery msg) throws Exception {
+							DatagramDnsResponse response = new DatagramDnsResponse(msg.recipient(), msg.sender(), msg.id());
 
-						ctx.writeAndFlush(response, ctx.voidPromise());
-					}
-				});
-			};
-		}).localAddress(new InetSocketAddress(this.config.dns.host, this.config.dns.port)).bind().syncUninterruptibly();
+							response.addRecord(
+								DnsSection.QUESTION,
+								msg.recordAt(DnsSection.QUESTION)
+							).addRecord(
+								DnsSection.ANSWER,
+								new DefaultDnsRawRecord(
+									DNSServer.this.config.dns.recordName,
+									DnsRecordType.A,
+									DNSServer.this.config.dns.recordTimeToLive,
+									Unpooled.buffer(4).writeInt(LoadBalancer.currentlyMasterAddress)
+								)
+							);
+
+							ctx.writeAndFlush(response, ctx.voidPromise());
+						}
+					});
+				};
+			}).localAddress(new InetSocketAddress(this.config.dns.host, this.config.dns.port)).bind().syncUninterruptibly().channel();
+		} catch (Exception e) {
+			Logger.fatal("DNSServer", "Error by starting DNS server.", e);
+		}
+		this.starting = false;
 	}
 }

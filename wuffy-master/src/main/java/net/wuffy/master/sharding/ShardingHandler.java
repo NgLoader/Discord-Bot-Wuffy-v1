@@ -1,24 +1,21 @@
 package net.wuffy.master.sharding;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.master.GatewayBotInfo;
+import net.wuffy.master.server.Server;
+import net.wuffy.master.server.ServerHandler;
 
-public class ServerHandler implements ITickable {
+public class ShardingHandler implements ITickable {
 
-	private static final ServerHandler INSTANCE = new ServerHandler();
-
-	public static ServerHandler getInstance() {
-		return ServerHandler.INSTANCE;
-	}
-
-	private List<Server> servers = new ArrayList<Server>();
+	private final ServerHandler serverHandler;
 
 	private Long lastCheck = 0L;
 	private Long lastNoFreeServerWarnMessage = 0L;
+
+	public ShardingHandler(ServerHandler serverHandler) {
+		this.serverHandler = serverHandler;
+	}
 
 	@Override
 	public void update() {
@@ -28,20 +25,20 @@ public class ServerHandler implements ITickable {
 			return;
 
 		int guilds = 0;
-		for(Server server : this.servers)
+		for(Server server : this.serverHandler.getServers())
 			guilds += server.isReady() ? server.getStatsUpdate().getGuildCount() : 0;
 
 		int needToRun = GatewayBotInfo.getDiscord_shards().get();
 		int needToRunByGuilds = (guilds / 2500) + 1;
 
 		if(needToRunByGuilds > needToRun)
-			GatewayBotInfo.getDiscord_shards().set(needToRunByGuilds);
+			GatewayBotInfo.getDiscord_shards().set(needToRun = needToRunByGuilds);
 
 		int currently = 0;
 
 		do {
 			int currentlyCopy = currently;
-			if(this.servers.stream().anyMatch(server -> server.isShardRunning(currentlyCopy)))
+			if(this.serverHandler.getServers().stream().anyMatch(server -> server.isShardRunning(currentlyCopy)))
 				continue;
 
 			Server server = this.getBestSever();
@@ -50,7 +47,7 @@ public class ServerHandler implements ITickable {
 				server.startShard(currently);
 			else {
 				if(this.lastNoFreeServerWarnMessage < System.currentTimeMillis()) {
-					this.lastNoFreeServerWarnMessage = System.currentTimeMillis() + 120000; //Only send this message every 2 minutes
+					this.lastNoFreeServerWarnMessage = System.currentTimeMillis() + 960000; //Only send this message every 16 minutes
 					Logger.debug("ServerHandler", String.format("No free server for starting shard \"%s\".", currently));
 				}
 				break;
@@ -60,7 +57,7 @@ public class ServerHandler implements ITickable {
 
 	public Server getBestSever() {
 		//TODO calculate best server with lowest memory and loweds shards
-		for(Server server : this.servers)
+		for(Server server : this.serverHandler.getServers())
 			if(server.canShardStart())
 				return server;
 		return null;

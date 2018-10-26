@@ -38,7 +38,7 @@ public class NetHandlerAuthenticationClient implements INetHandlerAuthentication
 			try (Stream<Path> paths = Files.walk(keyPath)) {
 				paths.filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
 					.forEach(path -> {
-						if(path.getFileName().toString().endsWith(".key"))
+						if(path.getFileName().toString().endsWith("#lb.key"))
 							try (DataInputStream inputStream = new DataInputStream(Files.newInputStream(path))) {
 								this.id = new UUID(inputStream.readLong(), inputStream.readLong());
 								this.privateKey = CryptUtil.generatePrivateKey(inputStream.readAllBytes());

@@ -8,6 +8,7 @@ import net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAc
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Region;
 import net.dv8tion.jda.core.entities.Category;
+import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.GuildVoiceState;
@@ -319,5 +320,10 @@ public class ImplGuild implements Guild {
 	@Override
 	public RestAction<Ban> getBanById(String userId) {
 		return this.guild.getBanById(userId);
+	}
+
+	@Override
+	public List<Channel> getChannels(boolean includeHidden) {
+		return this.guild.getChannels(includeHidden);
 	}
 }
