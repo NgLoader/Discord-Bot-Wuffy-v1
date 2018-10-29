@@ -8,27 +8,27 @@ import net.wuffy.network.music.INetHandlerMusicClient;
 
 public class CPacketMusicPlay implements Packet<INetHandlerMusicClient> {
 
-	private int id;
-
 	private long guildId;
+
+	private String url;
 
 	public CPacketMusicPlay() { }
 
-	public CPacketMusicPlay(int id, int guildId) {
-		this.id = id;
+	public CPacketMusicPlay(int guildId, String url) {
 		this.guildId = guildId;
+		this.url = url;
 	}
 
 	@Override
 	public void read(PacketBuffer packetBuffer) throws IOException {
-		this.id = packetBuffer.readInt();
 		this.guildId = packetBuffer.readInt();
+		this.url = packetBuffer.readString();
 	}
 
 	@Override
 	public void write(PacketBuffer packetBuffer) throws IOException {
-		packetBuffer.writeInt(this.id);
 		packetBuffer.writeLong(this.guildId);
+		packetBuffer.writeString(this.url);
 	}
 
 	@Override
@@ -36,11 +36,11 @@ public class CPacketMusicPlay implements Packet<INetHandlerMusicClient> {
 		handler.handleMusicPlay(this);
 	}
 
-	public int getId() {
-		return this.id;
-	}
-
 	public long getGuildId() {
 		return this.guildId;
+	}
+
+	public String getUrl() {
+		return this.url;
 	}
 }

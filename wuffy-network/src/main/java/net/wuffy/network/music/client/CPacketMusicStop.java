@@ -8,22 +8,22 @@ import net.wuffy.network.music.INetHandlerMusicClient;
 
 public class CPacketMusicStop implements Packet<INetHandlerMusicClient> {
 
-	private int id;
+	private long guildId;
 
 	public CPacketMusicStop() { }
 
-	public CPacketMusicStop(int id) {
-		this.id = id;
+	public CPacketMusicStop(long guildId) {
+		this.guildId = guildId;
 	}
 
 	@Override
 	public void read(PacketBuffer packetBuffer) throws IOException {
-		this.id = packetBuffer.readInt();
+		this.guildId = packetBuffer.readLong();
 	}
 
 	@Override
 	public void write(PacketBuffer packetBuffer) throws IOException {
-		packetBuffer.writeInt(this.id);
+		packetBuffer.writeLong(this.guildId);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class CPacketMusicStop implements Packet<INetHandlerMusicClient> {
 		handler.handleMusicStop(this);
 	}
 
-	public int getId() {
-		return this.id;
+	public long getGuildId() {
+		return this.guildId;
 	}
 }

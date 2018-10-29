@@ -10,22 +10,27 @@ public class CPacketMusicAction implements Packet<INetHandlerMusicClient> {
 
 	private EnumMusicAction action;
 
+	private long guildId;
+
 	private int valueInt;
 
 	public CPacketMusicAction() { }
 
-	public CPacketMusicAction(EnumMusicAction action) {
+	public CPacketMusicAction(EnumMusicAction action, long guildId) {
 		this.action = action;
+		this.guildId = guildId;
 	}
 
-	public CPacketMusicAction(EnumMusicAction action, int valueInt) {
+	public CPacketMusicAction(EnumMusicAction action, long guildId, int valueInt) {
 		this.action =  action;
+		this.guildId = guildId;
 		this.valueInt = valueInt;
 	}
 
 	@Override
 	public void read(PacketBuffer packetBuffer) throws IOException {
 		this.action = packetBuffer.readEnum(EnumMusicAction.class);
+		this.guildId = packetBuffer.readLong();
 
 		switch (this.action) {
 		case JUMP:
@@ -42,6 +47,7 @@ public class CPacketMusicAction implements Packet<INetHandlerMusicClient> {
 	@Override
 	public void write(PacketBuffer packetBuffer) throws IOException {
 		packetBuffer.writeEnum(this.action);
+		packetBuffer.writeLong(this.guildId);
 
 		switch (this.action) {
 		case JUMP:
@@ -62,6 +68,10 @@ public class CPacketMusicAction implements Packet<INetHandlerMusicClient> {
 
 	public EnumMusicAction getAction() {
 		return this.action;
+	}
+
+	public long getGuildId() {
+		return this.guildId;
 	}
 
 	public int getValueInt() {
