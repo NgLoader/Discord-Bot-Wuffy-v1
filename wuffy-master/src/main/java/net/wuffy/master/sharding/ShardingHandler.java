@@ -1,14 +1,23 @@
 package net.wuffy.master.sharding;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.master.GatewayBotInfo;
+import net.wuffy.master.Master;
 import net.wuffy.master.server.Server;
 import net.wuffy.master.server.ServerHandler;
+import net.wuffy.network.bot.client.CPacketBotShardUpdate;
+import net.wuffy.network.bot.client.CPacketBotShardUpdate.EnumMasterShard;
 
 public class ShardingHandler implements ITickable {
 
 	private final ServerHandler serverHandler;
+
+	private Long lastGatewayBotRefresh = 0L;
+	private Long lastGatewayBotRefreshMessage = 0L;
 
 	private Long lastCheck = 0L;
 	private Long lastNoFreeServerWarnMessage = 0L;
@@ -29,22 +38,44 @@ public class ShardingHandler implements ITickable {
 			guilds += server.isReady() ? server.getStatsUpdate().getGuildCount() : 0;
 
 		int needToRun = GatewayBotInfo.getDiscord_shards().get();
-		int needToRunByGuilds = (guilds / 2500) + 1;
+		int needToRunByGuilds = (guilds / 2400) + 1; //I calculate 2400 guilds pro shard
 
-		if(needToRunByGuilds > needToRun)
-			GatewayBotInfo.getDiscord_shards().set(needToRun = needToRunByGuilds);
+		if(Master.getInstance().getConfig().minShardCount > needToRun) //I don't know why I added this, but I think it's useful
+			needToRun = Master.getInstance().getConfig().minShardCount;
+
+		if(needToRunByGuilds > needToRun) {
+			needToRun = needToRunByGuilds;
+
+			if(lastGatewayBotRefresh < System.currentTimeMillis()) {
+				lastGatewayBotRefresh = System.currentTimeMillis() + 3600000;
+				GatewayBotInfo.refresh();
+			} else {
+				if(this.lastGatewayBotRefreshMessage < System.currentTimeMillis()) {
+					this.lastGatewayBotRefreshMessage = System.currentTimeMillis() + 960000; //Only send this message every 16 minutes
+					Logger.debug("ServerHandler", String.format(
+							"Discord sending lower chard count (%s) but master need (%s)",
+							Integer.toString(GatewayBotInfo.getDiscord_shards().get()),
+							Integer.toString(needToRun)));
+				}
+
+				GatewayBotInfo.getDiscord_shards().set(needToRun);
+			}
+
+			CPacketBotShardUpdate masterShardUpdatePacket = new CPacketBotShardUpdate(EnumMasterShard.SHARDCOUNT, needToRun);
+			this.serverHandler.getServers().forEach(server -> server.getNetworkManager().sendPacket(masterShardUpdatePacket));
+		}
 
 		int currently = 0;
 
 		do {
-			int currentlyCopy = currently;
-			if(this.serverHandler.getServers().stream().anyMatch(server -> server.isShardRunning(currentlyCopy)))
+			int shardId = currently;
+			if(this.serverHandler.getServers().stream().anyMatch(server -> server.isShardRunning(shardId)))
 				continue;
 
 			Server server = this.getBestSever();
 
 			if(server != null)
-				server.startShard(currently);
+				server.startShard(shardId);
 			else {
 				if(this.lastNoFreeServerWarnMessage < System.currentTimeMillis()) {
 					this.lastNoFreeServerWarnMessage = System.currentTimeMillis() + 960000; //Only send this message every 16 minutes
@@ -56,10 +87,11 @@ public class ShardingHandler implements ITickable {
 	}
 
 	public Server getBestSever() {
-		//TODO calculate best server with lowest memory and loweds shards
-		for(Server server : this.serverHandler.getServers())
-			if(server.canShardStart())
-				return server;
-		return null;
+		List<Server> valid = this.serverHandler.getServers().stream()
+				.filter(server -> server.canShardStart()) //Filter is server ready
+				.sorted((s1, s2) -> Integer.compare(s2.getShardsRunningCount(), s1.getShardsRunningCount())) //Sort by lowest shard count
+				.collect(Collectors.toList()); //Collect to list
+
+		return valid.isEmpty() ? null : valid.get(0);
 	}
 }

@@ -81,4 +81,8 @@ public class NetworkSystemMaster extends AbstractServer implements ITickable {
 			}
 		}
 	}
+
+	public List<NetworkManager> getNetworkManagers() {
+		return this.networkManager;
+	}
 }

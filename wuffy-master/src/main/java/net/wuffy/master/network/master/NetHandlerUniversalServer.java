@@ -4,10 +4,7 @@ import java.util.UUID;
 
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.ITickable;
-import net.wuffy.master.Master;
 import net.wuffy.master.auth.AuthManager;
-import net.wuffy.master.server.Server;
-import net.wuffy.master.sharding.ShardingHandler;
 import net.wuffy.network.NetworkManager;
 import net.wuffy.network.universal.INetHandlerUniversalServer;
 import net.wuffy.network.universal.client.CPacketUniversalDisconnect;
@@ -29,8 +26,6 @@ public class NetHandlerUniversalServer implements INetHandlerUniversalServer, IT
 	public NetHandlerUniversalServer(NetworkManager networkManager, UUID uuid) {
 		this.networkManager = networkManager;
 		this.uuid = uuid;
-
-		Master.getInstance().getServerHandler().addServer(new Server(this.networkManager, this.uuid, AuthManager.getName(this.uuid)));
 	}
 
 	@Override

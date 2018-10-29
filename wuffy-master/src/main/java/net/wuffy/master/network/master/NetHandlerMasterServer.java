@@ -2,36 +2,51 @@ package net.wuffy.master.network.master;
 
 import java.util.UUID;
 
+import net.wuffy.master.Master;
+import net.wuffy.master.auth.AuthManager;
+import net.wuffy.master.server.Server;
 import net.wuffy.network.NetworkManager;
-import net.wuffy.network.master.INetHandlerMasterServer;
-import net.wuffy.network.master.server.SPacketMasterHallo;
-import net.wuffy.network.master.server.SPacketMasterStatsUpdate;
-import net.wuffy.network.master.server.SPacketMasterStoppedShard;
-import net.wuffy.network.master.server.SPacketMasterSystemUpdate;
+import net.wuffy.network.bot.INetHandlerBotServer;
+import net.wuffy.network.bot.server.SPacketBotHallo;
+import net.wuffy.network.bot.server.SPacketBotStatsUpdate;
+import net.wuffy.network.bot.server.SPacketBotStoppedShard;
+import net.wuffy.network.bot.server.SPacketBotSystemUpdate;
 
-public class NetHandlerMasterServer extends NetHandlerUniversalServer implements INetHandlerMasterServer {
+public class NetHandlerMasterServer extends NetHandlerUniversalServer implements INetHandlerBotServer {
+
+	private Server server;
 
 	public NetHandlerMasterServer(NetworkManager networkManager, UUID uuid) {
 		super(networkManager, uuid);
+
+		this.server = new Server(this.networkManager, this.uuid, AuthManager.getName(this.uuid));
+		Master.getInstance().getServerHandler().addServer(this.server);
 	}
 
 	@Override
-	public void handleMasterInit(SPacketMasterHallo masterInit) {
-		// TODO Auto-generated method stub
+	public void handleBotInit(SPacketBotHallo masterInit) {
+		this.server.handlePacketHallo(masterInit);
 	}
 
 	@Override
-	public void handleMasterStatsUpdate(SPacketMasterStatsUpdate masterStatsUpdate) {
-		// TODO Auto-generated method stub
+	public void handleBotStatsUpdate(SPacketBotStatsUpdate masterStatsUpdate) {
+		this.server.handlePacketStatsUpdate(masterStatsUpdate);
 	}
 
 	@Override
-	public void handleMasterSystemUpdate(SPacketMasterSystemUpdate masterSystemUpdate) {
-		// TODO Auto-generated method stub
+	public void handleBotSystemUpdate(SPacketBotSystemUpdate masterSystemUpdate) {
+		this.server.handlePacketSystemUpdate(masterSystemUpdate);
 	}
 
 	@Override
-	public void handleMasterStoppedShard(SPacketMasterStoppedShard masterStoppedShard) {
-		// TODO Auto-generated method stub
+	public void handleBotStoppedShard(SPacketBotStoppedShard masterStoppedShard) {
+		this.server.stopShard(masterStoppedShard.getShardId());
+	}
+
+	@Override
+	public void onDisconnect(String reason) {
+		super.onDisconnect(reason);
+
+		Master.getInstance().getServerHandler().removeServer(this.server);
 	}
 }

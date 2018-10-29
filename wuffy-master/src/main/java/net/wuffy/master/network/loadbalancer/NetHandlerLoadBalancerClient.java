@@ -1,11 +1,13 @@
 package net.wuffy.master.network.loadbalancer;
 
+import javax.net.ssl.SSLException;
+
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.WebUtil;
 import net.wuffy.master.Master;
 import net.wuffy.network.NetworkManager;
 import net.wuffy.network.loadbalancer.INetHandlerLoadBalancerClient;
-import net.wuffy.network.loadbalancer.client.CPacketLoadBalancerNowMaster;
+import net.wuffy.network.loadbalancer.client.CPacketLoadBalancerMasterUpdate;
 import net.wuffy.network.loadbalancer.server.SPacketLoadBalancerInit;
 import net.wuffy.network.universal.INetHandlerUniversalClient;
 import net.wuffy.network.universal.client.CPacketUniversalDisconnect;
@@ -23,9 +25,41 @@ public class NetHandlerLoadBalancerClient implements INetHandlerUniversalClient,
 	}
 
 	@Override
-	public void handleLoadBalancerNowMaster(CPacketLoadBalancerNowMaster loadBalancerNowMaster) {
-		Logger.info("LoadBalancer", "I'm now the master.");
+	public void handleLoadBalancerMasterUpdate(CPacketLoadBalancerMasterUpdate loadBalancerMasterUpdate) {
 
+		switch(loadBalancerMasterUpdate.getType()) {
+			case START:
+				Logger.info("LoadBalancer", "I'm now the master. (Starting Master)");
+				try {
+					Master.getInstance().getNetworkSystemMaster().start(Master.getInstance().getConfig());
+					Logger.info("LoadBalancer", "Master started.");
+				} catch (SSLException e) {
+					Logger.fatal("Bootstrap", "SSLException", e);
+				}
+			break;
+
+			case STOP:
+				Logger.info("LoadBalancer", "No longer master. (Stopping Master)");
+				Master.getInstance().getNetworkSystemMaster().getNetworkManagers().forEach(networkManager -> networkManager.close("Master stopping"));
+			break;
+
+			case RESTART:
+				Logger.info("LoadBalancer", "Restarting Master.");
+
+				Master.getInstance().getNetworkSystemMaster().getNetworkManagers().forEach(networkManager -> networkManager.close("Master stopping"));
+				Logger.info("LoadBalancer", "Master stopped.");
+
+				try {
+					Master.getInstance().getNetworkSystemMaster().start(Master.getInstance().getConfig());
+					Logger.info("LoadBalancer", "Master started.");
+				} catch (SSLException e) {
+					Logger.fatal("Bootstrap", "SSLException", e);
+				}
+			break;
+
+			default:
+				break;
+		}
 		//TODO start master netty server for client to connect
 	}
 

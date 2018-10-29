@@ -49,7 +49,7 @@ public class NetHandlerAuthenticationServer implements INetHandlerAuthentication
 		if(CryptUtil.isSignatureValid(AuthManager.getPublicKey(this.uuid), this.token, packetAuthenticationAnswer.getToken())) {
 			this.networkManager.sendPacket(new CPacketAuthenticationSuccess());
 
-			this.networkManager.setProtocol(EnumProtocolState.MASTER);
+			this.networkManager.setProtocol(EnumProtocolState.BOT);
 			this.networkManager.setNetHandler(new NetHandlerMasterServer(this.networkManager, uuid));
 		} else {
 			this.disconnect("Invalid signature");

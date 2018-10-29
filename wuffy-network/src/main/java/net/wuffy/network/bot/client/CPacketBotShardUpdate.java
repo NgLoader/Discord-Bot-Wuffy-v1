@@ -1,20 +1,20 @@
-package net.wuffy.network.master.client;
+package net.wuffy.network.bot.client;
 
 import java.io.IOException;
 
 import net.wuffy.network.Packet;
 import net.wuffy.network.PacketBuffer;
-import net.wuffy.network.master.INetHandlerMasterClient;
+import net.wuffy.network.bot.INetHandlerBotClient;
 
-public class CPacketMasterShardUpdate implements Packet<INetHandlerMasterClient> {
+public class CPacketBotShardUpdate implements Packet<INetHandlerBotClient> {
 
 	private EnumMasterShard type;
 
 	private int value;
 
-	public CPacketMasterShardUpdate() { }
+	public CPacketBotShardUpdate() { }
 
-	public CPacketMasterShardUpdate(EnumMasterShard type, int value) {
+	public CPacketBotShardUpdate(EnumMasterShard type, int value) {
 		this.type = type;
 		this.value = value;
 	}
@@ -32,8 +32,8 @@ public class CPacketMasterShardUpdate implements Packet<INetHandlerMasterClient>
 	}
 
 	@Override
-	public void handle(INetHandlerMasterClient handler) {
-		handler.handleMasterShardUpdate(this);
+	public void handle(INetHandlerBotClient handler) {
+		handler.handleBotShardUpdate(this);
 	}
 
 	public EnumMasterShard getType() {

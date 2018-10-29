@@ -1,12 +1,12 @@
-package net.wuffy.network.master.server;
+package net.wuffy.network.bot.server;
 
 import java.io.IOException;
 
 import net.wuffy.network.Packet;
 import net.wuffy.network.PacketBuffer;
-import net.wuffy.network.master.INetHandlerMasterServer;
+import net.wuffy.network.bot.INetHandlerBotServer;
 
-public class SPacketMasterHallo implements Packet<INetHandlerMasterServer> {
+public class SPacketBotHallo implements Packet<INetHandlerBotServer> {
 
 	private long startupTime;
 
@@ -19,9 +19,9 @@ public class SPacketMasterHallo implements Packet<INetHandlerMasterServer> {
 	private long totalSwap;
 	private long totalDiskSpace;
 
-	public SPacketMasterHallo() { }
+	public SPacketBotHallo() { }
 
-	public SPacketMasterHallo(long startupTime) {
+	public SPacketBotHallo(long startupTime) {
 		this.startupTime = startupTime;
 	}
 
@@ -50,8 +50,8 @@ public class SPacketMasterHallo implements Packet<INetHandlerMasterServer> {
 	}
 
 	@Override
-	public void handle(INetHandlerMasterServer handler) {
-		handler.handleMasterInit(this);
+	public void handle(INetHandlerBotServer handler) {
+		handler.handleBotInit(this);
 	}
 
 	public long getStartupTime() {

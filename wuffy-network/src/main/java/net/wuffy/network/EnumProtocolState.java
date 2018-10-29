@@ -2,8 +2,9 @@ package net.wuffy.network;
 
 import net.wuffy.network.PacketRegistry.EnumProtocolDirection;
 import net.wuffy.network.authentication.AuthenticationRegistry;
+import net.wuffy.network.bot.BotRegistry;
 import net.wuffy.network.loadbalancer.LoadBalancerRegistry;
-import net.wuffy.network.master.MasterRegistry;
+import net.wuffy.network.music.MusicRegistry;
 
 /**
  * @author Ingrim4
@@ -12,7 +13,8 @@ public enum EnumProtocolState {
 
 	AUTH(AuthenticationRegistry.INSTANCE),
 	LOADBALANCER(LoadBalancerRegistry.INSTANCE),
-	MASTER(MasterRegistry.INSTANCE);
+	BOT(BotRegistry.INSTANCE),
+	MUSIC(MusicRegistry.INSTANCE);
 
 	private PacketRegistry registry;
 

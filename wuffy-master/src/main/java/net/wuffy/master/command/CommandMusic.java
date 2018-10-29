@@ -15,9 +15,10 @@ import net.wuffy.console.ConsoleCommand;
 import net.wuffy.console.ConsoleCommandResult;
 import net.wuffy.console.IConsoleCommandExecutor;
 import net.wuffy.master.auth.AuthManager;
+import net.wuffy.master.auth.AuthManager.EnumAuthManagerType;
 
-@ConsoleCommand(usage = "client <Create|Remove|List> [ID/Name]", aliases = { "client" })
-public class CommandClient implements IConsoleCommandExecutor {
+@ConsoleCommand(usage = "music <Create|Remove|List> [ID/Name]", aliases = { "music" })
+public class CommandMusic implements IConsoleCommandExecutor {
 
 	@Override
 	public ConsoleCommandResult onCommand(String[] args) {
@@ -27,7 +28,6 @@ public class CommandClient implements IConsoleCommandExecutor {
 
 				if(args.length > 1)
 					name = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-				System.out.println("-> " + name);
 
 				if(name == null || name.isEmpty()) {
 					Logger.info("Command", "Pls enter a name. (client create <Name>)");
@@ -43,7 +43,7 @@ public class CommandClient implements IConsoleCommandExecutor {
 				Logger.info("Command", "Generated.");
 
 				Logger.info("Command", "Saving...");
-				AuthManager.saveId(id, keyPair.getPublic(), name);
+				AuthManager.saveId(id, keyPair.getPublic(), name, EnumAuthManagerType.MUSIC);
 
 				try {
 					Files.createDirectories(Paths.get("wuffy"));
@@ -51,7 +51,7 @@ public class CommandClient implements IConsoleCommandExecutor {
 					Logger.fatal("Command", "Failed by creating path \"./wuffy/\"", e);
 				}
 
-				try (DataOutputStream outputStream = new DataOutputStream(Files.newOutputStream(Paths.get(String.format("wuffy/%s#m.key", id.toString()))))) {
+				try (DataOutputStream outputStream = new DataOutputStream(Files.newOutputStream(Paths.get(String.format("wuffy/%s#music.key", id.toString()))))) {
 					outputStream.writeLong(id.getMostSignificantBits());
 					outputStream.writeLong(id.getLeastSignificantBits());
 					outputStream.writeUTF(name);
@@ -90,7 +90,9 @@ public class CommandClient implements IConsoleCommandExecutor {
 				if(set.isEmpty())
 					Logger.info("Command", "No ID's exist.");
 				else
-					set.forEach(id -> Logger.info("Command", String.format("    - %s (%s)", id.toString(), AuthManager.getName(id))));
+					set.stream()
+								.filter(id -> AuthManager.getType(id) == EnumAuthManagerType.MUSIC)
+								.forEach(id -> Logger.info("Command", String.format("    - %s (%s)", id.toString(), AuthManager.getName(id))));
 
 				Logger.info("Command", "");
 				Logger.info("Command", "[] --- --- --- { Id's } --- --- --- []");

@@ -26,7 +26,7 @@ import net.wuffy.network.AbstractServer;
 import net.wuffy.network.EnumProtocolState;
 import net.wuffy.network.NettyUtil;
 import net.wuffy.network.NetworkManager;
-import net.wuffy.network.loadbalancer.client.CPacketLoadBalancerNowMaster;
+import net.wuffy.network.loadbalancer.client.CPacketLoadBalancerMasterUpdate;
 
 public class DNSServer extends AbstractServer implements ITickable {
 
@@ -72,7 +72,7 @@ public class DNSServer extends AbstractServer implements ITickable {
 							this.currentlyMaster = master;
 							this.currentlyMasterTrys = 0;
 							LoadBalancer.currentlyMasterAddress = LoadBalancer.defaultMasterAddress;
-							handler.getNetworkManager().sendPacket(new CPacketLoadBalancerNowMaster()); //Send again while the master think when the connection is lost he is no longer the main master
+							handler.getNetworkManager().sendPacket(new CPacketLoadBalancerMasterUpdate()); //Send again while the master think when the connection is lost he is no longer the main master
 
 							Logger.info("DNSServer", "Master connection was rebuilt.");
 							return;
@@ -98,7 +98,7 @@ public class DNSServer extends AbstractServer implements ITickable {
 					this.currentlyMasterId = handler.getUUID();
 					this.currentlyMasterTrys = 0;
 
-					master.sendPacket(new CPacketLoadBalancerNowMaster());
+					master.sendPacket(new CPacketLoadBalancerMasterUpdate());
 					LoadBalancer.currentlyMasterAddress = handler.getAddressAsInt();
 
 					Logger.info("DNSServer", String.format("New Master found \"%s\".", handler.getUUID().toString()));

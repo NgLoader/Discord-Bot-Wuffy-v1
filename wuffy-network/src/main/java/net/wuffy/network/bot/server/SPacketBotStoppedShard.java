@@ -1,18 +1,18 @@
-package net.wuffy.network.master.server;
+package net.wuffy.network.bot.server;
 
 import java.io.IOException;
 
 import net.wuffy.network.Packet;
 import net.wuffy.network.PacketBuffer;
-import net.wuffy.network.master.INetHandlerMasterServer;
+import net.wuffy.network.bot.INetHandlerBotServer;
 
-public class SPacketMasterStoppedShard implements Packet<INetHandlerMasterServer> {
+public class SPacketBotStoppedShard implements Packet<INetHandlerBotServer> {
 
 	private int shardId;
 
-	public SPacketMasterStoppedShard() { }
+	public SPacketBotStoppedShard() { }
 
-	public SPacketMasterStoppedShard(int shardId) {
+	public SPacketBotStoppedShard(int shardId) {
 		this.shardId = shardId;
 	}
 
@@ -27,8 +27,8 @@ public class SPacketMasterStoppedShard implements Packet<INetHandlerMasterServer
 	}
 
 	@Override
-	public void handle(INetHandlerMasterServer handler) {
-		handler.handleMasterStoppedShard(this);
+	public void handle(INetHandlerBotServer handler) {
+		handler.handleBotStoppedShard(this);
 	}
 
 	public int getShardId() {

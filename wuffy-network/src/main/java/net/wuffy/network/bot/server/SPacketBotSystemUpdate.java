@@ -1,15 +1,15 @@
-package net.wuffy.network.master.server;
+package net.wuffy.network.bot.server;
 
 import java.io.IOException;
 
 import net.wuffy.network.Packet;
 import net.wuffy.network.PacketBuffer;
-import net.wuffy.network.master.INetHandlerMasterServer;
+import net.wuffy.network.bot.INetHandlerBotServer;
 
 /**
  * @author Ingrim4
  */
-public class SPacketMasterSystemUpdate implements Packet<INetHandlerMasterServer> {
+public class SPacketBotSystemUpdate implements Packet<INetHandlerBotServer> {
 
 	private double cpuUsage;
 	private double cpuAverage;
@@ -17,9 +17,9 @@ public class SPacketMasterSystemUpdate implements Packet<INetHandlerMasterServer
 	private long freeSwap;
 	private long freeDiskSpace;
 
-	public SPacketMasterSystemUpdate() { }
+	public SPacketBotSystemUpdate() { }
 
-	public SPacketMasterSystemUpdate(double cpuUsage, double cpuAverage, long freeMemory, long freeSwap, long freeDiskSpace) {
+	public SPacketBotSystemUpdate(double cpuUsage, double cpuAverage, long freeMemory, long freeSwap, long freeDiskSpace) {
 		this.cpuUsage = cpuUsage;
 		this.cpuAverage = cpuAverage;
 		this.freeMemory = freeMemory;
@@ -46,8 +46,8 @@ public class SPacketMasterSystemUpdate implements Packet<INetHandlerMasterServer
 	}
 
 	@Override
-	public void handle(INetHandlerMasterServer handler) {
-		handler.handleMasterSystemUpdate(this);
+	public void handle(INetHandlerBotServer handler) {
+		handler.handleBotSystemUpdate(this);
 	}
 
 	public double getCpuUsage() {

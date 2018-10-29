@@ -13,11 +13,11 @@ import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.IWuffyPhantomReference;
 import net.wuffy.master.sharding.Shard;
 import net.wuffy.network.NetworkManager;
-import net.wuffy.network.master.client.CPacketMasterShardUpdate;
-import net.wuffy.network.master.client.CPacketMasterShardUpdate.EnumMasterShard;
-import net.wuffy.network.master.server.SPacketMasterHallo;
-import net.wuffy.network.master.server.SPacketMasterStatsUpdate;
-import net.wuffy.network.master.server.SPacketMasterSystemUpdate;
+import net.wuffy.network.bot.client.CPacketBotShardUpdate;
+import net.wuffy.network.bot.client.CPacketBotShardUpdate.EnumMasterShard;
+import net.wuffy.network.bot.server.SPacketBotHallo;
+import net.wuffy.network.bot.server.SPacketBotStatsUpdate;
+import net.wuffy.network.bot.server.SPacketBotSystemUpdate;
 
 public class Server implements IWuffyPhantomReference {
 
@@ -27,9 +27,9 @@ public class Server implements IWuffyPhantomReference {
 
 	private String name;
 
-	private SPacketMasterHallo defaultStats;
-	private SPacketMasterSystemUpdate systemUpdate;
-	private SPacketMasterStatsUpdate statsUpdate;
+	private SPacketBotHallo defaultStats;
+	private SPacketBotSystemUpdate systemUpdate;
+	private SPacketBotStatsUpdate statsUpdate;
 
 	private Map<Integer, Shard> shardsRunning = new HashMap<Integer, Shard>();
 
@@ -55,7 +55,7 @@ public class Server implements IWuffyPhantomReference {
 	}
 
 	public void updateShardCount(int newShardCount) {
-		this.networkManager.sendPacket(new CPacketMasterShardUpdate(EnumMasterShard.SHARDCOUNT, newShardCount));
+		this.networkManager.sendPacket(new CPacketBotShardUpdate(EnumMasterShard.SHARDCOUNT, newShardCount));
 	}
 
 	public void startShard(int shardId) {
@@ -68,7 +68,7 @@ public class Server implements IWuffyPhantomReference {
 			Shard shard = new Shard(this, shardId);
 			shardsRunning.put(shardId, shard);
 
-			this.networkManager.sendPacket(new CPacketMasterShardUpdate(EnumMasterShard.START, shardId));
+			this.networkManager.sendPacket(new CPacketBotShardUpdate(EnumMasterShard.START, shardId));
 			Logger.debug("ShardHandler", String.format("Shard \"%s\" successful starting on \"%s\".", shardId, this.name));
 		} catch(Exception e) {
 			Logger.fatal("ShardHandler", String.format("Failed to start shard \"%s\"", shardId), e);
@@ -89,35 +89,33 @@ public class Server implements IWuffyPhantomReference {
 				return;
 			}
 
-			this.networkManager.sendPacket(new CPacketMasterShardUpdate(EnumMasterShard.STOP, shardId));
+			this.networkManager.sendPacket(new CPacketBotShardUpdate(EnumMasterShard.STOP, shardId));
 		} catch(Exception e) {
 			Logger.fatal("ShardHandler", String.format("Failed to stop shard \"%s\"", shardId), e);
 		}
 	}
 
 	public boolean canShardStart() {
-		if(!this.isReady())
-			return false;
-
-		if(this.defaultStats.getTotalMemory() - Defaults.SHARD_RAM_COST < this.getUsedMemoryByShardCount())
-			return false;
-
-		if(this.statsUpdate != null &&
-				this.systemUpdate.getCpuUsage() < 80 && //Check if the currently CPU Usage under 80%
-				this.systemUpdate.getFreeMemory() - Defaults.SHARD_RAM_COST > 512) //Check has the currently freeMemory with the SHARD_RAM_COST more then 520MB free
-			return true;
+		if(
+				(this.isReady()) &&																						//Check is server ready
+				(this.networkManager != null && this.networkManager.isConnected()) &&									//Check is server connected
+				((this.defaultStats.getTotalMemory() - Defaults.SHARD_RAM_COST) > this.getUsedMemoryByShardCount()) && 	//Check (totalMemory - OneShardCost) > (currentlyRunningShardOnThisServer * OneShardCost)
+				(this.statsUpdate != null) && 																			//Check has send the server a statusUpdate
+				(this.systemUpdate.getCpuUsage() < 80) && 																//Check if the currently CPU Usage under 80%
+				(this.systemUpdate.getFreeMemory() - Defaults.SHARD_RAM_COST > 512)) 									//Check has the currently freeMemory with the SHARD_RAM_COST more then 520MB free
+				return true;
 		return false;
 	}
 
-	public void handlePacketHallo(SPacketMasterHallo packetMasterHallo) {
+	public void handlePacketHallo(SPacketBotHallo packetMasterHallo) {
 		this.defaultStats = packetMasterHallo;
 	}
 
-	public void handlePacketSystemUpdate(SPacketMasterSystemUpdate packetSystemUpdate) {
+	public void handlePacketSystemUpdate(SPacketBotSystemUpdate packetSystemUpdate) {
 		this.systemUpdate = packetSystemUpdate;
 	}
 
-	public void handlePacketStatsUpdate(SPacketMasterStatsUpdate packetStatsUpdate) {
+	public void handlePacketStatsUpdate(SPacketBotStatsUpdate packetStatsUpdate) {
 		this.statsUpdate = packetStatsUpdate;
 	}
 
@@ -141,6 +139,10 @@ public class Server implements IWuffyPhantomReference {
 		return Collections.unmodifiableMap(this.shardsRunning);
 	}
 
+	public int getShardsRunningCount() {
+		return this.shardsRunning.size();
+	}
+
 	public NetworkManager getNetworkManager() {
 		return this.networkManager;
 	}
@@ -157,15 +159,15 @@ public class Server implements IWuffyPhantomReference {
 		return this.uuid;
 	}
 
-	public SPacketMasterStatsUpdate getStatsUpdate() {
+	public SPacketBotStatsUpdate getStatsUpdate() {
 		return this.statsUpdate;
 	}
 
-	public SPacketMasterHallo getStats() {
+	public SPacketBotHallo getStats() {
 		return this.defaultStats;
 	}
 
-	public SPacketMasterSystemUpdate getSystemUpdate() {
+	public SPacketBotSystemUpdate getSystemUpdate() {
 		return this.systemUpdate;
 	}
 }

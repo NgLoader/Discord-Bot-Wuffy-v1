@@ -1,12 +1,12 @@
-package net.wuffy.network.master.server;
+package net.wuffy.network.bot.server;
 
 import java.io.IOException;
 
 import net.wuffy.network.Packet;
 import net.wuffy.network.PacketBuffer;
-import net.wuffy.network.master.INetHandlerMasterServer;
+import net.wuffy.network.bot.INetHandlerBotServer;
 
-public class SPacketMasterStatsUpdate implements Packet<INetHandlerMasterServer> {
+public class SPacketBotStatsUpdate implements Packet<INetHandlerBotServer> {
 
 	private int guildCount;
 
@@ -20,9 +20,9 @@ public class SPacketMasterStatsUpdate implements Packet<INetHandlerMasterServer>
 	private int userDNDCount;
 	private int userTotalCount; //!!!Don't send total count!!! (userOnlineCount + userAwayCount + userDNDCount)
 
-	public SPacketMasterStatsUpdate() { }
+	public SPacketBotStatsUpdate() { }
 
-	public SPacketMasterStatsUpdate(int guildCount, int channelCount, int textChannelCount, int roleCount, int userOnlineCount, int userAwayCount, int userDNDCount) {
+	public SPacketBotStatsUpdate(int guildCount, int channelCount, int textChannelCount, int roleCount, int userOnlineCount, int userAwayCount, int userDNDCount) {
 		this.guildCount = guildCount;
 		this.channelCount = channelCount;
 		this.textChannelCount = textChannelCount;
@@ -59,8 +59,8 @@ public class SPacketMasterStatsUpdate implements Packet<INetHandlerMasterServer>
 	}
 
 	@Override
-	public void handle(INetHandlerMasterServer handler) {
-		handler.handleMasterStatsUpdate(this);
+	public void handle(INetHandlerBotServer handler) {
+		handler.handleBotStatsUpdate(this);
 	}
 
 	public int getGuildCount() {

@@ -16,4 +16,6 @@ public class MasterConfig implements IConfig {
 
 	public String keyCertChainFile;
 	public String keyFile;
+
+	public Integer minShardCount;
 }

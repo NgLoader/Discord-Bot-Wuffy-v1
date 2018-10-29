@@ -25,6 +25,7 @@ public class AuthManager {
 	private static final Set<UUID> LOCK = new HashSet<UUID>();
 	private static final Map<UUID, PublicKey> CREDENTIALS = new HashMap<UUID, PublicKey>();
 	private static final Map<UUID, String> NAMES = new HashMap<UUID, String>();
+	private static final Map<UUID, EnumAuthManagerType> TYPES = new HashMap<UUID, EnumAuthManagerType>();
 
 	private static boolean initialized = false;
 
@@ -37,13 +38,16 @@ public class AuthManager {
 
 		if(Files.exists(keyPath))
 			try (Stream<Path> paths = Files.walk(keyPath)) {
-				paths.filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
+				paths
+					.filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
+					.filter(path -> !path.getFileName().toString().endsWith("#lb.key")) //Only to check is the loadbalancer key in the keys folder
 					.forEach(path -> {
 						try (DataInputStream inputStream = new DataInputStream(Files.newInputStream(path))) {
 							UUID uuid = new UUID(inputStream.readLong(), inputStream.readLong());
 	
 							AuthManager.USED_UUIDS.add(uuid);
 							AuthManager.NAMES.put(uuid, inputStream.readUTF());
+							AuthManager.TYPES.put(uuid, EnumAuthManagerType.values()[inputStream.readInt()]);
 							AuthManager.CREDENTIALS.put(uuid, CryptUtil.generatePublicKey(inputStream.readAllBytes()));
 	
 							Logger.debug("Auth", String.format("Loaded ID: \"%s\"", uuid.toString()));
@@ -58,7 +62,7 @@ public class AuthManager {
 			}
 	}
 
-	public static void saveId(UUID uuid, PublicKey publicKey, String name) {
+	public static void saveId(UUID uuid, PublicKey publicKey, String name, EnumAuthManagerType type) {
 		try {
 			Files.createDirectories(Paths.get("wuffy/keys"));
 		} catch (IOException e) {
@@ -69,6 +73,7 @@ public class AuthManager {
 			outputStream.writeLong(uuid.getMostSignificantBits());
 			outputStream.writeLong(uuid.getLeastSignificantBits());
 			outputStream.writeUTF(name);
+			outputStream.writeInt(type.ordinal());
 			outputStream.write(publicKey.getEncoded());
 
 			outputStream.close();
@@ -78,6 +83,7 @@ public class AuthManager {
 
 			AuthManager.CREDENTIALS.put(uuid, publicKey);
 			AuthManager.NAMES.put(uuid, name);
+			AuthManager.TYPES.put(uuid, type);
 		} catch (IOException e) {
 			Logger.fatal("AuthManager", String.format("Failed to save id \"%s\".", uuid.toString()), e);
 		}
@@ -101,6 +107,12 @@ public class AuthManager {
 
 		if(AuthManager.USED_UUIDS.contains(uuid))
 			AuthManager.USED_UUIDS.remove(uuid);
+
+		if(AuthManager.NAMES.containsKey(uuid))
+			AuthManager.NAMES.remove(uuid);
+
+		if(AuthManager.TYPES.containsKey(uuid))
+			AuthManager.TYPES.remove(uuid);
 	}
 
 	public static UUID generateId() {
@@ -145,7 +157,15 @@ public class AuthManager {
 		return AuthManager.NAMES.get(id);
 	}
 
+	public static EnumAuthManagerType getType(UUID id) {
+		return AuthManager.TYPES.get(id);
+	}
+
 	public static Set<UUID> getAllUsedIds() {
 		return Collections.unmodifiableSet(AuthManager.USED_UUIDS);
+	}
+
+	public enum EnumAuthManagerType {
+		BOT, MUSIC
 	}
 }

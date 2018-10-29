@@ -13,7 +13,8 @@ import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
 import net.wuffy.console.ConsoleCommandManager;
 import net.wuffy.master.auth.AuthManager;
-import net.wuffy.master.command.CommandClient;
+import net.wuffy.master.command.CommandBot;
+import net.wuffy.master.command.CommandMusic;
 import net.wuffy.master.network.loadbalancer.NetworkSystemLoadBalancer;
 import net.wuffy.master.network.master.NetworkSystemMaster;
 import net.wuffy.master.server.ServerHandler;
@@ -81,7 +82,8 @@ public class Master extends TickingTask {
 		this.shardingHandler = new ShardingHandler(this.serverHandler);
 
 		this.consoleCommandManager = new ConsoleCommandManager();
-		this.consoleCommandManager.registerExecutor(new CommandClient());
+		this.consoleCommandManager.registerExecutor(new CommandBot());
+		this.consoleCommandManager.registerExecutor(new CommandMusic());
 
 		this.tickables.add(WuffyPhantomRefernce.getInstance());
 		this.tickables.add(this.consoleCommandManager);
@@ -103,7 +105,7 @@ public class Master extends TickingTask {
 			this.tickables.add(this.networkSystemLoadBalancer);
 
 			//Master
-			this.networkSystemMaster = new NetworkSystemMaster().start(this.config);
+			this.networkSystemMaster = new NetworkSystemMaster();
 			this.tickables.add(this.networkSystemMaster);
 		} catch (SSLException e) {
 			Logger.fatal("Bootstrap", "SSLException", e);
@@ -142,5 +144,13 @@ public class Master extends TickingTask {
 
 	public ShardingHandler getShardingHandler() {
 		return this.shardingHandler;
+	}
+
+	public NetworkSystemLoadBalancer getNetworkSystemLoadBalancer() {
+		return this.networkSystemLoadBalancer;
+	}
+
+	public NetworkSystemMaster getNetworkSystemMaster() {
+		return this.networkSystemMaster;
 	}
 }

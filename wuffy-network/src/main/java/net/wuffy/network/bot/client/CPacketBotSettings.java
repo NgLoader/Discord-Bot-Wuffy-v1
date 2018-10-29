@@ -1,4 +1,4 @@
-package net.wuffy.network.master.client;
+package net.wuffy.network.bot.client;
 
 import java.io.IOException;
 import java.util.EnumSet;
@@ -6,9 +6,9 @@ import java.util.EnumSet;
 import net.wuffy.common.util.EnumUtil;
 import net.wuffy.network.Packet;
 import net.wuffy.network.PacketBuffer;
-import net.wuffy.network.master.INetHandlerMasterClient;
+import net.wuffy.network.bot.INetHandlerBotClient;
 
-public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
+public class CPacketBotSettings implements Packet<INetHandlerBotClient> {
 
 	private static final EnumSet<EnumMasterSettings> ENUMSET_CHECK_TOKEN  = EnumSet.of(EnumMasterSettings.ALL, EnumMasterSettings.TOKEN);
 	private static final EnumSet<EnumMasterSettings> ENUMSET_CHECK_ADMINS  = EnumSet.of(EnumMasterSettings.ALL, EnumMasterSettings.ADMINS);
@@ -25,9 +25,9 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 
 	private GatewayBot gatewayBot;
 
-	public CPacketMasterSettings() { }
+	public CPacketBotSettings() { }
 
-	public CPacketMasterSettings(String token, Status status, GatewayBot gatewayBot, EnumMasterSettings type, EnumMasterSettings... moreTypes) {
+	public CPacketBotSettings(String token, Status status, GatewayBot gatewayBot, EnumMasterSettings type, EnumMasterSettings... moreTypes) {
 		this.token = token;
 		this.status = status;
 		this.gatewayBot = gatewayBot;
@@ -39,11 +39,11 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 		this.types = packetBuffer.readEnumSet(EnumMasterSettings.class);
 
 		//Token
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_TOKEN))
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_TOKEN))
 			this.token = packetBuffer.readString();
 
 		//Admins
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_ADMINS)) {
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_ADMINS)) {
 			this.admins = new String[packetBuffer.readInt()];
 
 			for (int i = 0; i < admins.length; i++)
@@ -51,7 +51,7 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 		}
 
 		//Status
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_STATUS))
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_STATUS))
 		this.status = new Status(
 				packetBuffer.readInt(),
 				packetBuffer.readInt(),
@@ -59,7 +59,7 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 				packetBuffer.readString());
 
 		//GatewayBot
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_GATEWAYBOT))
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_GATEWAYBOT))
 		this.gatewayBot = new GatewayBot(
 				packetBuffer.readString(), 
 				packetBuffer.readInt(),
@@ -73,11 +73,11 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 		packetBuffer.writeEnumSet(this.types);
 
 		//Token
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_TOKEN))
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_TOKEN))
 			packetBuffer.writeString(this.token);
 
 		//Admins
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_ADMINS)) {
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_ADMINS)) {
 			packetBuffer.writeInt(this.admins.length);
 
 			for(String admin : this.admins)
@@ -85,7 +85,7 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 		}
 
 		//Status
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_STATUS)) {
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_STATUS)) {
 			packetBuffer.writeInt(this.status.statusType);
 			packetBuffer.writeInt(this.status.gameType);
 			packetBuffer.writeString(this.status.gameName);
@@ -93,7 +93,7 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 		}
 
 		//GatewayBot
-		if(EnumUtil.contains(this.types, CPacketMasterSettings.ENUMSET_CHECK_GATEWAYBOT)) {
+		if(EnumUtil.contains(this.types, CPacketBotSettings.ENUMSET_CHECK_GATEWAYBOT)) {
 			packetBuffer.writeString(this.gatewayBot.url);
 			packetBuffer.writeInt(this.gatewayBot.shards);
 			packetBuffer.writeInt(this.gatewayBot.sessionStartLimitTotal);
@@ -103,8 +103,8 @@ public class CPacketMasterSettings implements Packet<INetHandlerMasterClient> {
 	}
 
 	@Override
-	public void handle(INetHandlerMasterClient handler) {
-		handler.handleMasterGatewayBot(this);
+	public void handle(INetHandlerBotClient handler) {
+		handler.handleBotGatewayBot(this);
 	}
 
 	public String getToken() {
