@@ -14,12 +14,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-bot</artifactId>
+			<artifactId>wuffy-common</artifactId>
 			<version>${wuffy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-client</artifactId>
+			<artifactId>wuffy-network</artifactId>
 			<version>${wuffy.version}</version>
 		</dependency>
 	</dependencies>

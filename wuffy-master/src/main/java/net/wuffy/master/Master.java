@@ -15,8 +15,8 @@ import net.wuffy.console.ConsoleCommandManager;
 import net.wuffy.master.auth.AuthManager;
 import net.wuffy.master.command.CommandBot;
 import net.wuffy.master.command.CommandMusic;
+import net.wuffy.master.network.bot.NetworkSystemMaster;
 import net.wuffy.master.network.loadbalancer.NetworkSystemLoadBalancer;
-import net.wuffy.master.network.master.NetworkSystemMaster;
 import net.wuffy.master.server.ServerHandler;
 import net.wuffy.master.sharding.ShardingHandler;
 

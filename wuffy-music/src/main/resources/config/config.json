@@ -1,0 +1,6 @@
+{
+	"masterAddress": master.wuffy.eu,
+	"masterPort": 8080,
+	"keyCertChainFile": "wuffy/fullchain.pem",
+	"keyFile": "wuffy/privkey.pem"
+}

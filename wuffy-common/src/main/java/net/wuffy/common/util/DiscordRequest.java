@@ -16,7 +16,7 @@ public class DiscordRequest {
 	 * @see https://discordapp.com/developers/docs/topics/gateway#get-gateway-bot
 	 * 
 	 * @param token
-	 * @return
+	 * @return DiscordRequestGateway
 	 * @throws JsonSyntaxException
 	 * @throws IOException
 	 */

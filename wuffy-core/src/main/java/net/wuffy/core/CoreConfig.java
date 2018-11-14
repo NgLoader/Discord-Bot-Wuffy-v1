@@ -14,6 +14,8 @@ public class CoreConfig implements IConfig {
 	public String instanceName;
 	public String instanceVersion;
 
+	public String startParameters;
+
 	public String token;
 
 	public List<Long> admins;

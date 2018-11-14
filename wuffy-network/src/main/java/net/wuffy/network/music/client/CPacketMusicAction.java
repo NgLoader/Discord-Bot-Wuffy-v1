@@ -12,8 +12,6 @@ public class CPacketMusicAction implements Packet<INetHandlerMusicClient> {
 
 	private long guildId;
 
-	private int valueInt;
-
 	public CPacketMusicAction() { }
 
 	public CPacketMusicAction(EnumMusicAction action, long guildId) {
@@ -21,44 +19,16 @@ public class CPacketMusicAction implements Packet<INetHandlerMusicClient> {
 		this.guildId = guildId;
 	}
 
-	public CPacketMusicAction(EnumMusicAction action, long guildId, int valueInt) {
-		this.action =  action;
-		this.guildId = guildId;
-		this.valueInt = valueInt;
-	}
-
 	@Override
 	public void read(PacketBuffer packetBuffer) throws IOException {
 		this.action = packetBuffer.readEnum(EnumMusicAction.class);
 		this.guildId = packetBuffer.readLong();
-
-		switch (this.action) {
-		case JUMP:
-		case SKIP:
-		case VOLUME:
-			this.valueInt = packetBuffer.readInt();
-			break;
-
-		default:
-			break;
-		}
 	}
 
 	@Override
 	public void write(PacketBuffer packetBuffer) throws IOException {
 		packetBuffer.writeEnum(this.action);
 		packetBuffer.writeLong(this.guildId);
-
-		switch (this.action) {
-		case JUMP:
-		case SKIP:
-		case VOLUME:
-			packetBuffer.writeInt(this.valueInt);
-			break;
-
-		default:
-			break;
-		}
 	}
 
 	@Override
@@ -74,11 +44,7 @@ public class CPacketMusicAction implements Packet<INetHandlerMusicClient> {
 		return this.guildId;
 	}
 
-	public int getValueInt() {
-		return this.valueInt;
-	}
-
 	public enum EnumMusicAction {
-		NEXT, LAST, RESTART, RESUME, PAUSE, SHUFFLE, REPEAT, SKIP, JUMP, VOLUME
+		NEXT, LAST, RESTART, RESUME, PAUSE, SHUFFLE, UNSHUFFLE
 	}
 }

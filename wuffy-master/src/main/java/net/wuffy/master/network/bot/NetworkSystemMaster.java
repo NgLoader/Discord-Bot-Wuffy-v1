@@ -1,4 +1,4 @@
-package net.wuffy.master.network.master;
+package net.wuffy.master.network.bot;
 
 import java.io.File;
 import java.net.InetSocketAddress;

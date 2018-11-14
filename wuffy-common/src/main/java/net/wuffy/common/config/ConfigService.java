@@ -56,11 +56,26 @@ public class ConfigService {
 		//TODO fill out
 	}
 
+	public static <T extends IConfig> T removeConfig(Class<T> configClass) {
+		Objects.isNull(configClass);
+
+		IConfig config = ConfigService.configs.remove(configClass);
+
+		return config != null ? configClass.cast(config) : null;
+	}
+
+	public static <T extends IConfig> T reloadConfig(Class<T> configClass) {
+		Objects.isNull(configClass);
+
+		ConfigService.removeConfig(configClass);
+		return ConfigService.getConfig(configClass);
+	}
+
 	public static <T extends IConfig> T getConfig(Class<? extends T> configClass) {
 		Objects.isNull(configClass);
 
 		if(!configs.containsKey(configClass))
-			loadConfig(configClass);
+			ConfigService.loadConfig(configClass);
 
 		return configClass.cast(configs.get(configClass));
 	}
