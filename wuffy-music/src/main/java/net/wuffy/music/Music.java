@@ -71,7 +71,7 @@ public class Music extends TickingTask {
 
 		this.config = ConfigService.getConfig(MusicConfig.class);
 
-		this.jdaHandler = new JDAHandler("NOPE", 4);
+		this.jdaHandler = new JDAHandler("NDcyNTc0NzIzNzY3OTI2Nzg0.DrrI4A.TolqbuOSgSMhVNB_w5knhaj987I", 4);
 
 		this.networkSystem = new NetworkSystem();
 //		try {

@@ -4,14 +4,14 @@ import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Member;
 import net.wuffy.bot.database.user.WuffyUser;
 import net.wuffy.bot.keys.PermissionKeys;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 import net.wuffy.core.database.impl.ImplGuild;
 import net.wuffy.core.database.impl.ImplMember;
 import net.wuffy.core.database.impl.ImplUser;
 
 public abstract class WuffyMember extends ImplMember {
 
-	public WuffyMember(Core core, ImplUser user, Member member, ImplGuild guild) {
+	public WuffyMember(CoreOLD core, ImplUser user, Member member, ImplGuild guild) {
 		super(core, user, member, guild);
 	}
 

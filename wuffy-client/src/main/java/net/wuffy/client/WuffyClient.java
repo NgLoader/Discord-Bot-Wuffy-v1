@@ -2,9 +2,9 @@ package net.wuffy.client;
 
 import net.dv8tion.jda.core.AccountType;
 import net.wuffy.client.jda.JDAAdapter;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 
-public class WuffyClient extends Core {
+public class WuffyClient extends CoreOLD {
 
 	static {
 		//TODO Add commands

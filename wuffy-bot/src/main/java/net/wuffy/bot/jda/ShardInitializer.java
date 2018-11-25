@@ -6,7 +6,7 @@ import net.wuffy.bot.WuffyBot;
 import net.wuffy.bot.command.CommandHandler;
 import net.wuffy.common.logger.Logger;
 
-public class ShardInitializer extends ListenerAdapter {
+public class ShardInitializer extends ListenerAdapter { //TODO remove
 
 	private WuffyBot core;
 

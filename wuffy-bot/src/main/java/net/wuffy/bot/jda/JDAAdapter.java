@@ -8,18 +8,15 @@ import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.bot.sharding.ShardManager;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.hooks.EventListener;
 import net.wuffy.bot.WuffyBot;
 import net.wuffy.core.Core;
-import net.wuffy.core.jda.IJDAAdapter;
+import net.wuffy.core.jda.IJDA;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
-public class JDAAdapter implements IJDAAdapter {
+public class JDAAdapter implements IJDA {
 
 	private final WuffyBot core;
 
@@ -44,11 +41,13 @@ public class JDAAdapter implements IJDAAdapter {
 					.setToken(this.core.getConfig().token)
 					.addEventListeners(this.eventListeners.toArray());
 
-			var shardingConfig = config.sharding;
-			if(shardingConfig.enabled)
-				builder
-					.setShardsTotal(shardingConfig.total)
-					.setShards(shardingConfig.shardIds);
+			builder.setEventManagerProvider(core.getEventManagerAdapter());
+
+//			var shardingConfig = config.sharding;
+//			if(shardingConfig.enabled)
+//				builder
+//					.setShardsTotal(shardingConfig.total)
+//					.setShards(shardingConfig.shardIds);
 
 //			builder.setSessionController(controller); //TODO use WuffySessionController
 

@@ -19,8 +19,8 @@ import net.wuffy.bot.database.guild.WuffyMember;
 import net.wuffy.bot.database.user.WuffyUser;
 import net.wuffy.bot.keys.PermissionKeys;
 import net.wuffy.bot.keys.TranslationKeys;
+import net.wuffy.bot.lang.I18n;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
-import net.wuffy.core.lang.I18n;
 import net.wuffy.core.util.ArgumentBuffer;
 
 public abstract class Command {

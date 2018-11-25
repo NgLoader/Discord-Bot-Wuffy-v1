@@ -68,12 +68,12 @@ import net.wuffy.bot.command.commands.settings.CommandTwitch;
 import net.wuffy.bot.command.commands.settings.CommandYoutube;
 import net.wuffy.bot.command.commands.utility.CommandGuildInfo;
 import net.wuffy.bot.command.commands.utility.CommandUserInfo;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 
 public class CommandRegestry {
 
-	private static final Map<Core, List<Command>> COMMANDS = new HashMap<Core, List<Command>>();
-	private static final Map<Core, Map<String, Command>> ENABLED_COMMANDS = new HashMap<Core, Map<String, Command>>();
+	private static final Map<CoreOLD, List<Command>> COMMANDS = new HashMap<CoreOLD, List<Command>>();
+	private static final Map<CoreOLD, Map<String, Command>> ENABLED_COMMANDS = new HashMap<CoreOLD, Map<String, Command>>();
 
 	private final CommandHandler handler;
 

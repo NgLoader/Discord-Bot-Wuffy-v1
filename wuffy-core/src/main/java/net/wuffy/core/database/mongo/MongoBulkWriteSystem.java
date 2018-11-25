@@ -60,7 +60,7 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 				}
 
 				this.bulkThread = null;
-			}, String.format("Wuffy Discord Bot - Core (%s) - Database MongoDB BulkWrite (%s)", this.core.getConfig().instanceName, name));
+			}, String.format("Wuffy Discord Bot - Core (%s) - Database MongoDB BulkWrite (%s)", this.core.getId(), name));
 			this.bulkThread.setDaemon(true);
 		}
 

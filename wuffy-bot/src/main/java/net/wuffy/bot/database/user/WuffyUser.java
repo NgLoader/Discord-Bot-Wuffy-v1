@@ -2,7 +2,7 @@ package net.wuffy.bot.database.user;
 
 import net.dv8tion.jda.core.entities.User;
 import net.wuffy.bot.database.BlockedInfo;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 import net.wuffy.core.database.impl.ImplUser;
 
 public abstract class WuffyUser extends ImplUser {
@@ -21,7 +21,7 @@ public abstract class WuffyUser extends ImplUser {
 
 	public abstract void setAlphaTester(boolean alphaTester);
 
-	public WuffyUser(Core core, User user) {
+	public WuffyUser(CoreOLD core, User user) {
 		super(core, user);
 	}
 }

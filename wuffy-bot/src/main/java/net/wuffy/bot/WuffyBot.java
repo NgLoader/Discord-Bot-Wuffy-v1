@@ -13,6 +13,9 @@ import net.wuffy.bot.database.user.mongo.MongoExtensionUser;
 import net.wuffy.bot.database.user.sql.SQLExtensionUser;
 import net.wuffy.bot.jda.JDAAdapter;
 import net.wuffy.bot.jda.ShardInitializer;
+import net.wuffy.common.config.ConfigService;
+import net.wuffy.common.logger.Logger;
+import net.wuffy.common.logger.LoggerManager;
 import net.wuffy.core.Core;
 import net.wuffy.core.database.impl.IExtensionGuild;
 import net.wuffy.core.database.impl.IExtensionLang;
@@ -25,7 +28,38 @@ import net.wuffy.core.youtube.YoutubeAPI;
 
 public class WuffyBot extends Core {
 
-	private YoutubeAPI youtube;
+	public static void main(String[] args) {
+		if(Float.parseFloat(System.getProperty( "java.class.version" )) < 54) {
+			System.err.println("*** ERROR *** Wuffy equires Java 10 or above to work! Please download and install it!");
+			return;
+		}
+
+		Logger.info("Bootstrap", "Starting wuffy.");
+
+		System.setProperty("developerMode", "false");
+
+		int threads = 32;
+
+		for(int i = 0; i < args.length; i++) {
+			var arg = args[i];
+
+			if(arg.equalsIgnoreCase("--debug"))
+				LoggerManager.setDebug(true);
+			else if(arg.equalsIgnoreCase("--threads"))
+				threads = Integer.valueOf(args[i + 1]);
+			else if(arg.equalsIgnoreCase("--dev"))
+				System.setProperty("developerMode", "true");
+			else if(arg.equalsIgnoreCase("--useMasterSystem"))
+				System.setProperty("useMasterSystem", "true");
+		}
+
+		System.setProperty("io.netty.eventLoopThreads", Integer.toString(threads));
+
+		if(!System.getProperty("useMasterSystem").equals("true"))
+			new WuffyBot(ConfigService.getConfig(BotConfig.class));
+		else
+			
+	}
 
 	public WuffyBot(BotConfig config) {
 		super(config, AccountType.BOT, JDAAdapter.class);
@@ -54,22 +88,7 @@ public class WuffyBot extends Core {
 			sqlStorage.registerProvider(IExtensionLang.class, new SQLExtensionLang());
 		}
 
-		this.youtube = new YoutubeAPI(this.getConfig(BotConfig.class).youtubeToken);
-
-//		this.commandManager = new de.ngloader.bot.command.CommandManager(this);
 		new ShardInitializer(this);
-	}
-
-	@Override
-	protected void onEnable() {
-	}
-
-	@Override
-	protected void onDisable() {
-	}
-
-	public YoutubeAPI getYoutube() {
-		return this.youtube;
 	}
 
 	public BotConfig getConfig() {

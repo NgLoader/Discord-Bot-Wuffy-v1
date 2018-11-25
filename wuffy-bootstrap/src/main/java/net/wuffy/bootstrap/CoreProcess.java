@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import net.wuffy.common.Defaults;
+import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.util.ITickable;
+import net.wuffy.common.util.IWuffyPhantomReference;
 
-public class CoreProcess implements ITickable {
+public class CoreProcess implements ITickable, IWuffyPhantomReference {
 
 	private CoreConfig coreConfig;
 
@@ -25,6 +27,8 @@ public class CoreProcess implements ITickable {
 		this.coreConfig = coreConfig;
 		this.onStop = onStop;
 
+		WuffyPhantomRefernce.getInstance().add(this, String.format("CoreProcess - %s", coreConfig.uuid));
+
 		this.path = Paths.get(String.format("./work/%s", this.coreConfig.uuid.toString())).toFile();
 	}
 
@@ -32,6 +36,7 @@ public class CoreProcess implements ITickable {
 		List<String> command = new ArrayList<>(Arrays.asList(
 				Defaults.JAVA.toString(),
 				"-jar", "wuffy.jar" ));
+
 		command.addAll(this.coreConfig.parameters);
 
 		ProcessBuilder processBuilder = new ProcessBuilder();

@@ -1,8 +1,10 @@
 package net.wuffy.core.database;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import net.wuffy.common.logger.Logger;
 import net.wuffy.core.Core;
@@ -23,7 +25,6 @@ public abstract class Storage<S extends Storage<S>> {
 		this.core = core;
 	}
 
-	@SuppressWarnings("unchecked")
 	public final <U extends IStorageExtension, T extends StorageProvider<S>> boolean registerProvider(Class<U> extensionClass, T provider) {
 		Objects.requireNonNull(extensionClass);
 		Objects.requireNonNull(provider);
@@ -44,7 +45,7 @@ public abstract class Storage<S extends Storage<S>> {
 		Logger.debug("database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
 		return true;
 	}
-	
+
 	public final <U extends IStorageExtension> boolean unregisterProvider(Class<U> extensionClass) {
 		Objects.requireNonNull(extensionClass);
 
@@ -63,5 +64,9 @@ public abstract class Storage<S extends Storage<S>> {
 		Objects.requireNonNull(extensionClass);
 
 		return extensionClass.cast(this.storageExtensions.get(extensionClass));
+	}
+
+	public List<Class<? extends IStorageExtension>> getStorageExtensions() {
+		return this.storageExtensions.keySet().stream().collect(Collectors.toUnmodifiableList());
 	}
 }

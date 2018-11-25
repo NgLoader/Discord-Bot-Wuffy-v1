@@ -35,7 +35,7 @@ import net.wuffy.bot.database.NotificationType;
 import net.wuffy.bot.database.WarnInfo;
 import net.wuffy.bot.database.guild.WuffyGuild;
 import net.wuffy.bot.database.guild.mongo.MongoGuildCache.EnumEditOperator;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 
 public class MongoGuild extends WuffyGuild {
 
@@ -121,7 +121,7 @@ public class MongoGuild extends WuffyGuild {
 
 	protected Bson filter;
 
-	public MongoGuild(Core core, Guild guild, MongoExtensionGuild extension) {
+	public MongoGuild(CoreOLD core, Guild guild, MongoExtensionGuild extension) {
 		super(core, guild);
 		this.extension = extension;
 

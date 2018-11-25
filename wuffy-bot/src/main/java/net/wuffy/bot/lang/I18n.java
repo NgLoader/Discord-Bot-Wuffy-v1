@@ -1,4 +1,4 @@
-package net.wuffy.core.lang;
+package net.wuffy.bot.lang;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,9 @@ import net.wuffy.common.logger.Logger;
 import net.wuffy.core.Core;
 import net.wuffy.core.database.impl.IExtensionLang;
 import net.wuffy.core.database.impl.ImplLang;
+import net.wuffy.core.lang.II18n;
 
-public class I18n {
+public class I18n implements II18n {
 
 	public static String format(Core core, String locale, String key, String... params) {
 		return core.getI18n().format(key, locale, params);

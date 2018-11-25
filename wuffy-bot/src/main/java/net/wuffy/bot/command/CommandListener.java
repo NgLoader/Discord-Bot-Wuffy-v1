@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.wuffy.bot.command.commands.Command;
 import net.wuffy.bot.database.guild.WuffyGuild;
 import net.wuffy.common.logger.Logger;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 import net.wuffy.core.database.impl.IExtensionGuild;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
 import net.wuffy.core.util.ArgumentBuffer;
@@ -72,7 +72,7 @@ public class CommandListener extends ListenerAdapter {
 							Command command = CommandListener.this.regestry.getCommand(wuffyAlias);
 
 							if(command != null) {
-								Core core = CommandListener.this.handler.getCore();
+								CoreOLD core = CommandListener.this.handler.getCore();
 
 								try {
 									WuffyMessageRecivedEvent wuffyEvent = new WuffyMessageRecivedEvent(core, event.getJDA(), event.getResponseNumber(), event.getMessage());
@@ -149,7 +149,7 @@ public class CommandListener extends ListenerAdapter {
 					Command command = CommandListener.this.regestry.getCommand(wuffyAlias);
 
 					if(command != null) {
-						Core core = CommandListener.this.handler.getCore();
+						CoreOLD core = CommandListener.this.handler.getCore();
 
 						try {
 							WuffyMessageRecivedEvent wuffyEvent = new WuffyMessageRecivedEvent(core, event.getJDA(), event.getResponseNumber(), event.getMessage());

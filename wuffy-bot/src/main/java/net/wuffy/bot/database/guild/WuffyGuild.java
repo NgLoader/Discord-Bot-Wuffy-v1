@@ -19,7 +19,7 @@ import net.wuffy.bot.database.NotificationInfo;
 import net.wuffy.bot.database.NotificationType;
 import net.wuffy.bot.database.WarnInfo;
 import net.wuffy.bot.keys.PermissionKeys;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 import net.wuffy.core.database.impl.ImplGuild;
 
 public abstract class WuffyGuild extends ImplGuild {
@@ -208,7 +208,7 @@ public abstract class WuffyGuild extends ImplGuild {
 
 	public abstract void setAutoRole(List<String> roles);
 
-	public WuffyGuild(Core core, Guild guild) {
+	public WuffyGuild(CoreOLD core, Guild guild) {
 		super(core, guild);
 	}
 

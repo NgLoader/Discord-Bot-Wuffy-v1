@@ -16,8 +16,8 @@ import net.wuffy.bot.database.guild.WuffyGuild;
 import net.wuffy.bot.database.guild.WuffyMember;
 import net.wuffy.bot.keys.PermissionKeys;
 import net.wuffy.bot.keys.TranslationKeys;
+import net.wuffy.bot.lang.I18n;
 import net.wuffy.core.event.WuffyMessageRecivedEvent;
-import net.wuffy.core.lang.I18n;
 
 @CommandSettings(
 		category = CommandCategory.UTILITY,
@@ -58,7 +58,7 @@ public class CommandGuildInfo extends Command {
 		}
 	}
 
-	private EmbedBuilder getGuildInfo(WuffyMessageRecivedEvent event, Guild guild, I18n i18n, String locale) {
+	private EmbedBuilder getGuildInfo(WuffyMessageRecivedEvent event, Guild guild, II18n i18n, String locale) {
 		List<Member> members = guild.getMembers();
 		String iconUrl = guild.getIconUrl() == null ? "https://wuffy.eu/pictures/example_avatar_300x300.png" : guild.getIconUrl();
 

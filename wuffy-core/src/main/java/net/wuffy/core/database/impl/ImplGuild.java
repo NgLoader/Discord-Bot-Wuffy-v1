@@ -30,26 +30,21 @@ import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 import net.wuffy.core.Core;
 
-//TODO remove implements Guild and use getGuild
 public class ImplGuild implements Guild {
 
 	protected final Core core;
 	protected final Guild guild;
 
-	protected final IExtensionGuild<?, ?> extensionGuild;
-
 	public ImplGuild(Core core, Guild guild) {
 		this.core = core;
 		this.guild = guild;
-
-		this.extensionGuild = this.core.getStorageService().getExtension(IExtensionGuild.class);
 	}
 
 	public Core getCore() {
 		return this.core;
 	}
 
-	public Guild getRealGuild() {
+	public Guild getGuild() {
 		return this.guild;
 	}
 
@@ -114,8 +109,13 @@ public class ImplGuild implements Guild {
 	}
 
 	@Override
-	public ImplMember getOwner() {
-		return this.extensionGuild.getMemeber(this.guild, this.guild.getOwner());
+	public Member getOwner() {
+		return this.guild.getOwner();
+	}
+
+	@Override
+	public long getOwnerIdLong() {
+		return this.guild.getOwnerIdLong();
 	}
 
 	@Override
@@ -134,32 +134,13 @@ public class ImplGuild implements Guild {
 	}
 
 	@Override
-	public ImplMember getSelfMember() {
-		return this.extensionGuild.getMemeber(this.guild, this.guild.getSelfMember());
+	public Member getSelfMember() {
+		return this.guild.getSelfMember();
 	}
 
 	@Override
-	public ImplMember getMember(User user) {
-		return this.extensionGuild.getMemeber(this.guild, this.guild.getMember(user));
-	}
-
-	public ImplMember getMember(ImplUser user) {
-		return this.extensionGuild.getMemeber(this.guild, this.guild.getMemberById(user.getIdLong()));
-	}
-
-	@Override
-	public ImplMember getMemberById(long userId) {
-		return this.extensionGuild.getMemeber(this.guild, this.guild.getMemberById(userId));
-	}
-
-	@Override
-	public ImplMember getMemberById(String userId) {
-		return this.extensionGuild.getMemeber(this.guild, this.guild.getMemberById(Long.parseLong(userId.replace("<@", "").replace(">", ""))));
-	}
-
-	@Override
-	public List<Member> getMembers() {
-		return this.guild.getMembers();
+	public Member getMember(User user) {
+		return this.guild.getMember(user);
 	}
 
 	@Override
@@ -183,6 +164,11 @@ public class ImplGuild implements Guild {
 	}
 
 	@Override
+	public List<Channel> getChannels(boolean includeHidden) {
+		return this.guild.getChannels(includeHidden);
+	}
+
+	@Override
 	public SnowflakeCacheView<Role> getRoleCache() {
 		return this.guild.getRoleCache();
 	}
@@ -193,8 +179,23 @@ public class ImplGuild implements Guild {
 	}
 
 	@Override
+	public RestAction<List<ListedEmote>> retrieveEmotes() {
+		return this.guild.retrieveEmotes();
+	}
+
+	@Override
+	public RestAction<ListedEmote> retrieveEmoteById(String id) {
+		return this.guild.retrieveEmoteById(id);
+	}
+
+	@Override
 	public RestAction<List<Ban>> getBanList() {
 		return this.guild.getBanList();
+	}
+
+	@Override
+	public RestAction<Ban> getBanById(String userId) {
+		return this.guild.getBanById(userId);
 	}
 
 	@Override
@@ -300,30 +301,5 @@ public class ImplGuild implements Guild {
 	@Override
 	public boolean isAvailable() {
 		return this.guild.isAvailable();
-	}
-
-	@Override
-	public long getOwnerIdLong() {
-		return this.guild.getOwnerIdLong();
-	}
-
-	@Override
-	public RestAction<List<ListedEmote>> retrieveEmotes() {
-		return this.guild.retrieveEmotes();
-	}
-
-	@Override
-	public RestAction<ListedEmote> retrieveEmoteById(String id) {
-		return this.guild.retrieveEmoteById(id);
-	}
-
-	@Override
-	public RestAction<Ban> getBanById(String userId) {
-		return this.guild.getBanById(userId);
-	}
-
-	@Override
-	public List<Channel> getChannels(boolean includeHidden) {
-		return this.guild.getChannels(includeHidden);
 	}
 }

@@ -53,7 +53,7 @@ public class ArgumentBuffer {
 		return defaultValue;
 	}
 
-	public String get(int index) {
+	public String getArgument(int index) {
 		if(this.arguments.size() > index)
 			return this.arguments.get(index);
 		return null;

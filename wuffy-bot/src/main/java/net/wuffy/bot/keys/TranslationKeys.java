@@ -1,8 +1,9 @@
 package net.wuffy.bot.keys;
 
-import net.wuffy.core.lang.TranslationKeysCore;
+import net.wuffy.core.lang.ITranslationKeys;
 
-public class TranslationKeys extends TranslationKeysCore {
+public class TranslationKeys implements ITranslationKeys {
+
 	public static final String LANGUAGE = "language";
 
 	public static final String MESSAGE_TRUE = "message_true";
@@ -35,6 +36,16 @@ public class TranslationKeys extends TranslationKeysCore {
 	public static final String HELP_DESCRIPTION = "help_description_";
 	public static final String HELP_PERMISSION = "help_permission_";
 	public static final String HELP_USAGE = "help_usage_";
+
+	//Module
+	public static final String MODULE_AUTOPRUNE = "module_autoprune";
+	public static final String MODULE_COMMAND = "module_command";
+	public static final String MODULE_COUNTINGCHANNEL = "module_countingchannel";
+	public static final String MODULE_CUSTOMCOMMAND = "module_customcommand";
+	public static final String MODULE_LEVELSYSTEM = "module_levelsystem";
+	public static final String MODULE_NOTIFICATION = "module_notification";
+	public static final String MODULE_POLL = "module_poll";
+	public static final String MODULE_TICKETSYSTEM = "module_ticketsystem";
 
 	//Commands
 	public static final String MESSAGE_HELP_USAGE = "message_help_usage";

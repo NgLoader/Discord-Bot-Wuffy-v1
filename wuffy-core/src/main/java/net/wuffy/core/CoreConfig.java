@@ -9,12 +9,8 @@ import net.wuffy.core.database.DatabaseConfig;
 
 public class CoreConfig implements IConfig {
 
-	public Boolean enabled;
-
 	public String instanceName;
 	public String instanceVersion;
-
-	public String startParameters;
 
 	public String token;
 

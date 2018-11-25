@@ -19,7 +19,7 @@ import com.mongodb.client.model.UpdateOneModel;
 import net.dv8tion.jda.core.entities.User;
 import net.wuffy.bot.database.BlockedInfo;
 import net.wuffy.bot.database.user.WuffyUser;
-import net.wuffy.core.Core;
+import net.wuffy.core.CoreOLD;
 
 public class MongoUser extends WuffyUser {
 
@@ -38,7 +38,7 @@ public class MongoUser extends WuffyUser {
 
 	protected Bson filter;
 
-	public MongoUser(Core core, User user, MongoExtensionUser extension) {
+	public MongoUser(CoreOLD core, User user, MongoExtensionUser extension) {
 		super(core, user);
 		this.extension = extension;
 

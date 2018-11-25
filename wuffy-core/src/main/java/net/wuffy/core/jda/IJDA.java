@@ -2,7 +2,7 @@ package net.wuffy.core.jda;
 
 import net.dv8tion.jda.core.hooks.EventListener;
 
-public interface IJDAAdapter {
+public interface IJDA {
 
 	public void login();
 
