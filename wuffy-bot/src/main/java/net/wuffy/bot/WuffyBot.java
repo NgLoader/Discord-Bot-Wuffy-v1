@@ -87,8 +87,6 @@ public class WuffyBot extends Core {
 			sqlStorage.registerProvider(IExtensionUser.class, new SQLExtensionUser());
 			sqlStorage.registerProvider(IExtensionLang.class, new SQLExtensionLang());
 		}
-
-		new ShardInitializer(this);
 	}
 
 	public BotConfig getConfig() {

@@ -198,6 +198,10 @@ public class CPacketBotSettings implements Packet<INetHandlerBotClient> {
 		return this.instanceVersion;
 	}
 
+	public boolean isContainsType(EnumMasterSettings type) {
+		return this.types.contains(type) || this.types.contains(EnumMasterSettings.ALL);
+	}
+
 	public enum EnumMasterSettings {
 		ALL, TOKEN, ADMINS, STATUS, GATEWAYBOT, INSTANCENAME, INSTANCEVERSION, DATABASE
 	}

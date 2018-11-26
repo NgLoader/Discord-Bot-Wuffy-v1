@@ -8,11 +8,19 @@ import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.bot.sharding.ShardManager;
+import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Game.GameType;
 import net.dv8tion.jda.core.hooks.EventListener;
 import net.wuffy.bot.WuffyBot;
+import net.wuffy.common.logger.Logger;
 import net.wuffy.core.Core;
 import net.wuffy.core.jda.IJDA;
+import net.wuffy.network.bot.client.CPacketBotSettings;
+import net.wuffy.network.bot.client.CPacketBotSettings.EnumMasterSettings;
+import net.wuffy.network.bot.client.CPacketBotSettings.GatewayBot;
+import net.wuffy.network.bot.client.CPacketBotSettings.Status;
+import net.wuffy.network.bot.client.CPacketBotShardUpdate;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
@@ -22,55 +30,110 @@ public class JDAAdapter implements IJDA {
 
 	private ShardManager shardManager;
 
-	private List<EventListener> eventListeners;
+	private GatewayBot gatewayBot;
+	private Status status;
 
-	public JDAAdapter(Core core) {
+	private List<Integer> shardIds = new ArrayList<Integer>();
+	private int shardsTotal = 0;
+
+	public JDAAdapter(Core core, CPacketBotSettings packetBotSettings) {
 		this.core = WuffyBot.class.cast(core);
-		this.eventListeners = new ArrayList<>();
+	}
+
+	public void handleSettings(CPacketBotSettings packetBotSettings) {
+		//GatewayBot
+		if(packetBotSettings.isContainsType(EnumMasterSettings.GATEWAYBOT)) {
+			this.gatewayBot = packetBotSettings.getGatewayBot();
+
+			if(this.shardManager != null)
+				this.restart();
+		}
+
+		//Status
+		if(packetBotSettings.isContainsType(EnumMasterSettings.STATUS)) {
+			if(this.shardManager != null) {
+				this.shardManager.setStatusProvider(id -> this.status.getStatusType(OnlineStatus.class));
+				this.shardManager.setGameProvider(id -> this.status.getGameUrl() != null && Game.isValidStreamingUrl(this.status.getGameUrl()) ?
+						Game.of(this.status.getGameType(GameType.class), this.status.getGameName(), this.status.getGameName()) :
+						Game.of(this.status.getGameType(GameType.class), this.status.getGameName()));
+			}
+
+			this.status = packetBotSettings.getStatus();
+		}
+	}
+
+	public void handleShardUpdate(CPacketBotShardUpdate packetBotShardUpdate) {
+		switch (packetBotShardUpdate.getType()) {
+		case START:
+			this.shardIds.add(packetBotShardUpdate.getValue());
+
+			if(this.shardManager == null && this.shardsTotal != 0 && !this.shardIds.isEmpty())
+				this.login();
+			break;
+
+		case STOP:
+			this.shardIds.remove(packetBotShardUpdate.getValue());
+
+			if(this.shardManager != null)
+				if(this.shardIds.isEmpty())
+					this.logout();
+				else
+					this.shardManager.shutdown(packetBotShardUpdate.getValue());
+			break;
+
+		case SHARDCOUNT:
+			try {
+				if(this.shardManager != null)
+					this.logout();
+			} finally {
+				this.shardsTotal = packetBotShardUpdate.getValue();
+
+				this.login();
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	public DefaultShardManagerBuilder buildShardManagerBuilder() {
+		return new DefaultShardManagerBuilder()
+			.setToken(this.core.getConfig().token)
+			.setHttpClientBuilder(new OkHttpClient.Builder()
+					.protocols(Arrays.asList(Protocol.HTTP_2))) //TODO check if work
+			.setSessionController(new WuffySessionController(this.gatewayBot))
+
+			//Provider
+			.setEventManagerProvider(core.getEventManagerAdapter())
+			.setStatusProvider(id -> this.status.getStatusType(OnlineStatus.class))
+			.setGameProvider(id -> this.status.getGameUrl() != null && Game.isValidStreamingUrl(this.status.getGameUrl()) ?
+				Game.of(this.status.getGameType(GameType.class), this.status.getGameName(), this.status.getGameName()) :
+				Game.of(this.status.getGameType(GameType.class), this.status.getGameName()))
+
+			//Sharding
+			.setShardsTotal(this.shardsTotal)
+			.setShards(this.shardIds);
+	}
+
+	@Deprecated
+	@Override
+	public void addListener(EventListener listener) {
+		throw new UnsupportedOperationException("This function is not supported");
 	}
 
 	@Override
 	public void login() {
-		if(this.shardManager != null)
-			throw new NullPointerException("ShardMananager was not null!");
-
 		try {
-			var config = this.core.getConfig();
-
-			var builder = new DefaultShardManagerBuilder()
-					.setToken(this.core.getConfig().token)
-					.addEventListeners(this.eventListeners.toArray());
-
-			builder.setEventManagerProvider(core.getEventManagerAdapter());
-
-//			var shardingConfig = config.sharding;
-//			if(shardingConfig.enabled)
-//				builder
-//					.setShardsTotal(shardingConfig.total)
-//					.setShards(shardingConfig.shardIds);
-
-//			builder.setSessionController(controller); //TODO use WuffySessionController
-
-			builder.setStatus(config.status);
-			builder.setGame(config.game.url != null && !config.game.url.isEmpty() ?
-					Game.of(config.game.gameType, config.game.name, config.game.url) :
-					Game.of(config.game.gameType, config.game.name));
-
-			builder.setHttpClientBuilder(new OkHttpClient.Builder()
-					.protocols(Arrays.asList(Protocol.HTTP_2))); //TODO check if work
-
-			this.shardManager = builder.build();
+			try {
+				if(this.shardManager != null)
+					this.logout();
+			} finally {
+				this.shardManager = this.buildShardManagerBuilder().build();
+			}
 		} catch (LoginException | IllegalArgumentException e) {
-			throw new Error(e);
+			Logger.fatal("JDAAdapter", "Error by login", e);
 		}
-	}
-
-	@Override
-	public void addListener(EventListener listener) {
-		if(shardManager != null)
-			shardManager.addEventListener(this.eventListeners);
-		else if(this.eventListeners != null)
-			this.eventListeners.add(listener);
 	}
 
 	@Override
@@ -82,13 +145,13 @@ public class JDAAdapter implements IJDA {
 
 	public void restart() {
 		try {
-			logout();
+			this.logout();
 		} finally {
-			login();
+			this.login();
 		}
 	}
 
 	public ShardManager getShardManager() {
-		return shardManager;
+		return this.shardManager;
 	}
 }
