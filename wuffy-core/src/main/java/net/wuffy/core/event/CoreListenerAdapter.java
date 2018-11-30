@@ -2,21 +2,32 @@ package net.wuffy.core.event;
 
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.guild.GuildAvailableEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.EventListener;
+import net.wuffy.core.event.events.WuffyGuildAvailableEvent;
 import net.wuffy.core.event.events.WuffyGuildJoinEvent;
 import net.wuffy.core.event.events.WuffyGuildLeaveEvent;
 import net.wuffy.core.event.events.WuffyGuildMessageReceivedEvent;
 import net.wuffy.core.event.events.WuffyReadyEvent;
+import net.wuffy.core.event.impl.EventGuild;
 
-public abstract class CoreListenerAdapter<T extends EventGuild> implements EventListener {
+/**
+ * 
+ * @author Nils
+ *
+ * Not useful
+ */
+@Deprecated
+public abstract class CoreListenerAdapter<T extends EventGuild<?, ?>> implements EventListener {
 
 	public void onGuildMessageReceivedEvent(WuffyGuildMessageReceivedEvent<T> event) { }
 
 	public void onGuildJoinEvent(WuffyGuildJoinEvent<T> event) { }
 	public void onGuildLeaveEvent(WuffyGuildLeaveEvent<T> event) { }
+	public void onGuildAvailableEvent(WuffyGuildAvailableEvent<T> event) { }
 
 	public void onReadyEvent(WuffyReadyEvent<T> event) { }
 
@@ -24,6 +35,8 @@ public abstract class CoreListenerAdapter<T extends EventGuild> implements Event
 	public void onEvent(Event event) {
 		if(event instanceof GuildMessageReceivedEvent)
 			this.onGuildMessageReceivedEvent(new WuffyGuildMessageReceivedEvent<T>((GuildMessageReceivedEvent) event));
+		else if(event instanceof GuildAvailableEvent)
+			this.onGuildAvailableEvent(new WuffyGuildAvailableEvent<>((GuildAvailableEvent) event));
 		else if(event instanceof GuildJoinEvent)
 			this.onGuildJoinEvent(new WuffyGuildJoinEvent<T>((GuildJoinEvent) event));
 		else if(event instanceof GuildLeaveEvent)

@@ -3,13 +3,13 @@ package net.wuffy.bot.module;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.wuffy.bot.database.DBGuild;
 import net.wuffy.bot.module.modules.command.ModuleCommand;
 import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.IWuffyPhantomReference;
-import net.wuffy.core.event.EventGuild;
 
-public class GuildModule<T extends EventGuild> implements IWuffyPhantomReference {
+public class GuildModule implements IWuffyPhantomReference {
 
 	private static final Map<EnumModuleType, Class<? extends Module>> MODULE_CLASSES = new HashMap<EnumModuleType, Class<? extends Module>>();
 
@@ -23,16 +23,38 @@ public class GuildModule<T extends EventGuild> implements IWuffyPhantomReference
 
 	private final Map<EnumModuleType, Module> modules = new HashMap<EnumModuleType, Module>();
 
-	private final T guild;
+	private DBGuild guild;
 
-	private GuildModule(T guild) {
+	private GuildEventManager guildModuleListenerAdapter;
+
+	private Boolean initialized = false;
+
+	public GuildModule(DBGuild guild) {
 		this.guild = guild;
 
-		WuffyPhantomRefernce.getInstance().add(this, String.format("GuildModule - %s", this.guild != null ? Long.toString(this.guild.getIdLong()) : "UNKNOWN"));
+		WuffyPhantomRefernce.getInstance().add(this, String.format("GuildModule - %s", this.guild.getJDA() != null ? this.guild.getJDA().getShardInfo().getShardString() : "UNKNOWN"));
 	}
 
-	public void initialize() {
+	public boolean initialize() {
+		if(this.initialized)
+			return false;
+		this.initialized = true;
+
+		this.guildModuleListenerAdapter = new GuildEventManager(this);
+
+		this.enable(EnumModuleType.COMMAND);
 		//TODO call initialize
+		return true;
+	}
+
+	public void destroy() {
+		this.modules.values().forEach(Module::destroy);
+		this.modules.clear();
+
+		this.guildModuleListenerAdapter.destroy();
+
+		this.guild = null;
+		this.guildModuleListenerAdapter = null;
 	}
 
 	public boolean enable(Module module) {
@@ -44,15 +66,16 @@ public class GuildModule<T extends EventGuild> implements IWuffyPhantomReference
 			return false;
 
 		try {
-			Module module = GuildModule.getModuleClass(enumModuleType).getConstructor().newInstance(this.guild);
+			Module module = GuildModule.getModuleClass(enumModuleType).getConstructor(GuildModule.class).newInstance(this);
 
 			this.modules.put(enumModuleType, module);
 
 			module.onEnable();
 
-			Logger.debug("GuildModule", String.format("Enable module \"%s\" for guild \"%s\"", enumModuleType.name(), Long.toString(this.guild.getIdLong())));
+			Logger.debug("GuildModule", String.format("Enable module \"%s\" for guild \"%s\"", enumModuleType.name(), this.getGuild().getJDA().getShardInfo().getShardString()));
 			return true;
 		} catch(Exception e) {
+			Logger.fatal("GuildModule", String.format("Errror by enableing module \"%s\" for guild \"%s\"", enumModuleType.name(), this.getGuild().getJDA().getShardInfo().getShardString()), e);
 			return false;
 		}
 	}
@@ -70,7 +93,7 @@ public class GuildModule<T extends EventGuild> implements IWuffyPhantomReference
 		if(module != null)
 			module.onDisable();
 
-		Logger.debug("GuildModule", String.format("Disable module \"%s\" for guild \"%s\"", enumModuleType.name(), Long.toString(this.guild.getIdLong())));
+		Logger.debug("GuildModule", String.format("Disable module \"%s\" for guild \"%s\"", enumModuleType.name(), this.getGuild().getJDA().getShardInfo().getShardString()));
 	}
 
 	public boolean isEnabled(Module module) {
@@ -81,7 +104,11 @@ public class GuildModule<T extends EventGuild> implements IWuffyPhantomReference
 		return this.modules.containsKey(enumModuleType);
 	}
 
-	public T getGuild() {
+	public GuildEventManager getGuildModuleListenerAdapter() {
+		return this.guildModuleListenerAdapter;
+	}
+
+	public DBGuild getGuild() {
 		return this.guild;
 	}
 }

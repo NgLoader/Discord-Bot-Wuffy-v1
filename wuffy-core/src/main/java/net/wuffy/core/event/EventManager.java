@@ -36,7 +36,6 @@ public class EventManager implements IEventManager {
 	@Override
 	public void handle(Event event) {
 		Class<? extends Event> eventClass = event.getClass();
-		Class<? extends Event> eventSuperClass = Event.class;
 
 		do {
 			Map<Object, List<Method>> listeners = methods.get(eventClass);
@@ -53,7 +52,7 @@ public class EventManager implements IEventManager {
 					}
 				}));
 
-			eventClass = eventClass == Event.class ? null : eventSuperClass.cast(eventClass.getSuperclass()).getClass();
+			eventClass = eventClass == Event.class ? null : (Class<? extends Event>) eventClass.getSuperclass();
 		} while(eventClass != null);
 	}
 
@@ -67,7 +66,7 @@ public class EventManager implements IEventManager {
 
 		for(Object listener : this.listeners) {
 			boolean isClass = listener instanceof Class;
-			Class<?> clazz = isClass ? Class.class.cast(listener) : listener.getClass();
+			Class<?> clazz = isClass ? (Class<?>) listener : listener.getClass();
 			Method[] allMethods = clazz.getDeclaredMethods();
 
 			for(Method method : allMethods) {
@@ -77,7 +76,7 @@ public class EventManager implements IEventManager {
 				Class<?>[] parameterTypes = method.getParameterTypes();
 
 				if(parameterTypes.length == 1 && Event.class.isAssignableFrom(parameterTypes[0])) {
-					Class<? extends Event> eventClass = Event.class.cast(parameterTypes[0]).getClass();
+					Class<? extends Event> eventClass = (Class<? extends Event>) parameterTypes[0];
 
 					if(!this.methods.containsKey(eventClass))
 						this.methods.put(eventClass, new HashMap<Object, List<Method>>());

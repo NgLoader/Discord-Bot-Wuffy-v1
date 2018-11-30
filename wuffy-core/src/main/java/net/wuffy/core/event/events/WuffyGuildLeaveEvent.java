@@ -3,8 +3,15 @@ package net.wuffy.core.event.events;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.wuffy.core.event.EventGuild;
+import net.wuffy.core.event.impl.EventGuild;
 
+/**
+ * 
+ * @author Nils
+ *
+ * Not useful
+ */
+@Deprecated
 public class WuffyGuildLeaveEvent<T extends EventGuild> extends GuildLeaveEvent {
 
 	private T guild;

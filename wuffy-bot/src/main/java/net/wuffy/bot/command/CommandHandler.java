@@ -1,18 +1,18 @@
 package net.wuffy.bot.command;
 
 import net.dv8tion.jda.core.JDA;
-import net.wuffy.bot.WuffyBot;
+import net.wuffy.bot.Wuffy;
 
 public class CommandHandler {
 
-	private final WuffyBot core;
+	private final Wuffy core;
 	private final JDA shard;
 
 	private CommandRegestry regestry;
 	private CommandExecuter executer;
 	private CommandListener listener;
 
-	public CommandHandler(WuffyBot core, JDA shard) {
+	public CommandHandler(Wuffy core, JDA shard) {
 		this.core = core;
 		this.shard = shard;
 
@@ -35,7 +35,7 @@ public class CommandHandler {
 		return this.listener;
 	}
 
-	public WuffyBot getCore() {
+	public Wuffy getCore() {
 		return this.core;
 	}
 

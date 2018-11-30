@@ -4,9 +4,11 @@ import java.util.Locale;
 
 public interface ILanguage {
 
-	public Locale getTranslation(String key);
+	public Locale getLocale();
 
-	public Locale getTranslation(ITranslationKeys key);
+	public String getTranslation(String key);
+
+	public String getTranslation(ITranslationKeys key);
 
 	public void addTranslation(ITranslationKeys key, String translation);
 

@@ -1,4 +1,3 @@
 package net.wuffy.core.lang;
 
-public interface ITranslationKeys {
-}
+public interface ITranslationKeys { }

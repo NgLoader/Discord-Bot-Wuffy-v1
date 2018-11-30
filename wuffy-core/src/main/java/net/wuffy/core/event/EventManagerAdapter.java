@@ -11,10 +11,10 @@ public class EventManagerAdapter implements IntFunction<IEventManager> {
 	private Map<Integer, EventManager> managers = new HashMap<Integer, EventManager>();
 
 	@Override
-	public IEventManager apply(int value) { //TODO what is the value
-		if(!this.managers.containsKey(value))
-			this.managers.put(value, new EventManager());
+	public IEventManager apply(int shardId) {
+		if(!this.managers.containsKey(shardId))
+			this.managers.put(shardId, new EventManager());
 
-		return this.managers.get(value);
+		return this.managers.get(shardId);
 	}
 }

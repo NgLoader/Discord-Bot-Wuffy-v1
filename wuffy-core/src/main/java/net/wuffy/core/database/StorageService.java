@@ -1,7 +1,5 @@
 package net.wuffy.core.database;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import net.wuffy.common.logger.Logger;
@@ -40,7 +38,7 @@ public final class StorageService {
 		Logger.debug("database", "Loading database modules");
 
 		if(storage == null) {
-			Logger.info("StorageService", String.format("Storage type \"%s\" not exist or is not enabled!", this.config.type));
+			Logger.info("StorageService", "Storage not exist or is not enabled!");
 			return;
 		}
 
@@ -56,26 +54,13 @@ public final class StorageService {
 		this.init = false;
 	}
 
-	public <T extends Storage<T>> T getStorage(Class<T> storageClass) {
+	public <T extends Storage<?>> T getStorage(Class<T> storageClass) {
 		Objects.requireNonNull(storageClass);
 
 		return storageClass.cast(this.storage);
 	}
 
-	public <T extends IStorageExtension> boolean registerExtension(Class<T> extensionClass) {
-		Objects.requireNonNull(extensionClass);
-
-		if(this.extensions.containsKey(extensionClass))
-			return false;
-
-		this.extensions.put(extensionClass, this.storage.getProvider(extensionClass));
-		Logger.debug("database storage", "registerExtension '" + extensionClass.getSimpleName() + "'");
-		return true;
-	}
-
-	public <T extends IStorageExtension> T getExtension(Class<T> extenionClass) {
-		Objects.requireNonNull(extenionClass);
-
-		return extenionClass.cast(this.extensions.get(extenionClass));
+	public Storage<?> getStorage() {
+		return this.storage;
 	}
 }

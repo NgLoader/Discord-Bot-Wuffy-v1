@@ -1,17 +1,15 @@
 package net.wuffy.core.database;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import net.wuffy.common.logger.Logger;
 import net.wuffy.core.Core;
 
 public abstract class Storage<S extends Storage<S>> {
 
-	protected final Map<Class<? extends IStorageExtension>, StorageProvider<S>> storageExtensions = new HashMap<Class<? extends IStorageExtension>, StorageProvider<S>>();
+	protected final Map<Class<? extends IExtension>, StorageProvider<S>> storageExtensions = new HashMap<Class<? extends IExtension>, StorageProvider<S>>();
 
 	protected abstract void connect();
 
@@ -25,7 +23,8 @@ public abstract class Storage<S extends Storage<S>> {
 		this.core = core;
 	}
 
-	public final <U extends IStorageExtension, T extends StorageProvider<S>> boolean registerProvider(Class<U> extensionClass, T provider) {
+	@SuppressWarnings("unchecked")
+	public final <T extends StorageProvider<S>> boolean registerProvider(Class<? extends IExtension> extensionClass, T provider) {
 		Objects.requireNonNull(extensionClass);
 		Objects.requireNonNull(provider);
 
@@ -41,12 +40,13 @@ public abstract class Storage<S extends Storage<S>> {
 		provider.setCore(this.core);
 
 		this.storageExtensions.put(extensionClass, provider);
+		System.out.println("1" + extensionClass.getSimpleName() + " - " + extensionClass);
 		provider.registered((S) this);
-		Logger.debug("database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
+		Logger.debug("Database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
 		return true;
 	}
 
-	public final <U extends IStorageExtension> boolean unregisterProvider(Class<U> extensionClass) {
+	public final boolean unregisterProvider(Class<? extends IExtension> extensionClass) {
 		Objects.requireNonNull(extensionClass);
 
 		StorageProvider<?> provider = this.storageExtensions.remove(extensionClass);
@@ -56,17 +56,14 @@ public abstract class Storage<S extends Storage<S>> {
 		if(this.storageExtensions.isEmpty())
 			this.disconnect();
 
-		Logger.debug("database storage", "unregisterProvider '" + extensionClass.getSimpleName() + "'");
+		Logger.debug("Database storage", "unregisterProvider '" + extensionClass.getSimpleName() + "'");
 		return provider != null;
 	}
 
-	public final <U extends IStorageExtension> U getProvider(Class<U> extensionClass) {
+	public final <T extends IExtension> T getProvider(Class<T> extensionClass) {
 		Objects.requireNonNull(extensionClass);
+		System.out.println("2" + extensionClass.getSimpleName() + " - " + extensionClass);
 
 		return extensionClass.cast(this.storageExtensions.get(extensionClass));
-	}
-
-	public List<Class<? extends IStorageExtension>> getStorageExtensions() {
-		return this.storageExtensions.keySet().stream().collect(Collectors.toUnmodifiableList());
 	}
 }

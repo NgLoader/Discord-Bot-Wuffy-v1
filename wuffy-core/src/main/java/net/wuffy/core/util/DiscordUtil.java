@@ -3,18 +3,15 @@ package net.wuffy.core.util;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.wuffy.core.Core;
-import net.wuffy.core.database.impl.ImplGuild;
+import net.wuffy.core.event.impl.EventGuild;
 
 public class DiscordUtil {
 
-	public static Member searchMember(Core core, ImplGuild implGuild, String search) {
-		Guild guild = implGuild.getGuild();
-
+	public static Member searchMember(Core core, EventGuild<?, ?> guild, String search) {
 		if(search.matches("<@![0-9]{14,20}>"))
 			return guild.getMemberById(Long.valueOf(search.substring(3, search.length() - 1)));
 
@@ -35,9 +32,7 @@ public class DiscordUtil {
 		return found.isEmpty() ? null : found.get(0) != null && found.get(0).getUser() != null ? found.get(0) : null;
 	}
 
-	public static TextChannel searchChannel(ImplGuild implGuild, String search) {
-		Guild guild = implGuild.getGuild();
-
+	public static TextChannel searchChannel(EventGuild<?, ?> guild, String search) {
 		if(search.matches("<@![0-9]{14,20}>"))
 			return guild.getTextChannelById(Long.valueOf(search.substring(3, search.length() - 1)));
 
@@ -55,9 +50,7 @@ public class DiscordUtil {
 		return found.isEmpty() ? null : found.get(0) != null ? found.get(0) : null;
 	}
 
-	public static Role searchRole(ImplGuild implGuild, String search) {
-		Guild guild = implGuild.getGuild();
-
+	public static Role searchRole(EventGuild<?, ?> guild, String search) {
 		if(search.matches("<@![0-9]{14,20}>"))
 			return guild.getRoleById(Long.valueOf(search.substring(3, search.length() - 1)));
 

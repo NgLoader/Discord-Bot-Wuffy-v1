@@ -3,6 +3,7 @@ package net.wuffy.core.database.mongo;
 public class MongoConfig {
 
 	public Boolean enabled;
+
 	public String address;
 	public Integer port;
 	public String username;

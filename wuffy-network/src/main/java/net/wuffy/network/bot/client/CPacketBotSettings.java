@@ -213,6 +213,10 @@ public class CPacketBotSettings implements Packet<INetHandlerBotClient> {
 		private String gameName;
 		private String gameUrl;
 
+		public Status(Enum<?> statusType, Enum<?> gameType, String gameName, String gameUrl) {
+			this(statusType.ordinal(), gameType.ordinal(), gameName, gameUrl);
+		}
+
 		public Status(int statusType, int gameType, String gameName, String gameUrl) {
 			this.statusType = statusType;
 			this.gameType = gameType;
@@ -364,5 +368,21 @@ public class CPacketBotSettings implements Packet<INetHandlerBotClient> {
 		public String getKeyStorePassword() {
 			return this.keyStorePassword;
 		}
+	}
+
+	public Status createStatus(int statusType, int gameType, String gameName, String gameUrl) {
+		return new Status(statusType, gameType, gameName, gameUrl);
+	}
+
+	public Status createStatus(Enum<?> statusType, Enum<?> gameType, String gameName, String gameUrl) {
+		return new Status(statusType, gameType, gameName, gameUrl);
+	}
+
+	public GatewayBot createGatewayBot(String url, int shards, int sessionStartLimitTotal, int sessionStartLimitRemaining, int sessionStartLimitRestAfter) {
+		return new GatewayBot(url, shards, sessionStartLimitTotal, sessionStartLimitRemaining, sessionStartLimitRestAfter);
+	}
+
+	public Database createDatabase(String address, Integer port, String username, String password, String database, String collectionPrefix, DatabaseSsl ssl) {
+		return new Database(address, port, username, password, database, collectionPrefix, ssl);
 	}
 }

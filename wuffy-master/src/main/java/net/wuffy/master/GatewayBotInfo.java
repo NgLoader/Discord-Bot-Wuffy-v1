@@ -21,7 +21,13 @@ public class GatewayBotInfo {
 	public static void refresh() {
 		while(true) {
 			try {
-				DiscordRequestGateway gateway = DiscordRequest.gatewayBot(Master.getInstance().getConfig().botToken);
+				DiscordRequestGateway gateway = DiscordRequest.gatewayBot("NDcyNTc0NzIzNzY3OTI2Nzg0.DuCaJA.Tegf_8u6ukPRAN7k-V-BgSxDstk");
+
+				System.out.println(gateway.url);
+				System.out.println(gateway.shards);
+				System.out.println(gateway.session_start_limit.total);
+				System.out.println(gateway.session_start_limit.remaining);
+				System.out.println(gateway.session_start_limit.reset_after);
 
 				GatewayBotInfo.discord_wss_url = gateway.url;
 				GatewayBotInfo.discord_shards = new AtomicInteger(gateway.shards);

@@ -10,6 +10,4 @@ public class DatabaseConfig implements IConfig {
 	public MongoConfig mongo;
 	public SQLConfig sql;
 	public LocaleConfig locale;
-
-	public String type;
 }

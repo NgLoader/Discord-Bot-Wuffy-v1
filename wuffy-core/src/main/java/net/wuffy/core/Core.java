@@ -10,51 +10,46 @@ import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.IWuffyPhantomReference;
 import net.wuffy.common.util.TickingTask;
-import net.wuffy.core.event.EventManagerAdapter;
-import net.wuffy.core.jda.IJDA;
-import net.wuffy.core.scheduler.WuffyScheduler;
 
 public abstract class Core extends TickingTask implements IWuffyPhantomReference {
 
-	protected final Long startTimeInMillis = System.currentTimeMillis();
+	protected abstract void onDestroy();
 
-	protected final UUID id;
+	protected final Long startTimeInMillis = System.currentTimeMillis();
 
 	protected final Thread masterThread;
 	protected final Thread shutdownHookThread;
 
 	protected final AccountType accountType;
-	protected final WuffyScheduler scheduler;
-	protected final IJDA jdaAdapter;
-
-	protected final EventManagerAdapter eventManagerAdapter;
+	protected final CoreConfig config;
+	protected final UUID id;
 
 	private List<ITickable> tickables = new ArrayList<ITickable>();
 
-	public Core(UUID id, AccountType accountType, IJDA jdaAdapter) {
+	public Core(UUID id, CoreConfig config, AccountType accountType) {
 		super(1000 / 20);
 
-		this.id = id;
-		this.jdaAdapter = jdaAdapter;
 		this.accountType = accountType;
+		this.config = config;
+		this.id = id;
 
 		WuffyPhantomRefernce.getInstance().add(this, this.id.toString());
 
-		this.scheduler = new WuffyScheduler(this);
-		this.tickables.add(this.scheduler);
-
 		this.masterThread = new Thread(this, String.format("Wuffy Discord Bot - Core (%s)", this.id.toString()));
-		this.masterThread.setDaemon(true);
-
-		this.eventManagerAdapter = new EventManagerAdapter();
 
 		this.shutdownHookThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Core.this.stop();
+				try {
+					Core.this.onDestroy();
+				} catch(Exception e) {
+					Logger.fatal("TickingTask", "Error by stopped instance", e);
+				}
+
+				Logger.info("TickingTask", "Stopped instance");
 			}
-		}, String.format("Wuffy Discord Bot - Core ShutdownHook (%s)", this.id.toString()));
+		}, String.format("Wuffy Discord Bot - ShutdownHook (%s)", this.id.toString()));
 
 		Runtime.getRuntime().addShutdownHook(this.shutdownHookThread);
 
@@ -67,7 +62,7 @@ public abstract class Core extends TickingTask implements IWuffyPhantomReference
 			try {
 				tickable.update();
 			} catch(Exception e) {
-				Logger.fatal("Core Thread", String.format("Error by updateing tickable (%s) removing from tickable list!", tickable != null ? tickable.getClass().getSimpleName() : "NULL"), e);
+				Logger.fatal("TickingTask", String.format("Error by updateing tickable (%s) removing from tickable list!", tickable != null ? tickable.getClass().getSimpleName() : "NULL"), e);
 
 				this.tickables.remove(tickable);
 			}
@@ -76,11 +71,7 @@ public abstract class Core extends TickingTask implements IWuffyPhantomReference
 	@Override
 	protected void stop() {
 		this.running = false;
-
-		this.scheduler.cancelAllTasks();
-		this.jdaAdapter.logout();
-
-		Logger.info("Core", String.format("Stopped instance (%s)", this.id.toString()));
+		System.exit(0);
 	}
 
 	public void addTickable(ITickable tickable) {
@@ -91,32 +82,16 @@ public abstract class Core extends TickingTask implements IWuffyPhantomReference
 		this.tickables.remove(tickable);
 	}
 
-	public AccountType getAccountType() {
-		return this.accountType;
-	}
-
 	public Long getStartTimeInMillis() {
 		return this.startTimeInMillis;
 	}
 
-	public IJDA getJdaAdapter() {
-		return this.jdaAdapter;
+	public AccountType getAccountType() {
+		return this.accountType;
 	}
 
-	public <T extends IJDA> T getJdaAdapter(Class<T> jdaProviderClass) {
-		return jdaProviderClass.cast(this.jdaAdapter);
-	}
-
-	public WuffyScheduler getScheduler() {
-		return this.scheduler;
-	}
-
-	public <T extends WuffyScheduler> T getScheduler(Class<T> schedulerClass) {
-		return schedulerClass.cast(this.scheduler);
-	}
-
-	public EventManagerAdapter getEventManagerAdapter() {
-		return this.eventManagerAdapter;
+	public CoreConfig getConfig() {
+		return this.config;
 	}
 
 	public UUID getId() {

@@ -28,7 +28,9 @@ public class WuffySessionController implements SessionController {
 	@Override
 	public void appendSession(SessionConnectNode node) {
 		try {
-			node.run(false);
+			Logger.info("ShardInitializer", String.format("Initializing shard \"%s\".", Integer.toString(node.getShardInfo().getShardId())));
+
+			node.run(true);
 
 			Logger.info("SessionController", String.format("Starting session \"%s\"", node.getShardInfo().getShardString()));
 		} catch (InterruptedException e) {

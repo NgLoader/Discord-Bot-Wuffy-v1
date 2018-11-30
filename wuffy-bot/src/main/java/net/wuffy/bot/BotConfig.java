@@ -23,8 +23,6 @@ public class BotConfig extends CoreConfig {
 		this.instanceName = packetBotSettings.getInstanceName();
 		this.instanceVersion = packetBotSettings.getInstanceVersion();
 
-		//NILS mach es über die bootstrap
-
 		//Bot status
 		CPacketBotSettings.Status status = packetBotSettings.getStatus();
 		this.status = status.getStatusType(OnlineStatus.class);
@@ -35,7 +33,5 @@ public class BotConfig extends CoreConfig {
 
 		if(this.game.gameType == GameType.STREAMING)
 			this.game.url = status.getGameUrl();
-
-		this.enabled = true;
 	}
 }

@@ -12,9 +12,11 @@ import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Game.GameType;
 import net.dv8tion.jda.core.hooks.EventListener;
-import net.wuffy.bot.WuffyBot;
+import net.wuffy.bot.Wuffy;
+import net.wuffy.bot.module.ModuleListenerAdapter;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.core.Core;
+import net.wuffy.core.event.EventManagerAdapter;
 import net.wuffy.core.jda.IJDA;
 import net.wuffy.network.bot.client.CPacketBotSettings;
 import net.wuffy.network.bot.client.CPacketBotSettings.EnumMasterSettings;
@@ -26,9 +28,11 @@ import okhttp3.Protocol;
 
 public class JDAAdapter implements IJDA {
 
-	private final WuffyBot core;
+	private final Wuffy core;
 
 	private ShardManager shardManager;
+
+	private String token;
 
 	private GatewayBot gatewayBot;
 	private Status status;
@@ -36,8 +40,8 @@ public class JDAAdapter implements IJDA {
 	private List<Integer> shardIds = new ArrayList<Integer>();
 	private int shardsTotal = 0;
 
-	public JDAAdapter(Core core, CPacketBotSettings packetBotSettings) {
-		this.core = WuffyBot.class.cast(core);
+	public JDAAdapter(Core core) {
+		this.core = Wuffy.class.cast(core);
 	}
 
 	public void handleSettings(CPacketBotSettings packetBotSettings) {
@@ -60,6 +64,14 @@ public class JDAAdapter implements IJDA {
 
 			this.status = packetBotSettings.getStatus();
 		}
+
+		//Token
+		if(packetBotSettings.isContainsType(EnumMasterSettings.TOKEN)) {
+			this.token = packetBotSettings.getToken();
+
+			if(this.shardManager != null)
+				this.restart();
+		}
 	}
 
 	public void handleShardUpdate(CPacketBotShardUpdate packetBotShardUpdate) {
@@ -69,6 +81,8 @@ public class JDAAdapter implements IJDA {
 
 			if(this.shardManager == null && this.shardsTotal != 0 && !this.shardIds.isEmpty())
 				this.login();
+			else if(this.shardManager != null)
+				this.shardManager.start(packetBotShardUpdate.getValue());
 			break;
 
 		case STOP:
@@ -88,7 +102,8 @@ public class JDAAdapter implements IJDA {
 			} finally {
 				this.shardsTotal = packetBotShardUpdate.getValue();
 
-				this.login();
+				if(!this.shardIds.isEmpty())
+					this.login();
 			}
 			break;
 
@@ -99,13 +114,13 @@ public class JDAAdapter implements IJDA {
 
 	public DefaultShardManagerBuilder buildShardManagerBuilder() {
 		return new DefaultShardManagerBuilder()
-			.setToken(this.core.getConfig().token)
+			.setToken(this.token)
 			.setHttpClientBuilder(new OkHttpClient.Builder()
-					.protocols(Arrays.asList(Protocol.HTTP_2))) //TODO check if work
+					.protocols(Arrays.asList(Protocol.HTTP_2, Protocol.HTTP_1_1))) //INFO I need HTTP_1_1 (it is requested by okhttp3)
 			.setSessionController(new WuffySessionController(this.gatewayBot))
 
 			//Provider
-			.setEventManagerProvider(core.getEventManagerAdapter())
+			.setEventManagerProvider(new EventManagerAdapter())
 			.setStatusProvider(id -> this.status.getStatusType(OnlineStatus.class))
 			.setGameProvider(id -> this.status.getGameUrl() != null && Game.isValidStreamingUrl(this.status.getGameUrl()) ?
 				Game.of(this.status.getGameType(GameType.class), this.status.getGameName(), this.status.getGameName()) :
@@ -113,7 +128,10 @@ public class JDAAdapter implements IJDA {
 
 			//Sharding
 			.setShardsTotal(this.shardsTotal)
-			.setShards(this.shardIds);
+			.setShards(this.shardIds)
+
+			//Module Listener
+			.addEventListeners(new ModuleListenerAdapter(this.core));
 	}
 
 	@Deprecated
@@ -153,5 +171,9 @@ public class JDAAdapter implements IJDA {
 
 	public ShardManager getShardManager() {
 		return this.shardManager;
+	}
+
+	public Wuffy getCore() {
+		return this.core;
 	}
 }

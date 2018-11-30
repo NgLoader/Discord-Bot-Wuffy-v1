@@ -2,7 +2,7 @@ package net.wuffy.core.database;
 
 import net.wuffy.core.Core;
 
-public abstract class StorageProvider<S extends Storage<S>> implements IStorageExtension {
+public abstract class StorageProvider<S extends Storage<S>> {
 
 	protected abstract void registered(S storage);
 
