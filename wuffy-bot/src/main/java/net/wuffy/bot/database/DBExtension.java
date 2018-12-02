@@ -15,4 +15,10 @@ public interface DBExtension extends IExtension {
 	public DBUser getUser(User user);
 
 	public II18n getI18n();
+
+	public void clearCache();
+	public void clearCacheGuild();
+	public void clearCacheMember();
+	public void clearCacheUser();
+	public void clearCacheI18n();
 }

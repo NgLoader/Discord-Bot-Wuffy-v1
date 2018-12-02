@@ -7,6 +7,13 @@ import net.wuffy.core.event.impl.EventUser;
 
 public abstract class DBUser extends EventUser {
 
+	/* Alpha tester */
+	public abstract boolean isAlphaTester();
+	public abstract void setAlphaTester(boolean tester);
+
+	/* Handler */
+	public abstract void destroy();
+
 	public DBUser(Core core, User user) {
 		super(core, user);
 	}

@@ -1,5 +1,6 @@
 package net.wuffy.core.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class ArgumentBuffer {
 	private List<String> arguments;
 
 	public ArgumentBuffer(List<String> arguments) {
-		this.arguments = arguments;
+		this.arguments = new ArrayList<String>(arguments);
 	}
 
 	public ArgumentBuffer(String[] arguments) {

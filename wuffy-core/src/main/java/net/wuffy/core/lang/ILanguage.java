@@ -6,11 +6,11 @@ public interface ILanguage {
 
 	public Locale getLocale();
 
+	public void setLocale(Locale locale);
+
 	public String getTranslation(String key);
 
-	public String getTranslation(ITranslationKeys key);
+	public void addTranslation(String key, String translation);
 
-	public void addTranslation(ITranslationKeys key, String translation);
-
-	public void removeTranslation(ITranslationKeys key);
+	public void removeTranslation(String key);
 }

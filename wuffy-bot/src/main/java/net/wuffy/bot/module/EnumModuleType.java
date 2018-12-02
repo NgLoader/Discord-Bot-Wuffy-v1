@@ -11,7 +11,9 @@ public enum EnumModuleType {
 	POLL(TranslationKeys.MODULE_POLL),
 	TICKETSYSTEM(TranslationKeys.MODULE_TICKETSYSTEM),
 	LEVELSYSTEM(TranslationKeys.MODULE_LEVELSYSTEM),
-	NOTIFICATION(TranslationKeys.MODULE_NOTIFICATION);
+	NOTIFICATION(TranslationKeys.MODULE_NOTIFICATION),
+	MUSIC(TranslationKeys.MODULE_MUSIC),
+	GROUP(TranslationKeys.MODULE_GROUP);
 
 	private String translationKey;
 

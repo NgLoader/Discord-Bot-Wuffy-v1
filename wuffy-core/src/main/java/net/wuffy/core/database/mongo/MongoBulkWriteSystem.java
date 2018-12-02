@@ -13,9 +13,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.WriteModel;
 
 import net.wuffy.common.logger.Logger;
-import net.wuffy.core.database.StorageProvider;
 
-public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage> {
+public class MongoBulkWriteSystem {
 
 	private final List<WriteModel<Document>> writers = new ArrayList<WriteModel<Document>>();
 
@@ -36,13 +35,18 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
-	protected Thread bulkThread;
+	private Thread bulkThread;
+	private boolean running;
 
-	protected MongoCollection<Document> bulkCollection;
+	private MongoCollection<Document> bulkCollection;
 
-	protected boolean running;
+	private String name;
 
-	public void enableBulkWrite(MongoCollection<Document> bulkCollection, String name) {
+	public MongoBulkWriteSystem(String name) {
+		this.name = name;
+	}
+
+	public void enableBulkWrite(MongoCollection<Document> bulkCollection) {
 		if(bulkThread == null) {
 			this.running = true;
 
@@ -60,7 +64,7 @@ public abstract class MongoBulkWriteSystem extends StorageProvider<MongoStorage>
 				}
 
 				this.bulkThread = null;
-			}, String.format("Wuffy Discord Bot - Core (%s) - Database MongoDB BulkWrite (%s)", this.core.getId(), name));
+			}, String.format("Wuffy Discord Bot - Database MongoDB BulkWrite (%s)", this.name));
 			this.bulkThread.setDaemon(true);
 		}
 

@@ -7,6 +7,9 @@ import net.wuffy.core.event.impl.EventMember;
 
 public abstract class DBMember extends EventMember<DBGuild, DBUser> {
 
+	/* Handler */
+	public abstract void destroy();
+
 	protected final DBGuild guild;
 	protected final DBUser user;
 

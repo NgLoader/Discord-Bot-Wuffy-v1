@@ -3,10 +3,9 @@ package net.wuffy.bot;
 import java.util.UUID;
 
 import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Game.GameType;
+import net.wuffy.bot.command.CommandExecuterAdapter;
 import net.wuffy.bot.database.DBExtension;
-import net.wuffy.bot.database.impl.MongoStorageImpl;
+import net.wuffy.bot.database.mongo.MongoStorageImpl;
 import net.wuffy.bot.jda.JDAAdapter;
 import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
@@ -16,10 +15,6 @@ import net.wuffy.core.Core;
 import net.wuffy.core.database.StorageService;
 import net.wuffy.core.database.mongo.MongoStorage;
 import net.wuffy.core.scheduler.WuffyScheduler;
-import net.wuffy.network.bot.client.CPacketBotSettings;
-import net.wuffy.network.bot.client.CPacketBotSettings.EnumMasterSettings;
-import net.wuffy.network.bot.client.CPacketBotShardUpdate;
-import net.wuffy.network.bot.client.CPacketBotShardUpdate.EnumMasterShard;
 
 public class Wuffy extends Core {
 
@@ -62,6 +57,7 @@ public class Wuffy extends Core {
 	private JDAAdapter jdaAdapter;
 	private StorageService storageService;
 	private ConsoleCommandManager consoleCommandManager;
+	private CommandExecuterAdapter commandHandlerAdapter;
 	private WuffyScheduler scheduler;
 
 	public Wuffy(BotConfig config) {
@@ -78,6 +74,9 @@ public class Wuffy extends Core {
 		//Console
 		this.consoleCommandManager = new ConsoleCommandManager();
 		this.addTickable(this.consoleCommandManager);
+
+		//Command Handler
+		this.commandHandlerAdapter = new CommandExecuterAdapter();
 
 		//Scheduler
 		this.scheduler = new WuffyScheduler(this);
@@ -97,6 +96,10 @@ public class Wuffy extends Core {
 
 	public ConsoleCommandManager getConsoleCommandManager() {
 		return this.consoleCommandManager;
+	}
+
+	public CommandExecuterAdapter getCommandHandlerAdapter() {
+		return this.commandHandlerAdapter;
 	}
 
 	public StorageService getStorageService() {

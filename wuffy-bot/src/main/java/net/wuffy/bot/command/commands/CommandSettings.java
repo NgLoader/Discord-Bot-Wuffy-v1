@@ -23,11 +23,15 @@ public @interface CommandSettings {
 
 	String[] aliases();
 
-	boolean adminCommand() default false;
-
-	boolean privateChatCommand() default false;
+	boolean privateChat() default false;//TODO is "admin()" only admin's are allowed to use this in private chat!
 
 	boolean nsfw() default false;
 
+	boolean admin() default false;
+
 	boolean alpha() default false;
+
+	boolean partner() default false;
+
+	boolean hidden() default false;
 }

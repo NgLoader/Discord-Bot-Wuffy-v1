@@ -40,7 +40,6 @@ public abstract class Storage<S extends Storage<S>> {
 		provider.setCore(this.core);
 
 		this.storageExtensions.put(extensionClass, provider);
-		System.out.println("1" + extensionClass.getSimpleName() + " - " + extensionClass);
 		provider.registered((S) this);
 		Logger.debug("Database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
 		return true;
@@ -62,7 +61,6 @@ public abstract class Storage<S extends Storage<S>> {
 
 	public final <T extends IExtension> T getProvider(Class<T> extensionClass) {
 		Objects.requireNonNull(extensionClass);
-		System.out.println("2" + extensionClass.getSimpleName() + " - " + extensionClass);
 
 		return extensionClass.cast(this.storageExtensions.get(extensionClass));
 	}
