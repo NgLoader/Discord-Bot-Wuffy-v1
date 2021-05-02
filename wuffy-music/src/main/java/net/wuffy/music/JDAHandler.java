@@ -8,13 +8,13 @@ import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
-import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
-import net.dv8tion.jda.bot.sharding.ShardManager;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDA.Status;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.managers.AudioManager;
-import net.dv8tion.jda.core.utils.cache.CacheFlag;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDA.Status;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.util.DiscordHelper;
 import net.wuffy.common.util.ITickable;
@@ -68,7 +68,6 @@ public class JDAHandler implements ITickable {
 
 						if(!audioManager.isAttemptingToConnect() && (
 								audioGuild == null										||
-								audioGuild.getAudioPlayer() == null						||
 								audioGuild.getAudioPlayer().getPlayingTrack() == null 	||
 								audioManager.getSendingHandler() == null 				||
 //								audioManager.getSendingHandler().canProvide() 			|| //Unknown error (already checking is null ^)

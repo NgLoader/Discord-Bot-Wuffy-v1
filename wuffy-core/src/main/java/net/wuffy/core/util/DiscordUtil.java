@@ -3,15 +3,17 @@ package net.wuffy.core.util;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.wuffy.core.Core;
-import net.wuffy.core.event.impl.EventGuild;
+import net.wuffy.core.database.impl.IExtensionGuild;
+import net.wuffy.core.database.impl.ImplGuild;
+import net.wuffy.core.database.impl.ImplMember;
 
 public class DiscordUtil {
 
-	public static Member searchMember(Core core, EventGuild<?, ?> guild, String search) {
+	public static ImplMember searchMember(Core core, ImplGuild guild, String search) {
 		if(search.matches("<@![0-9]{14,20}>"))
 			return guild.getMemberById(Long.valueOf(search.substring(3, search.length() - 1)));
 
@@ -29,10 +31,10 @@ public class DiscordUtil {
 		if(found.isEmpty())
 			found = guild.getMembers().stream().filter(member -> member.getEffectiveName().toLowerCase().startsWith(search.toLowerCase())).collect(Collectors.toList());
 
-		return found.isEmpty() ? null : found.get(0) != null && found.get(0).getUser() != null ? found.get(0) : null;
+		return found.isEmpty() ? null : found.get(0) != null && found.get(0).getUser() != null ? core.getStorageService().getExtension(IExtensionGuild.class).getMemeber(guild, found.get(0)) : null;
 	}
 
-	public static TextChannel searchChannel(EventGuild<?, ?> guild, String search) {
+	public static TextChannel searchChannel(ImplGuild guild, String search) {
 		if(search.matches("<@![0-9]{14,20}>"))
 			return guild.getTextChannelById(Long.valueOf(search.substring(3, search.length() - 1)));
 
@@ -50,7 +52,7 @@ public class DiscordUtil {
 		return found.isEmpty() ? null : found.get(0) != null ? found.get(0) : null;
 	}
 
-	public static Role searchRole(EventGuild<?, ?> guild, String search) {
+	public static Role searchRole(ImplGuild guild, String search) {
 		if(search.matches("<@![0-9]{14,20}>"))
 			return guild.getRoleById(Long.valueOf(search.substring(3, search.length() - 1)));
 

@@ -157,6 +157,6 @@ public class WuffyScheduler implements ITickable {
 	}
 
 	public Core getCore() {
-		return this.core;
+		return core;
 	}
 }

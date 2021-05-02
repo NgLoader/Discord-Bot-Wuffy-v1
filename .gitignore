@@ -4,7 +4,7 @@ target/
 tmp/
 */wuffy/config.json
 */wuffy/*.key
-*/wuffy/bot.json
+*/wuffy/*
 *.tmp
 *.bak
 *.swp

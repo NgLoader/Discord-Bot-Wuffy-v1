@@ -29,7 +29,7 @@ public class WuffyPhantomRefernce implements ITickable {
 		}
 	}
 
-	public void add(IWuffyPhantomReference clazz, String instanceName) {
-		this.references.put(new PhantomReference<IWuffyPhantomReference>(clazz, this.referenceQueue), instanceName);
+	public void add(IWuffyPhantomReference core, String instanceName) {
+		this.references.put(new PhantomReference<IWuffyPhantomReference>(core, this.referenceQueue), instanceName);
 	}
 }

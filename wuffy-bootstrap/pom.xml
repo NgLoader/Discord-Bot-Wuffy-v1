@@ -14,17 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-common</artifactId>
-			<version>${wuffy.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-console</artifactId>
-			<version>${wuffy.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>de.ngloader</groupId>
-			<artifactId>wuffy-network</artifactId>
+			<artifactId>wuffy-bot</artifactId>
 			<version>${wuffy.version}</version>
 		</dependency>
 	</dependencies>

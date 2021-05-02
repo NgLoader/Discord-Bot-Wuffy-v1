@@ -13,7 +13,6 @@ import net.wuffy.music.audio.WuffyAudioQueue.EnumAudioQueueType;
 import net.wuffy.music.audio.listener.AudioEventListener;
 import net.wuffy.music.audio.listener.MessagePrintListener;
 import net.wuffy.music.audio.module.ModuleEventManager;
-import net.wuffy.music.audio.module.event.DestroyEvent;
 import net.wuffy.music.audio.module.event.UpdateEvent;
 import net.wuffy.network.NetworkManager;
 
@@ -64,25 +63,14 @@ public class WuffyAudioGuild implements IWuffyPhantomReference, ITickable {
 
 	@Override
 	public void update() {
-		if(!this.destroyed)
-			this.eventManager.onEvent(new UpdateEvent());
+		this.eventManager.onEvent(new UpdateEvent());
 	}
 
 	public void destroy() {
-		if(this.destroyed)
-			return;
-
 		this.destroyed = true;
-
-		WuffyAudioHandler.removeGuild(this.guild.getIdLong());
-
-		this.eventManager.onEvent(new DestroyEvent());
 
 		this.audioPlayer.destroy();
 		this.guild.getAudioManager().closeAudioConnection();
-
-		if(this.networkManager != null && this.networkManager.isConnected())
-			this.networkManager.close("Destroyed");
 
 		this.audioSendHandler = null;
 		this.networkManager = null;
@@ -90,7 +78,6 @@ public class WuffyAudioGuild implements IWuffyPhantomReference, ITickable {
 		this.guild = null;
 		this.textChannel = null;
 		this.audioPlayer = null;
-		this.eventManager = null;
 	}
 
 	public AudioSendHandler getAudioSendHandler() {

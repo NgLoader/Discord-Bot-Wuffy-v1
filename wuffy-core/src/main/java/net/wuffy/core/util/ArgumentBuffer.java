@@ -10,7 +10,7 @@ public class ArgumentBuffer {
 	private List<String> arguments;
 
 	public ArgumentBuffer(List<String> arguments) {
-		this.arguments = new ArrayList<String>(arguments);
+		this.arguments = new ArrayList<>(arguments);
 	}
 
 	public ArgumentBuffer(String[] arguments) {
@@ -54,7 +54,7 @@ public class ArgumentBuffer {
 		return defaultValue;
 	}
 
-	public String getArgument(int index) {
+	public String get(int index) {
 		if(this.arguments.size() > index)
 			return this.arguments.get(index);
 		return null;

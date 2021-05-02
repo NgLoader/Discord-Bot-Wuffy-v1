@@ -16,10 +16,8 @@ public final class SQLStorage extends Storage<SQLStorage> {
 
 	public SQLStorage(Core core, SQLConfig config) {
 		super(core);
-
 		if (!config.uri.startsWith("jdbc:mysql://"))
 			throw new IllegalArgumentException("Invalid mysql connection uri");
-
 		this.config = config;
 	}
 

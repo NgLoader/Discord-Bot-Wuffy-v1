@@ -19,34 +19,43 @@
 
 		<!-- Requested by dv8tion JDA -->
 		<dependency>
+			<groupId>com.neovisionaries</groupId>
+			<artifactId>nv-websocket-client</artifactId>
+			<version>${nv-websocket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.neovisionaries</groupId>
+			<artifactId>nv-websocket-client</artifactId>
+			<version>${nv-websocket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>${okhttp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons-collections.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
 			<version>${trove4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>${jna.version}</version>
-			<scope>compile</scope>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.neovisionaries</groupId>
-			<artifactId>nv-websocket-client</artifactId>
-			<version>${nv-websocket-client.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>${commons-collections4.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>${jsoup.version}</version>
-		</dependency>
+
+
 
 		<!-- Requested by ngloader wuffy -->
 		<dependency>
@@ -67,19 +76,24 @@
 			<version>v3-rev204-1.23.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>de.ngloader</groupId>
 			<artifactId>wuffy-common</artifactId>
-		<version>${wuffy.version}</version>
+			<version>${wuffy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ngloader</groupId>
 			<artifactId>wuffy-network</artifactId>
-		<version>${wuffy.version}</version>
+			<version>${wuffy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ngloader</groupId>
 			<artifactId>wuffy-console</artifactId>
-		<version>${wuffy.version}</version>
+			<version>${wuffy.version}</version>
 		</dependency>
 	</dependencies>
 </project>

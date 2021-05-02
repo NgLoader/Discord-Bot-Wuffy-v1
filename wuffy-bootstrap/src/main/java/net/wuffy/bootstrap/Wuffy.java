@@ -1,22 +1,17 @@
 package net.wuffy.bootstrap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import net.wuffy.bootstrap.command.ConsoleCommandDeveloperMode;
 import net.wuffy.bootstrap.command.ConsoleCommandGarbageCollector;
 import net.wuffy.bootstrap.command.ConsoleCommandStartInstance;
 import net.wuffy.bootstrap.command.ConsoleCommandStopInstance;
+import net.wuffy.bot.WuffyBot;
 import net.wuffy.common.WuffyPhantomRefernce;
 import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
-import net.wuffy.common.util.ITickable;
 import net.wuffy.common.util.TickingTask;
 import net.wuffy.console.ConsoleCommandManager;
+import net.wuffy.core.Core;
 
 public class Wuffy extends TickingTask {
 
@@ -55,28 +50,27 @@ public class Wuffy extends TickingTask {
 
 		Logger.info("Bootstrap", "Loading and initializing bots and clients");
 
-		Wuffy.instance = new Wuffy();
+		GlobalConfig config = ConfigService.getConfig(GlobalConfig.class);
+
+		Logger.info("Bootstrap", "Loading bots...");
+		config.bots.stream().filter(bot -> bot.enabled).forEach(bot -> { bot.admins.addAll(config.admins); new WuffyBot(bot); });
+		Logger.info("Bootstrap", "Loaded bots: " + Core.getBots().size());
+
+		Wuffy.instance = new Wuffy(config);
 	}
 
-	private final Map<UUID, CoreProcess> processes = new HashMap<UUID, CoreProcess>();
-
-	private final List<ITickable> tickables = new ArrayList<ITickable>();
+	private final GlobalConfig config;
 
 	private final ConsoleCommandManager consoleCommandManager;
 
 	private final Thread masterThread;
 
-	private GlobalConfig config;
-
-	public Wuffy() {
+	public Wuffy(GlobalConfig config) {
 		super(1000 / 40);
 
-		this.tickables.add(WuffyPhantomRefernce.getInstance());
-
-		this.config = ConfigService.getConfig(GlobalConfig.class);
+		this.config = config;
 
 		this.consoleCommandManager = new ConsoleCommandManager();
-		this.tickables.add(this.consoleCommandManager);
 
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandStartInstance());
 		this.consoleCommandManager.registerExecutor(new ConsoleCommandStopInstance());
@@ -88,14 +82,17 @@ public class Wuffy extends TickingTask {
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			this.running = false;
-			this.stop();
+			stop();
 		}));
+
+		Logger.info("Bootstrap", "Enabling all instances...");
+		Core.getInstances().forEach(Core::enable);
 	}
 
 	@Override
 	protected void update() {
-		this.tickables.forEach(ITickable::update);
-		this.processes.values().forEach(ITickable::update);
+		this.consoleCommandManager.update();
+		WuffyPhantomRefernce.getInstance().update();
 	}
 
 	@Override
@@ -104,21 +101,17 @@ public class Wuffy extends TickingTask {
 
 		this.consoleCommandManager.close();
 
-		this.processes.values().forEach(CoreProcess::stop);
+		Core.getInstances().forEach(Core::disable);
 
 		Logger.info("Shutdown", "Goodbye");
 		LoggerManager.close();
 	}
 
 	public GlobalConfig getConfig() {
-		return this.config;
+		return config;
 	}
 
 	public ConsoleCommandManager getConsoleCommandManager() {
-		return this.consoleCommandManager;
-	}
-
-	public Map<UUID, CoreProcess> getProcesses() {
-		return this.processes;
+		return consoleCommandManager;
 	}
 }

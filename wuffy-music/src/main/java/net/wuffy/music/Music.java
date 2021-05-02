@@ -11,7 +11,7 @@ import com.sedmelluq.discord.lavaplayer.tools.io.MessageOutput;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.entities.Guild;
 import net.wuffy.common.config.ConfigService;
 import net.wuffy.common.logger.Logger;
 import net.wuffy.common.logger.LoggerManager;
@@ -96,7 +96,7 @@ public class Music extends TickingTask {
 
 		try {
 			if(++test == 8) {
-				System.out.println("Starting test");
+				System.out.println("TEST");
 				Guild guild = this.jdaHandler.getGuild(330812207598272515L);
 
 				WuffyAudioHandler.addGuild(null, guild, guild.getTextChannelById(343187634388205568L), guild.getVoiceChannels().get(0), EnumAudioQueueType.REPEAT);

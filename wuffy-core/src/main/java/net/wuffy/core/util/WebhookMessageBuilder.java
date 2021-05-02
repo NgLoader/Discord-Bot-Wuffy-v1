@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.wuffy.common.util.GsonUtil;
 
 public class WebhookMessageBuilder {
@@ -84,7 +84,7 @@ public class WebhookMessageBuilder {
 		if(this.tts)
 			object.put("tts", this.tts);
 		if(!this.embeds.isEmpty())
-			object.put("embeds", new JSONArray(this.embeds.stream().map(embed -> embed.toJSONObject()).collect(Collectors.toList())));
+			object.put("embeds", new JSONArray(this.embeds.stream().map(embed -> embed.toData()).collect(Collectors.toList())));
 
 		return object.toString();
 	}

@@ -9,7 +9,7 @@ import net.wuffy.core.Core;
 
 public abstract class Storage<S extends Storage<S>> {
 
-	protected final Map<Class<? extends IExtension>, StorageProvider<S>> storageExtensions = new HashMap<Class<? extends IExtension>, StorageProvider<S>>();
+	protected final Map<Class<? extends IStorageExtension>, StorageProvider<S>> storageExtensions = new HashMap<Class<? extends IStorageExtension>, StorageProvider<S>>();
 
 	protected abstract void connect();
 
@@ -24,7 +24,7 @@ public abstract class Storage<S extends Storage<S>> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public final <T extends StorageProvider<S>> boolean registerProvider(Class<? extends IExtension> extensionClass, T provider) {
+	public final <U extends IStorageExtension, T extends StorageProvider<S>> boolean registerProvider(Class<U> extensionClass, T provider) {
 		Objects.requireNonNull(extensionClass);
 		Objects.requireNonNull(provider);
 
@@ -41,11 +41,11 @@ public abstract class Storage<S extends Storage<S>> {
 
 		this.storageExtensions.put(extensionClass, provider);
 		provider.registered((S) this);
-		Logger.debug("Database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
+		Logger.debug("database storage", "registerProvider '" + extensionClass.getSimpleName() + "'");
 		return true;
 	}
-
-	public final boolean unregisterProvider(Class<? extends IExtension> extensionClass) {
+	
+	public final <U extends IStorageExtension> boolean unregisterProvider(Class<U> extensionClass) {
 		Objects.requireNonNull(extensionClass);
 
 		StorageProvider<?> provider = this.storageExtensions.remove(extensionClass);
@@ -55,11 +55,11 @@ public abstract class Storage<S extends Storage<S>> {
 		if(this.storageExtensions.isEmpty())
 			this.disconnect();
 
-		Logger.debug("Database storage", "unregisterProvider '" + extensionClass.getSimpleName() + "'");
+		Logger.debug("database storage", "unregisterProvider '" + extensionClass.getSimpleName() + "'");
 		return provider != null;
 	}
 
-	public final <T extends IExtension> T getProvider(Class<T> extensionClass) {
+	public final <U extends IStorageExtension> U getProvider(Class<U> extensionClass) {
 		Objects.requireNonNull(extensionClass);
 
 		return extensionClass.cast(this.storageExtensions.get(extensionClass));

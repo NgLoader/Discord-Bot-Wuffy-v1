@@ -6,7 +6,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.api.Permission;
 import net.wuffy.bot.keys.PermissionKeys;
 
 @Target(TYPE)
@@ -23,15 +23,11 @@ public @interface CommandSettings {
 
 	String[] aliases();
 
-	boolean privateChat() default false;//TODO is "admin()" only admin's are allowed to use this in private chat!
+	boolean adminCommand() default false;
+
+	boolean privateChatCommand() default false;
 
 	boolean nsfw() default false;
 
-	boolean admin() default false;
-
 	boolean alpha() default false;
-
-	boolean partner() default false;
-
-	boolean hidden() default false;
 }

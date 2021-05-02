@@ -36,8 +36,6 @@ public class Master extends TickingTask {
 			return;
 		}
 
-		GatewayBotInfo.refresh();
-
 		Logger.info("Bootstrap", "Starting Wuffy Master.");
 
 		var threads = 32;
